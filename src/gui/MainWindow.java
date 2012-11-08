@@ -23,24 +23,20 @@ public class MainWindow extends JFrame{
 	 * Create a new main window.
 	 */
 	public MainWindow()  {
-		
 		new JFrame();
 		InitializeComponents();
 		setSize(new Dimension(width, height));
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);
-		setVisible(true);
-		
 	}
 	
 	private void InitializeComponents() {
 		navPanel = new NavigationPanel();
 		ediPanel = new EditorPanel();
 		
-		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navPanel, ediPanel);
 		mainSplit.setDividerLocation(width / 3);
-		mainSplit.setTopComponent(navPanel);
-		mainSplit.setBottomComponent(ediPanel);
 	}	
 
 	/**
