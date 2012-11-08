@@ -25,6 +25,7 @@ public class MainWindow {
 	 * Create a new main window.
 	 */
 	public MainWindow() {
+		//HALLO
 		// Create window
 		MainWindow = new JFrame();
 		InitializeComponents();
