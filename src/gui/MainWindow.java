@@ -25,7 +25,6 @@ public class MainWindow {
 	 * Create a new main window.
 	 */
 	public MainWindow() {
-		//HALLO
 		// Create window
 		MainWindow = new JFrame();
 		InitializeComponents();
@@ -54,7 +53,6 @@ public class MainWindow {
 		// beg jmcr 8.11.12
 		MainSplitter.setDividerLocation(width / 3);
 		// end jmcr 8.11.12
-		// lutsch meinen schwanz
 	}
 	
 	private void MainNavigation() {
