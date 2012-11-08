@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -23,24 +24,26 @@ public class MainWindow extends JFrame{
 	 * Create a new main window.
 	 */
 	public MainWindow()  {
-		
 		new JFrame();
 		InitializeComponents();
 		setSize(new Dimension(width, height));
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);
-		setVisible(true);
-		
 	}
 	
 	private void InitializeComponents() {
+		
 		navPanel = new NavigationPanel();
 		ediPanel = new EditorPanel();
 		
-		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		// FIXME besser: scrollNavPanel in NavigationPanel() erzeugen
+		JScrollPane scrollNavPanel = new JScrollPane();
+    scrollNavPanel.getViewport().add(navPanel);
+    // ^ das nach NavigationPanel.java ^
+    
+		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollNavPanel, ediPanel);
 		mainSplit.setDividerLocation(width / 3);
-		mainSplit.setTopComponent(navPanel);
-		mainSplit.setBottomComponent(ediPanel);
 	}	
 
 	/**
