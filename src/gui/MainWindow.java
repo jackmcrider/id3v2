@@ -12,66 +12,42 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 
-public class MainWindow {
-	private JFrame MainWindow;
-	private JSplitPane MainSplitter;
-	private JTree MainNavigation;
-	private JPanel MainEditor;
-	private GridLayout MainEditorStructure;
+public class MainWindow extends JFrame{
 	
+	private JSplitPane mainSplit;
+	private NavigationPanel navPanel;
+	private EditorPanel ediPanel;
 	private int width = 800, height = 600;
 
 	/**
 	 * Create a new main window.
 	 */
-	public MainWindow() {
-		// Create window
-		MainWindow = new JFrame();
+	public MainWindow()  {
+		
+		new JFrame();
 		InitializeComponents();
-
-		// Define stuff
-		MainWindow.setSize(new Dimension(width, height));
-		MainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		MainWindow.add(MainSplitter);
-
-		// Make window visible
-		MainWindow.setVisible(true);
+		setSize(new Dimension(width, height));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		add(mainSplit);
+		setVisible(true);
+		
 	}
 	
 	private void InitializeComponents() {
-		MainNavigation();
-		MainEditor();
-		MainSplitter();
+		navPanel = new NavigationPanel();
+		ediPanel = new EditorPanel();
 		
-		MainSplitter.setTopComponent(MainNavigation);
-		MainSplitter.setBottomComponent(MainEditor);
-	}
-	
-	private void MainSplitter() {
-		MainSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		
-		// beg jmcr 8.11.12
-		MainSplitter.setDividerLocation(width / 3);
-		// end jmcr 8.11.12
-	}
-	
-	private void MainNavigation() {
-		MainNavigation = new JTree();
-	}
-	
-	private void MainEditor() {
-		MainEditor = new JPanel();
-		MainEditorStructure = new GridLayout(5, 1, 5, 5);
-		MainEditor.setLayout(MainEditorStructure);
-		
-		//MainEditor.add();
-	}
+		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		mainSplit.setDividerLocation(width / 3);
+		mainSplit.setTopComponent(navPanel);
+		mainSplit.setBottomComponent(ediPanel);
+	}	
 
 	/**
 	 * Get the JFrame instance of the main window.
 	 * @return
 	 */
 	public JFrame get() {
-		return MainWindow;
+		return this;
 	}
 }
