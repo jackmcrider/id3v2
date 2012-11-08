@@ -18,6 +18,8 @@ public class MainWindow {
 	private JTree MainNavigation;
 	private JPanel MainEditor;
 	private GridLayout MainEditorStructure;
+	
+	private int width = 800, height = 600;
 
 	/**
 	 * Create a new main window.
@@ -28,7 +30,7 @@ public class MainWindow {
 		InitializeComponents();
 
 		// Define stuff
-		MainWindow.setSize(new Dimension(800, 600));
+		MainWindow.setSize(new Dimension(width, height));
 		MainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainWindow.add(MainSplitter);
 
@@ -47,6 +49,10 @@ public class MainWindow {
 	
 	private void MainSplitter() {
 		MainSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		
+		// beg jmcr 8.11.12
+		MainSplitter.setDividerLocation(width / 3);
+		// end jmcr 8.11.12
 	}
 	
 	private void MainNavigation() {
@@ -58,7 +64,7 @@ public class MainWindow {
 		MainEditorStructure = new GridLayout(5, 1, 5, 5);
 		MainEditor.setLayout(MainEditorStructure);
 		
-		MainEditor.add();
+		//MainEditor.add();
 	}
 
 	/**
