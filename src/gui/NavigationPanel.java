@@ -17,20 +17,18 @@ public class NavigationPanel extends JPanel {
 	private JTree tree;
 	private File f;
 
-	public NavigationPanel() {
-		f = new File(".");
+	public NavigationPanel(final EditorPanel ep) {
+		f = new File("mp3s");
 		tree =  new JTree(addNodes(null,f));
 		
 		   tree.addTreeSelectionListener(new TreeSelectionListener() {
 			      public void valueChanged(TreeSelectionEvent e) {
 			        DefaultMutableTreeNode node = (DefaultMutableTreeNode) e
 			            .getPath().getLastPathComponent();
-			        System.out.println("You selected " + node);
+			        ep.setTF(node.toString());
 			      }
 			    });
 		add(tree);
-		 
-		 
 	}
 	
 	private DefaultMutableTreeNode addNodes(DefaultMutableTreeNode curTop, File dir) {
