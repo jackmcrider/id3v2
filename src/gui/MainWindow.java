@@ -18,7 +18,7 @@ public class MainWindow extends JFrame{
 	private JSplitPane mainSplit;
 	private NavigationPanel navPanel;
 	private EditorPanel ediPanel;
-	private int width = 500, height = 300;
+	private int width = 600, height = 350;
 
 	/**
 	 * Create a new main window.
