@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.GridLayout;
 import java.io.File;
 import java.util.Vector;
 import java.util.Collections;
