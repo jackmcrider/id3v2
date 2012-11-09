@@ -13,23 +13,24 @@ public class MainWindow extends JFrame{
 	private NavigationPanel navPanel;
 	private EditorPanel ediPanel;
 	private int width = 800, height = 600;
+	private JFrame win;
 
 	/**
 	 * Create a new main window.
 	 */
 	public MainWindow()  {
-		new JFrame();
+		//win = new JFrame();
 		InitializeComponents();
 		setSize(new Dimension(width, height));
-		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);
+		setVisible(true);
 	}
 	
 	private void InitializeComponents() {
 		
-		navPanel = new NavigationPanel();
-		ediPanel = new EditorPanel();
+		ediPanel = new EditorPanel(this.getContentPane());
+		navPanel = new NavigationPanel(ediPanel);
 		
 		// FIXME besser: scrollNavPanel in NavigationPanel() erzeugen
 		JScrollPane scrollNavPanel = new JScrollPane();
