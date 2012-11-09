@@ -32,6 +32,7 @@ public class NavigationPanel extends JScrollPane {
 						.getPath().getLastPathComponent();
 				if (node.isLeaf())
 					ep.refresh(node);
+				
 			}
 		});
 		panel.add(tree);
