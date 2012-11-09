@@ -1,11 +1,13 @@
 package gui;
 
 import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+
 
 public class MainWindow extends JFrame{
 	
@@ -19,9 +21,9 @@ public class MainWindow extends JFrame{
 	 * Create a new main window.
 	 */
 	public MainWindow()  {
-		//win = new JFrame();
 		InitializeComponents();
 		setSize(new Dimension(width, height));
+		setLocation(Toolkit.getDefaultToolkit().getScreenSize().width/2 - width/2, Toolkit.getDefaultToolkit().getScreenSize().height/2 - height/2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);
 		setVisible(true);
@@ -31,13 +33,8 @@ public class MainWindow extends JFrame{
 		
 		ediPanel = new EditorPanel(this.getContentPane());
 		navPanel = new NavigationPanel(ediPanel);
-		
-		// FIXME besser: scrollNavPanel in NavigationPanel() erzeugen
-		JScrollPane scrollNavPanel = new JScrollPane();
-    scrollNavPanel.getViewport().add(navPanel);
-    // ^ das nach NavigationPanel.java ^
     
-		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollNavPanel, ediPanel);
+		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navPanel, ediPanel);
 		mainSplit.setDividerLocation(width / 3);
 	}	
 

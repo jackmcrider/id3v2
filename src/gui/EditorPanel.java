@@ -7,27 +7,29 @@ import java.awt.Insets;
 //import java.awt.GridLayout;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 public class EditorPanel extends JPanel {
 	
 	private GridBagLayout ediStructure;
 	private JTextField titlef, albumf, artistf, jahrf;
+	private JLabel titlel, albuml,artistl,jahrl;
 	private GridBagConstraints constr;
 	
 
 	public EditorPanel(Container win){
 		/*ediStructure = new GridLayout(2, 3, 5, 5);
 		setLayout(ediStructure);*/
-		JLabel titlel = new JLabel("Titel");
+		titlel = new JLabel("Titel");
 		titlef  = new JTextField("Titel");
 		
-		JLabel albuml = new JLabel("Album");
+		albuml = new JLabel("Album");
 		albumf  = new JTextField("Album");
 		
-		JLabel artistl = new JLabel("Artist");
+		artistl = new JLabel("Artist");
 		artistf = new JTextField("Artist");
 		
-		JLabel jahrl = new JLabel("Penis");
+		jahrl = new JLabel("Penis");
 		jahrf   = new JTextField("Jahr");
 
 		ediStructure = new GridBagLayout();
@@ -70,11 +72,7 @@ public class EditorPanel extends JPanel {
 	  addC(jahrf, 5, 1);
 		}
 	
-	public void setTF(String s)
-	{
-		titlef.setText(s);
-		System.out.println(s);
-	}
+
 	
 	private void addC(Container c, int y, int x)
 	{
@@ -82,4 +80,46 @@ public class EditorPanel extends JPanel {
 		constr.gridy = y;
 		this.add(c, constr);
 	}
+	
+	public void refresh(DefaultMutableTreeNode n){
+		titlef.setText(n.toString()+"title");
+		albumf.setText(n.toString()+"album");
+		artistf.setText(n.toString()+"artist");
+		jahrf.setText(n.toString()+"jahr");
+	}
+	
+	public void setTitle(String s)
+	{
+		titlef.setText(s);
+	}
+	public void setAlbum(String s)
+	{
+		albumf.setText(s);
+	}
+	public void setArtist(String s)
+	{
+		artistf.setText(s);
+	}
+	public void setJahr(String s)
+	{
+		jahrf.setText(s);
+	}
+	
+	public String getTitle()
+	{
+		return titlef.getText();
+	}
+	public String getAlbum()
+	{
+		return albumf.getText();
+	}
+	public String getArtist()
+	{
+		return artistf.getText();
+	}
+	public String getJahr()
+	{
+		return jahrf.getText();
+	}
+	
 }
