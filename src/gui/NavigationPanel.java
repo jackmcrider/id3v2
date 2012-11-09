@@ -1,8 +1,5 @@
 package gui;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.io.File;
 import java.util.Vector;
 import java.util.Collections;
@@ -32,10 +29,7 @@ public class NavigationPanel extends JPanel {
 			        System.out.println("You selected " + node);
 			      }
 			    });
-		add(tree);	 
-		
-		
-		
+		add(tree);
 	}
 	
 	private DefaultMutableTreeNode addNodes(DefaultMutableTreeNode curTop, File dir) {
