@@ -37,7 +37,7 @@ public class MainWindow extends JFrame{
 	private void InitializeComponents() {
 		
 		ediPanel = new EditorPanel(this.getContentPane());
-		navPanel = new NavigationPanel(ediPanel);
+		navPanel = new NavigationPanel(/*ediPanel*/);
 		
 		// FIXME besser: scrollNavPanel in NavigationPanel() erzeugen
 		JScrollPane scrollNavPanel = new JScrollPane();
