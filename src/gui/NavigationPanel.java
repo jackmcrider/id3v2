@@ -23,7 +23,7 @@ public class NavigationPanel extends JScrollPane {
 		panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 1));
 		
-		file = new File(".");
+		file = new File("mp3s");
 		tree = new JTree(createTree(null, file));
 
 		tree.addTreeSelectionListener(new TreeSelectionListener() {

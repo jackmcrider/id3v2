@@ -3,7 +3,6 @@ package gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -14,11 +13,16 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-//import java.awt.GridLayout;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
+
 
 public class EditorPanel extends JPanel {
 
@@ -144,8 +148,8 @@ public class EditorPanel extends JPanel {
 	}
 
 
-
 	public void refresh(DefaultMutableTreeNode n) {
+
 		titlef.setText(n.toString() + "title");
 		albumf.setText(n.toString() + "album");
 		artistf.setText(n.toString() + "artist");
@@ -153,13 +157,16 @@ public class EditorPanel extends JPanel {
 		//setCover
 	}
 	public void repaintCover() {
+		// get the min space for cover, set it as size
+		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp.getSize().width : buttonsp.getSize().height;
+		
 		coverp.removeAll();
-		icon = new ImageIcon(image.getScaledInstance(artistp.getSize().width,
-				buttonsp.getSize().height, Image.SCALE_SMOOTH));
+		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace, Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
 		cover.setPreferredSize(new Dimension(10, 10));
 		coverp.add(cover);
 	}
+	
 
 	public JLabel getCover() {
 		return cover;

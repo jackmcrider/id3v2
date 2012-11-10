@@ -26,6 +26,7 @@ public class MainWindow extends JFrame{
 	public MainWindow()  {
 		InitializeComponents();
 		setSize(new Dimension(width, height));
+		this.setMinimumSize(new Dimension(250,350));
 		setLocation(Toolkit.getDefaultToolkit().getScreenSize().width/2 - width/2, Toolkit.getDefaultToolkit().getScreenSize().height/2 - height/2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);	
@@ -58,6 +59,9 @@ public class MainWindow extends JFrame{
 			public void componentResized(ComponentEvent arg0) {
 				if(ediPanel.getCover() != null)
 					ediPanel.repaintCover();
+				if(navPanel.getSize().width > 0)
+					if(navPanel.getSize().width < width/3)
+						mainSplit.setDividerLocation( getFrameSize().width/ 4);
 				setVisible(true);
 			}
 
@@ -71,6 +75,10 @@ public class MainWindow extends JFrame{
 	 * Get the JFrame instance of the main window.
 	 * @return
 	 */
+	
+	public Dimension getFrameSize(){
+		return this.getSize();
+	}
 	public JFrame get() {
 		return this;
 	}
