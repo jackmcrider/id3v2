@@ -153,9 +153,11 @@ public class EditorPanel extends JPanel {
 		//setCover
 	}
 	public void repaintCover() {
+		// get the min space for cover, set it as size
+		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp.getSize().width : buttonsp.getSize().height;
+		
 		coverp.removeAll();
-		icon = new ImageIcon(image.getScaledInstance(artistp.getSize().width,
-				buttonsp.getSize().height, Image.SCALE_SMOOTH));
+		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace, Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
 		cover.setPreferredSize(new Dimension(10, 10));
 		coverp.add(cover);
