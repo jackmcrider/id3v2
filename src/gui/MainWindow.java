@@ -26,7 +26,7 @@ public class MainWindow extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);	
 		setVisible(true);
-		//Erst nach Visible(true) wissen die Panels, wie groß sie sind
+		//Erst nach Visible(true) wissen die Panels, wie gross sie sind
 		ediPanel.addCover();
 		setVisible(true);
 	}
