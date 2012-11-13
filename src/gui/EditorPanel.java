@@ -3,6 +3,7 @@ package gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -30,8 +31,10 @@ public class EditorPanel extends JPanel {
 	private JTextField titlef, albumf, artistf, jahrf;
 	private JLabel titlel, albuml, artistl, jahrl, cover;
 	private JPanel titlep, albump, artistp, jahrp, coverp, buttonsp;
+	private JTextArea infoArea;
+	private JButton saveButton, closeButton;
 	private GridBagConstraints constr;
-	private JTextArea a;
+	
 	private File imageFile;
 	private BufferedImage image;
 	private ImageIcon icon;
@@ -66,14 +69,12 @@ public class EditorPanel extends JPanel {
 		jahrp.add(jahrl);
 		jahrp.add(jahrf);
 
-		JButton closeButton = new JButton("Close");
-		JButton saveButton = new JButton("Save");
-		closeButton.setMinimumSize(new Dimension(100, 40));
-		closeButton.setMaximumSize(new Dimension(100, 40));
-		closeButton.setPreferredSize(new Dimension(100, 40));
-		saveButton.setMaximumSize(new Dimension(100, 40));
-		saveButton.setMinimumSize(new Dimension(100, 40));
-		saveButton.setPreferredSize(new Dimension(100, 40));
+		closeButton = new JButton("Close");
+		saveButton = new JButton("Save");
+		infoArea = new JTextArea("Info");
+	//	infoArea.setPreferredSize(new Dimension(150, 200));
+		infoArea.setEditable(false);
+		
 
 		saveButton.addActionListener(new ActionListener() {
 
@@ -88,17 +89,21 @@ public class EditorPanel extends JPanel {
 				System.exit(0);
 			}
 		});
-
-
 		buttonsp = new JPanel();
-		buttonsp.setLayout(new GridLayout(4,0));
-		buttonsp.add(new Container());
-		buttonsp.add(new Container());
+		GridBagLayout bgl = new GridBagLayout();
+		buttonsp.setLayout(new FlowLayout());
+		saveButton.setSize(new Dimension(100,40));
+		closeButton.setSize(new Dimension(100,40));
 		buttonsp.add(saveButton);
 		buttonsp.add(closeButton);
+	//	addComponent(buttonsp,bgl,infoArea	  ,0 ,0 ,2 ,2 ,1 ,1.0);
+		//addComponent(buttonsp,bgl,saveButton  ,1 ,2 ,1 ,1 ,0 ,0);
+		//addComponent(buttonsp,bgl,closeButton ,1 ,3 ,1 ,1 ,0 ,0);
+		
 
 		ediStructure = new GridBagLayout();
 		constr = new GridBagConstraints();
+
 
 		setLayout(ediStructure);
 
@@ -106,7 +111,7 @@ public class EditorPanel extends JPanel {
 		addComponent(this, ediStructure, artistp, 0, 1, 1, 1, 0.5, 0);
 		addComponent(this, ediStructure, albump, 1, 1, 1, 1, 0.5, 0);
 		addComponent(this, ediStructure, jahrp, 1, 2, 1, 1, 0, 0);
-		addComponent(this, ediStructure, buttonsp, 1, 3, 1, 1, 0, 0.5);
+		addComponent(this, ediStructure, buttonsp, 1, 3, 1, 1, 1, 1);
 	}
 
 
@@ -115,7 +120,7 @@ public class EditorPanel extends JPanel {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.ipadx = 5;
 		gbc.ipady = 5;
-		gbc.insets = new Insets(1, 1, 1, 1);
+		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.anchor = GridBagConstraints.LAST_LINE_START;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = x;
@@ -129,7 +134,6 @@ public class EditorPanel extends JPanel {
 	}
 	
 	public void addCover() {
-		;
 		coverp = new JPanel();
 		coverp.setLayout(new GridLayout(1, 1));
 		imageFile = new File("testbild/bild.jpg");
@@ -154,6 +158,7 @@ public class EditorPanel extends JPanel {
 		albumf.setText(n.toString() + "album");
 		artistf.setText(n.toString() + "artist");
 		jahrf.setText(n.toString() + "jahr");
+		infoArea.setText(n.toString() + "info");
 		//setCover
 	}
 	public void repaintCover() {
