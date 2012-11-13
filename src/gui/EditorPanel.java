@@ -79,7 +79,7 @@ public class EditorPanel extends JPanel {
 		saveButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("noe");
+				System.out.println("noe saving bro");
 			}
 		});
 		
