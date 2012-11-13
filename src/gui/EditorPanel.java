@@ -143,8 +143,10 @@ public class EditorPanel extends JPanel {
 		} catch (IOException ioex) {
 			System.exit(1);
 		}
-		icon = new ImageIcon(image.getScaledInstance(artistp.getSize().width,
-				buttonsp.getSize().height, Image.SCALE_SMOOTH));
+		
+		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp.getSize().width : buttonsp.getSize().height;
+		icon = new ImageIcon(image.getScaledInstance(minSpace,
+				minSpace, Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
 		cover.setPreferredSize(new Dimension(10, 10));
 		coverp.add(cover);
