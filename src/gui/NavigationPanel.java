@@ -43,7 +43,7 @@ public class NavigationPanel extends JScrollPane {
 						.getPath().getLastPathComponent();
 				if (node.isLeaf()){
 					ep.refresh(node);
-					test(node.getParent()+file.separator+node.toString());
+					//test(node.getParent()+file.separator+node.toString());
 				}
 			}
 		});
@@ -52,7 +52,7 @@ public class NavigationPanel extends JScrollPane {
 	}
 	
 	/*
-	 * tests... doesn't belong to the 1st mileston
+	 * tests... doesn't belong to the 1st milestone
 	 */
 	public void test(String path) {
 		System.out.println(path);

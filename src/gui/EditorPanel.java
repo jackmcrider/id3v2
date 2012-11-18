@@ -163,7 +163,6 @@ public class EditorPanel extends JPanel {
 		albumf.setText(n.toString() + "album");
 		artistf.setText(n.toString() + "artist");
 		jahrf.setText(n.toString() + "jahr");
-		infoArea.setText(n.toString() + "info");
 		//setCover
 	}
 	public void repaintCover() {
