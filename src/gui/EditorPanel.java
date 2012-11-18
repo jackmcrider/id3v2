@@ -29,6 +29,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public class EditorPanel extends JPanel {
 
+	/*
+	 * 
+	 * 
+	 */
+	
 	private GridBagLayout ediStructure;
 	private JTextField titlef, albumf, artistf, jahrf;
 	private JLabel titlel, albuml, artistl, jahrl, cover;

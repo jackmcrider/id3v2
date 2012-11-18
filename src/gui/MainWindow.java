@@ -11,13 +11,18 @@ import javax.swing.JSplitPane;
 
 public class MainWindow extends JFrame{
 	
+	/*
+	 * The main frame is splitted in two panels.
+	 * left: navigationtree
+	 * right: editorPanel
+	 */
 	private JSplitPane mainSplit;
 	private NavigationPanel navPanel;
 	private EditorPanel ediPanel;
 	private int width = 600, height = 350;
 
 	/**
-	 * Create a new main window.
+	 * Create a new main window and setup the basics.
 	 */
 	public MainWindow()  {
 
@@ -28,8 +33,7 @@ public class MainWindow extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);	
 		setVisible(true);
-		ediPanel.addCover(); //Erst nach Visible(true) wissen die Panels, wie gross sie sind
-	
+		ediPanel.addCover(); //only after setVisible(true) the panels know their size.
 		setVisible(true);
 	}
 	
@@ -42,6 +46,7 @@ public class MainWindow extends JFrame{
 		mainSplit.setDividerLocation(width / 3);
 		
   
+		//resizes the two panels when the main frame gets resized by user.
 		this.addComponentListener(new ComponentListener(){
 
 			@Override
@@ -68,15 +73,10 @@ public class MainWindow extends JFrame{
 		});		
 	}	
 
-	/**
-	 * Get the JFrame instance of the main window.
-	 * @return
-	 */
+
 	
 	public Dimension getFrameSize(){
 		return this.getSize();
 	}
-	public JFrame get() {
-		return this;
-	}
+
 }
