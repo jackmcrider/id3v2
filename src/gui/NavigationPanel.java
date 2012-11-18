@@ -41,14 +41,11 @@ public class NavigationPanel extends JScrollPane {
 					ep.refresh(node);
 					test(node.getParent()+file.separator+node.toString());
 				}
-				
 			}
 		});
 		panel.add(tree);
 		this.getViewport().add(panel);
 	}
-	
-	
 	
 	public void test(String path) {
 		System.out.println(path);
@@ -81,11 +78,7 @@ public class NavigationPanel extends JScrollPane {
                     if (textBuffer[i] == 0){
                     	System.out.println("x: "+x + " y: "+y);
                     	continue;
-                    	
                     }
-                    	
-                        
- 
                     if (keyword.startsWith("T")) {
                         if (i < 3){
                         	System.out.println("x: "+x + " y: "+y);
@@ -96,11 +89,10 @@ public class NavigationPanel extends JScrollPane {
                     y++;
                     buffer.append((char) textBuffer[i]);
                 }
- 
+                
                 System.out.println("Text"+x+": " + buffer.toString());
                 x++;
             }
- 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -128,7 +120,6 @@ public class NavigationPanel extends JScrollPane {
 		Vector files = new Vector();
 
 		for (int i = 0; i < vec.size(); i++) {
-
 			String thisObject = (String) vec.elementAt(i);
 			String newPath;
 
@@ -147,5 +138,4 @@ public class NavigationPanel extends JScrollPane {
 
 		return curDir;
 	}
-
 }
