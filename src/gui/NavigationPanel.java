@@ -25,6 +25,10 @@ public class NavigationPanel extends JScrollPane {
 	private File file;
 	private JPanel panel;
 
+	/*
+	 * Left side of the window, contains a file tree
+	 * Gets ep for accessing the editor panel
+	 */
 	public NavigationPanel(final EditorPanel ep) {
 
 		panel = new JPanel();
@@ -47,6 +51,9 @@ public class NavigationPanel extends JScrollPane {
 		this.getViewport().add(panel);
 	}
 	
+	/*
+	 * tests... doesn't belong to the 1st mileston
+	 */
 	public void test(String path) {
 		System.out.println(path);
         try {
@@ -100,6 +107,9 @@ public class NavigationPanel extends JScrollPane {
         }
     }
 
+	/*
+	 * DefaultMutableTreeNode greates the file tree by creating nodes from files and directories
+	 */
 	private DefaultMutableTreeNode createTree(DefaultMutableTreeNode curTop, File dir) {
 
 		String curPath = dir.getPath();
