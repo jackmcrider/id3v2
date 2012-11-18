@@ -139,7 +139,7 @@ public class EditorPanel extends JPanel {
 		icon = new ImageIcon(image.getScaledInstance(minSpace,
 				minSpace, Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
-		cover.addMouseListener(new mListener());
+		coverp.addMouseListener(new mListener());
 		cover.setPreferredSize(new Dimension(10, 10));
 		coverp.add(cover);
 		addComponent(this, ediStructure, coverp, 0, 2, 1, 3, 0, 0);
