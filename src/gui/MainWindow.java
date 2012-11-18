@@ -20,6 +20,7 @@ public class MainWindow extends JFrame{
 	 * Create a new main window.
 	 */
 	public MainWindow()  {
+
 		InitializeComponents();
 		setSize(new Dimension(width, height));
 		this.setMinimumSize(new Dimension(250,350));
@@ -27,15 +28,14 @@ public class MainWindow extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);	
 		setVisible(true);
-		//Erst nach Visible(true) wissen die Panels, wie gross sie sind
-		ediPanel.addCover();
+		ediPanel.addCover(); //Erst nach Visible(true) wissen die Panels, wie gross sie sind
 	
 		setVisible(true);
 	}
 	
 	private void InitializeComponents() {
 		
-		ediPanel = new EditorPanel(this.getContentPane());
+		ediPanel = new EditorPanel();
 		navPanel = new NavigationPanel(ediPanel);
     
 		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navPanel, ediPanel);

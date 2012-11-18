@@ -1,10 +1,13 @@
 package gui;
 
-public class CoverDialog
+import javax.swing.JFrame;
+
+public class CoverDialog extends JFrame
 {
 	
 	public CoverDialog(){
-		System.out.println("ja bla bla");
+		setTitle("Change Cover");
+		setSize(200,100);
 	}
   // this should bring up the dialog for changing/removing the cover art
 }

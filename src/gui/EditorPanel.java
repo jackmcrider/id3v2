@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +41,7 @@ public class EditorPanel extends JPanel {
 	private BufferedImage image;
 	private ImageIcon icon;
 
-	public EditorPanel(Container win) {
+	public EditorPanel() {
 
 		titlep = new JPanel();
 		titlep.setLayout(new GridLayout(2, 0));
@@ -69,22 +71,15 @@ public class EditorPanel extends JPanel {
 		jahrp.add(jahrl);
 		jahrp.add(jahrf);
 
+		
 		closeButton = new JButton("Close");
 		saveButton = new JButton("Save");
-		infoArea = new JTextArea("Info");
-	//	infoArea.setPreferredSize(new Dimension(150, 200));
-		infoArea.setEditable(false);
-		
-
 		saveButton.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("noe saving bro");
 			}
 		});
-		
 		closeButton.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
@@ -96,22 +91,18 @@ public class EditorPanel extends JPanel {
 		closeButton.setSize(new Dimension(100,40));
 		buttonsp.add(saveButton);
 		buttonsp.add(closeButton);
-	//	addComponent(buttonsp,bgl,infoArea	  ,0 ,0 ,2 ,2 ,1 ,1.0);
-		//addComponent(buttonsp,bgl,saveButton  ,1 ,2 ,1 ,1 ,0 ,0);
-		//addComponent(buttonsp,bgl,closeButton ,1 ,3 ,1 ,1 ,0 ,0);
 		
 
 		ediStructure = new GridBagLayout();
 		constr = new GridBagConstraints();
-
 
 		setLayout(ediStructure);
 
 		addComponent(this, ediStructure, titlep, 0, 0, 2, 1, 1.0, 0);
 		addComponent(this, ediStructure, artistp, 0, 1, 1, 1, 0.5, 0);
 		addComponent(this, ediStructure, albump, 1, 1, 1, 1, 0.5, 0);
-		addComponent(this, ediStructure, jahrp, 1, 2, 1, 1, 0, 0);
-		addComponent(this, ediStructure, buttonsp, 1, 3, 1, 1, 1, 1);
+		addComponent(this, ediStructure, jahrp, 1, 2, 1, 1, 0.5, 0);
+		addComponent(this, ediStructure, buttonsp, 1, 3, 1, 1, 0.5, 1);
 	}
 
 
@@ -147,18 +138,13 @@ public class EditorPanel extends JPanel {
 		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp.getSize().width : buttonsp.getSize().height;
 		icon = new ImageIcon(image.getScaledInstance(minSpace,
 				minSpace, Image.SCALE_SMOOTH));
-		JButton coverb = new JButton();
-		coverb.setIcon(icon);
-		coverb.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				CoverDialog dialog = new CoverDialog();
-			}
-		});
-		coverp.add(coverb);
-		
-		addComponent(this, ediStructure, coverp, 0, 2, 1, 2, 0.2, 0);
+		cover = new JLabel(icon);
+		cover.addMouseListener(new mListener());
+		cover.setPreferredSize(new Dimension(10, 10));
+		coverp.add(cover);
+		addComponent(this, ediStructure, coverp, 0, 2, 1, 3, 0, 0);
 	}
+
 
 
 	public void refresh(DefaultMutableTreeNode n) {
@@ -179,6 +165,29 @@ public class EditorPanel extends JPanel {
 		cover = new JLabel(icon);
 		cover.setPreferredSize(new Dimension(10, 10));
 		coverp.add(cover);
+	}
+	
+	private class mListener implements MouseListener{
+		 public void mousePressed(MouseEvent e) {
+		     
+		    }
+
+		    public void mouseReleased(MouseEvent e) {
+
+		    }
+
+		    public void mouseEntered(MouseEvent e) {
+
+		    }
+
+		    public void mouseExited(MouseEvent e) {
+
+		    }
+
+		    public void mouseClicked(MouseEvent e) {    	
+		    	CoverDialog dialog = new CoverDialog();
+		    	dialog.setVisible(true);
+		    }
 	}
 	
 
