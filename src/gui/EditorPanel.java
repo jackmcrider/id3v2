@@ -46,6 +46,11 @@ public class EditorPanel extends JPanel {
 	private BufferedImage image;
 	private ImageIcon icon;
 
+	/*
+	 * EditorPanel is the ID3v2-Editor, the right side of the window.
+	 * It has a big gridlayout with jpanels for every field in it
+	 * the cover is an ImageIcon 
+	 */
 	public EditorPanel() {
 
 		titlep = new JPanel();
