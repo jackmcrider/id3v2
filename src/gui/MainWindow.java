@@ -32,6 +32,7 @@ public class MainWindow extends JFrame{
 		setLocation(Toolkit.getDefaultToolkit().getScreenSize().width/2 - width/2, Toolkit.getDefaultToolkit().getScreenSize().height/2 - height/2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(mainSplit);	
+		this.setTitle("Meine kleine Musikbibliothek");
 		setVisible(true);
 		ediPanel.addCover(); //only after setVisible(true) the panels know their size.
 		setVisible(true);
