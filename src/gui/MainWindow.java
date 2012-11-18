@@ -29,6 +29,7 @@ public class MainWindow extends JFrame{
 		setVisible(true);
 		//Erst nach Visible(true) wissen die Panels, wie gross sie sind
 		ediPanel.addCover();
+	
 		setVisible(true);
 	}
 	

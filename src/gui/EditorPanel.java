@@ -147,9 +147,16 @@ public class EditorPanel extends JPanel {
 		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp.getSize().width : buttonsp.getSize().height;
 		icon = new ImageIcon(image.getScaledInstance(minSpace,
 				minSpace, Image.SCALE_SMOOTH));
-		cover = new JLabel(icon);
-		cover.setPreferredSize(new Dimension(10, 10));
-		coverp.add(cover);
+		JButton coverb = new JButton();
+		coverb.setIcon(icon);
+		coverb.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				CoverDialog dialog = new CoverDialog();
+			}
+		});
+		coverp.add(coverb);
+		
 		addComponent(this, ediStructure, coverp, 0, 2, 1, 2, 0.2, 0);
 	}
 
