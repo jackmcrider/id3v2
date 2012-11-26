@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -23,11 +25,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.tree.DefaultMutableTreeNode;
 
+import model.MP3File;
+
+@SuppressWarnings("serial")
 public class EditorPanel extends JPanel {
 
-	private static final long serialVersionUID = -4191165192504170939L;
 	private GridBagLayout ediStructure;
 	private JTextField titlef, albumf, artistf, jahrf;
 	private JLabel titlel, albuml, artistl, jahrl, cover;
@@ -36,12 +39,9 @@ public class EditorPanel extends JPanel {
 	private File imageFile;
 	private BufferedImage image;
 	private ImageIcon icon;
+	
+	private MP3File currentlyOpenedMP3File = null;
 
-	/*
-	 * EditorPanel is the ID3v2-Editor, the right side of the window. It has a
-	 * big gridlayout with jpanels for every field in it the cover is an
-	 * ImageIcon
-	 */
 	public EditorPanel() {
 
 		titlep = new JPanel();
@@ -142,13 +142,20 @@ public class EditorPanel extends JPanel {
 		addComponent(this, ediStructure, coverp, 0, 2, 1, 3, 0, 0);
 	}
 
-	public void refresh(DefaultMutableTreeNode n) {
-
-		titlef.setText(n.toString() + "title");
-		albumf.setText(n.toString() + "album");
-		artistf.setText(n.toString() + "artist");
-		jahrf.setText(n.toString() + "jahr");
-		// setCover
+	public void load(MP3File n) {
+		if(this.currentlyOpenedMP3File != null){
+			this.currentlyOpenedMP3File.setTitle(this.titlef.getText());
+			this.currentlyOpenedMP3File.setAlbum(this.albumf.getText());
+			this.currentlyOpenedMP3File.setArtist(this.artistf.getText());
+			this.currentlyOpenedMP3File.setYear(this.jahrf.getText());
+		}
+		
+		this.currentlyOpenedMP3File = n;
+		this.titlef.setText(n.getTitle());
+		this.albumf.setText(n.getAlbum());
+		this.artistf.setText(n.getArtist());
+		this.jahrf.setText(n.getYear());
+		// TODO: n.getCover()
 	}
 
 	public void repaintCover() {

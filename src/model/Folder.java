@@ -24,6 +24,6 @@ public class Folder extends DefaultMutableTreeNode {
 	}
 
 	public String toString() {
-		return representedFolder.getName();
+		return this.representedFolder.getName();
 	}
 }
