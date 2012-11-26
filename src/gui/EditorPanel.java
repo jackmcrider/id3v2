@@ -22,34 +22,25 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-
 public class EditorPanel extends JPanel {
 
-	/*
-	 * 
-	 * 
-	 */
-	
+	private static final long serialVersionUID = -4191165192504170939L;
 	private GridBagLayout ediStructure;
 	private JTextField titlef, albumf, artistf, jahrf;
 	private JLabel titlel, albuml, artistl, jahrl, cover;
 	private JPanel titlep, albump, artistp, jahrp, coverp, buttonsp;
-	private JTextArea infoArea;
 	private JButton saveButton, closeButton;
-	private GridBagConstraints constr;
-	
 	private File imageFile;
 	private BufferedImage image;
 	private ImageIcon icon;
 
 	/*
-	 * EditorPanel is the ID3v2-Editor, the right side of the window.
-	 * It has a big gridlayout with jpanels for every field in it
-	 * the cover is an ImageIcon 
+	 * EditorPanel is the ID3v2-Editor, the right side of the window. It has a
+	 * big gridlayout with jpanels for every field in it the cover is an
+	 * ImageIcon
 	 */
 	public EditorPanel() {
 
@@ -81,7 +72,6 @@ public class EditorPanel extends JPanel {
 		jahrp.add(jahrl);
 		jahrp.add(jahrf);
 
-		
 		closeButton = new JButton("Close");
 		saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
@@ -95,16 +85,13 @@ public class EditorPanel extends JPanel {
 			}
 		});
 		buttonsp = new JPanel();
-		GridBagLayout bgl = new GridBagLayout();
 		buttonsp.setLayout(new FlowLayout());
-		saveButton.setSize(new Dimension(100,40));
-		closeButton.setSize(new Dimension(100,40));
+		saveButton.setSize(new Dimension(100, 40));
+		closeButton.setSize(new Dimension(100, 40));
 		buttonsp.add(saveButton);
 		buttonsp.add(closeButton);
-		
 
 		ediStructure = new GridBagLayout();
-		constr = new GridBagConstraints();
 
 		setLayout(ediStructure);
 
@@ -114,7 +101,6 @@ public class EditorPanel extends JPanel {
 		addComponent(this, ediStructure, jahrp, 1, 2, 1, 1, 0.5, 0);
 		addComponent(this, ediStructure, buttonsp, 1, 3, 1, 1, 0.5, 1);
 	}
-
 
 	private void addComponent(Container cont, GridBagLayout gbl, Component c,
 			int x, int y, int width, int height, double weightx, double weighty) {
@@ -133,7 +119,7 @@ public class EditorPanel extends JPanel {
 		gbl.setConstraints(c, gbc);
 		cont.add(c);
 	}
-	
+
 	public void addCover() {
 		coverp = new JPanel();
 		coverp.setLayout(new GridLayout(1, 1));
@@ -144,10 +130,11 @@ public class EditorPanel extends JPanel {
 		} catch (IOException ioex) {
 			System.exit(1);
 		}
-		
-		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp.getSize().width : buttonsp.getSize().height;
-		icon = new ImageIcon(image.getScaledInstance(minSpace,
-				minSpace, Image.SCALE_SMOOTH));
+
+		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp
+				.getSize().width : buttonsp.getSize().height;
+		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace,
+				Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
 		coverp.addMouseListener(new mListener());
 		cover.setPreferredSize(new Dimension(10, 10));
@@ -155,50 +142,50 @@ public class EditorPanel extends JPanel {
 		addComponent(this, ediStructure, coverp, 0, 2, 1, 3, 0, 0);
 	}
 
-
-
 	public void refresh(DefaultMutableTreeNode n) {
 
 		titlef.setText(n.toString() + "title");
 		albumf.setText(n.toString() + "album");
 		artistf.setText(n.toString() + "artist");
 		jahrf.setText(n.toString() + "jahr");
-		//setCover
+		// setCover
 	}
+
 	public void repaintCover() {
 		// get the min space for cover, set it as size
-		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp.getSize().width : buttonsp.getSize().height;
-		
+		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp
+				.getSize().width : buttonsp.getSize().height;
+
 		coverp.removeAll();
-		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace, Image.SCALE_SMOOTH));
+		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace,
+				Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
 		cover.setPreferredSize(new Dimension(10, 10));
 		coverp.add(cover);
 	}
-	
-	private class mListener implements MouseListener{
-		 public void mousePressed(MouseEvent e) {
-		     
-		    }
 
-		    public void mouseReleased(MouseEvent e) {
+	private class mListener implements MouseListener {
+		public void mousePressed(MouseEvent e) {
 
-		    }
+		}
 
-		    public void mouseEntered(MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
 
-		    }
+		}
 
-		    public void mouseExited(MouseEvent e) {
+		public void mouseEntered(MouseEvent e) {
 
-		    }
+		}
 
-		    public void mouseClicked(MouseEvent e) {    	
-		    	CoverDialog dialog = new CoverDialog();
-		    	dialog.setVisible(true);
-		    }
+		public void mouseExited(MouseEvent e) {
+
+		}
+
+		public void mouseClicked(MouseEvent e) {
+			CoverDialog dialog = new CoverDialog();
+			dialog.setVisible(true);
+		}
 	}
-	
 
 	public JLabel getCover() {
 		return cover;
