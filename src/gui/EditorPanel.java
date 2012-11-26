@@ -30,45 +30,45 @@ import model.MP3File;
 public class EditorPanel extends JPanel {
 
 	private GridBagLayout ediStructure;
-	private JTextField titlef, albumf, artistf, jahrf;
-	private JLabel titlel, albuml, artistl, jahrl, cover;
-	private JPanel titlep, albump, artistp, jahrp, coverp, buttonsp;
+	private JTextField titleField, albumField, artistField, yearField;
+	private JLabel titleLabel, albumLabel, artistLabel, jahrLabel, cover;
+	private JPanel titlePanel, albumPanel, artistPanel, jahrPanel, coverPanel, buttonsPanel;
 	private JButton saveButton, closeButton;
 	private File imageFile;
 	private BufferedImage image;
 	private ImageIcon icon;
-	
+
 	private MP3File currentlyOpenedMP3File = null;
 
 	public EditorPanel() {
 
-		titlep = new JPanel();
-		titlep.setLayout(new GridLayout(2, 0));
-		titlel = new JLabel("Titel");
-		titlef = new JTextField("Titel");
-		titlep.add(titlel);
-		titlep.add(titlef);
+		titlePanel = new JPanel();
+		titlePanel.setLayout(new GridLayout(2, 0));
+		titleLabel = new JLabel("Titel");
+		titleField = new JTextField("Titel");
+		titlePanel.add(titleLabel);
+		titlePanel.add(titleField);
 
-		albump = new JPanel();
-		albump.setLayout(new GridLayout(2, 0));
-		albuml = new JLabel("Album");
-		albumf = new JTextField("Album");
-		albump.add(albuml);
-		albump.add(albumf);
+		albumPanel = new JPanel();
+		albumPanel.setLayout(new GridLayout(2, 0));
+		albumLabel = new JLabel("Album");
+		albumField = new JTextField("Album");
+		albumPanel.add(albumLabel);
+		albumPanel.add(albumField);
 
-		artistp = new JPanel();
-		artistp.setLayout(new GridLayout(2, 0));
-		artistl = new JLabel("Artist");
-		artistf = new JTextField("Artist");
-		artistp.add(artistl);
-		artistp.add(artistf);
+		artistPanel = new JPanel();
+		artistPanel.setLayout(new GridLayout(2, 0));
+		artistLabel = new JLabel("Artist");
+		artistField = new JTextField("Artist");
+		artistPanel.add(artistLabel);
+		artistPanel.add(artistField);
 
-		jahrp = new JPanel();
-		jahrp.setLayout(new GridLayout(2, 0));
-		jahrl = new JLabel("Jahr");
-		jahrf = new JTextField("Jahr");
-		jahrp.add(jahrl);
-		jahrp.add(jahrf);
+		jahrPanel = new JPanel();
+		jahrPanel.setLayout(new GridLayout(2, 0));
+		jahrLabel = new JLabel("Jahr");
+		yearField = new JTextField("Jahr");
+		jahrPanel.add(jahrLabel);
+		jahrPanel.add(yearField);
 
 		closeButton = new JButton("Close");
 		saveButton = new JButton("Save");
@@ -82,22 +82,22 @@ public class EditorPanel extends JPanel {
 				System.exit(0);
 			}
 		});
-		buttonsp = new JPanel();
-		buttonsp.setLayout(new FlowLayout());
+		buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new FlowLayout());
 		saveButton.setSize(new Dimension(100, 40));
 		closeButton.setSize(new Dimension(100, 40));
-		buttonsp.add(saveButton);
-		buttonsp.add(closeButton);
+		buttonsPanel.add(saveButton);
+		buttonsPanel.add(closeButton);
 
 		ediStructure = new GridBagLayout();
 
 		setLayout(ediStructure);
 
-		addComponent(this, ediStructure, titlep, 0, 0, 2, 1, 1.0, 0);
-		addComponent(this, ediStructure, artistp, 0, 1, 1, 1, 0.5, 0);
-		addComponent(this, ediStructure, albump, 1, 1, 1, 1, 0.5, 0);
-		addComponent(this, ediStructure, jahrp, 1, 2, 1, 1, 0.5, 0);
-		addComponent(this, ediStructure, buttonsp, 1, 3, 1, 1, 0.5, 1);
+		addComponent(this, ediStructure, titlePanel, 0, 0, 2, 1, 1.0, 0);
+		addComponent(this, ediStructure, artistPanel, 0, 1, 1, 1, 0.5, 0);
+		addComponent(this, ediStructure, albumPanel, 1, 1, 1, 1, 0.5, 0);
+		addComponent(this, ediStructure, jahrPanel, 1, 2, 1, 1, 0.5, 0);
+		addComponent(this, ediStructure, buttonsPanel, 1, 3, 1, 1, 0.5, 1);
 	}
 
 	private void addComponent(Container cont, GridBagLayout gbl, Component c,
@@ -119,8 +119,8 @@ public class EditorPanel extends JPanel {
 	}
 
 	public void addCover() {
-		coverp = new JPanel();
-		coverp.setLayout(new GridLayout(1, 1));
+		coverPanel = new JPanel();
+		coverPanel.setLayout(new GridLayout(1, 1));
 		imageFile = new File("testbild/bild.jpg");
 		image = null;
 		try {
@@ -129,44 +129,44 @@ public class EditorPanel extends JPanel {
 			System.exit(1);
 		}
 
-		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp
-				.getSize().width : buttonsp.getSize().height;
+		int minSpace = (artistPanel.getSize().width < buttonsPanel.getSize().height) ? artistPanel
+				.getSize().width : buttonsPanel.getSize().height;
 		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace,
 				Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
-		coverp.addMouseListener(new mListener());
+		coverPanel.addMouseListener(new mListener());
 		cover.setPreferredSize(new Dimension(10, 10));
-		coverp.add(cover);
-		addComponent(this, ediStructure, coverp, 0, 2, 1, 3, 0, 0);
+		coverPanel.add(cover);
+		addComponent(this, ediStructure, coverPanel, 0, 2, 1, 3, 0, 0);
 	}
 
 	public void load(MP3File n) {
-		if(this.currentlyOpenedMP3File != null){
-			this.currentlyOpenedMP3File.setTitle(this.titlef.getText());
-			this.currentlyOpenedMP3File.setAlbum(this.albumf.getText());
-			this.currentlyOpenedMP3File.setArtist(this.artistf.getText());
-			this.currentlyOpenedMP3File.setYear(this.jahrf.getText());
+		if (this.currentlyOpenedMP3File != null) {
+			this.currentlyOpenedMP3File.setTitle(this.getTitle());
+			this.currentlyOpenedMP3File.setAlbum(this.getAlbum());
+			this.currentlyOpenedMP3File.setArtist(this.getArtist());
+			this.currentlyOpenedMP3File.setYear(this.getYear());
 		}
-		
+
 		this.currentlyOpenedMP3File = n;
-		this.titlef.setText(n.getTitle());
-		this.albumf.setText(n.getAlbum());
-		this.artistf.setText(n.getArtist());
-		this.jahrf.setText(n.getYear());
+		this.setTitle(n.getTitle());
+		this.setAlbum(n.getAlbum());
+		this.setArtist(n.getArtist());
+		this.setYear(n.getYear());
 		// TODO: n.getCover()
 	}
 
 	public void repaintCover() {
 		// get the min space for cover, set it as size
-		int minSpace = (artistp.getSize().width < buttonsp.getSize().height) ? artistp
-				.getSize().width : buttonsp.getSize().height;
+		int minSpace = (artistPanel.getSize().width < buttonsPanel.getSize().height) ? artistPanel
+				.getSize().width : buttonsPanel.getSize().height;
 
-		coverp.removeAll();
+		coverPanel.removeAll();
 		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace,
 				Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
 		cover.setPreferredSize(new Dimension(10, 10));
-		coverp.add(cover);
+		coverPanel.add(cover);
 	}
 
 	private class mListener implements MouseListener {
@@ -197,35 +197,35 @@ public class EditorPanel extends JPanel {
 	}
 
 	public void setTitle(String s) {
-		titlef.setText(s);
+		titleField.setText(s);
 	}
 
 	public void setAlbum(String s) {
-		albumf.setText(s);
+		albumField.setText(s);
 	}
 
 	public void setArtist(String s) {
-		artistf.setText(s);
+		artistField.setText(s);
 	}
 
-	public void setJahr(String s) {
-		jahrf.setText(s);
+	public void setYear(String s) {
+		yearField.setText(s);
 	}
 
 	public String getTitle() {
-		return titlef.getText();
+		return titleField.getText();
 	}
 
 	public String getAlbum() {
-		return albumf.getText();
+		return albumField.getText();
 	}
 
 	public String getArtist() {
-		return artistf.getText();
+		return artistField.getText();
 	}
 
-	public String getJahr() {
-		return jahrf.getText();
+	public String getYear() {
+		return yearField.getText();
 	}
 
 }
