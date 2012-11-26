@@ -10,7 +10,7 @@ public class Folder extends DefaultMutableTreeNode {
 
 	public Folder(String path) {
 		if (path == null)
-			path = "mp3s";
+			path = "resources" + File.separator + "mp3s";
 
 		representedFolder = new File(path);
 
