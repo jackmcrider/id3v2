@@ -11,41 +11,44 @@ import javax.swing.JSplitPane;
 public class MainWindow extends JFrame {
 	private static final long serialVersionUID = -3497358611682975661L;
 
-	private JSplitPane mainSplit;
-	private NavigationPanel navPanel;
-	private EditorPanel ediPanel;
-	private int width = 600, height = 350;
+	// Components
+	private JSplitPane mainSplitter;
+	private NavigationPanel navigationPanel;
+	private EditorPanel editorPanel;
+	private int width = 800, height = 640;
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	/**
 	 * Create a new main window and setup the basics.
 	 */
 	public MainWindow() {
-
-		InitializeComponents();
-		setSize(new Dimension(width, height));
-		this.setMinimumSize(new Dimension(250, 350));
-		setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2
-				- width / 2, Toolkit.getDefaultToolkit().getScreenSize().height
-				/ 2 - height / 2);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		add(mainSplit);
-		this.setTitle("Meine kleine Musikbibliothek");
-		setVisible(true);
-		ediPanel.addCover(); // only after setVisible(true) the panels know
-								// their size.
-		setVisible(true);
+		// Size and position
+		this.setSize(new Dimension(width, height));
+		this.setMinimumSize(new Dimension(600, 480));
+		this.setLocation(this.screenSize.width / 2 - width / 2,	this.screenSize.height / 2 - height / 2);
+		
+		// Exit on close
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		// Initialize components and make them visible
+		this.initializeComponents();
+		this.setVisible(true);
+		
+		// Add the cover, when the panels know their size, after setVisible(true)
+		this.editorPanel.addCover();
 	}
 
-	private void InitializeComponents() {
+	private void initializeComponents() {
+		// Initialize editor and navigation panel
+		this.editorPanel = new EditorPanel();
+		this.navigationPanel = new NavigationPanel(editorPanel);
 
-		ediPanel = new EditorPanel();
-		navPanel = new NavigationPanel(ediPanel);
-
-		mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navPanel,
-				ediPanel);
-		mainSplit.setDividerLocation(width / 3);
-
-		// resizes the two panels when the main frame gets resized by user.
+		// Initialize the splitter
+		this.mainSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navigationPanel, editorPanel);
+		this.mainSplitter.setDividerLocation(width / 3);
+		this.add(mainSplitter);
+		
+		// Resize panels and cover
 		this.addComponentListener(new ComponentListener() {
 
 			@Override
@@ -58,12 +61,20 @@ public class MainWindow extends JFrame {
 
 			@Override
 			public void componentResized(ComponentEvent arg0) {
-				if (ediPanel.getCover() != null)
-					ediPanel.repaintCover();
-				if (navPanel.getSize().width > 0)
-					if (navPanel.getSize().width < width / 3)
-						mainSplit.setDividerLocation(getFrameSize().width / 4);
-				setVisible(true);
+				// Get the source of the event
+				MainWindow source = (MainWindow) arg0.getSource();
+				
+				// Resize cover
+				if (source.getEditorPanel().getCover() != null)
+					source.getEditorPanel().repaintCover();
+				
+				// Resize splitter
+				if (source.getNavigationPanel().getSize().width > 0)
+					if (source.getNavigationPanel().getSize().width < width / 3)
+						source.getMainSplitter().setDividerLocation(source.getSize().width / 3);
+				
+				// Repaint the source and set it visible again
+				// source.setVisible(true);
 			}
 
 			@Override
@@ -71,9 +82,29 @@ public class MainWindow extends JFrame {
 			}
 		});
 	}
-
-	public Dimension getFrameSize() {
-		return this.getSize();
+	
+	/**
+	 * Get the MainSplitter instance of the MainWindow
+	 * @return
+	 */
+	public JSplitPane getMainSplitter() {
+		return this.mainSplitter;
+	}
+	
+	/**
+	 * Get the NavigationPanel instance of the MainWindow
+	 * @return
+	 */
+	public NavigationPanel getNavigationPanel() {
+		return this.navigationPanel;
+	}
+	
+	/**
+	 * Get the EditorPanel instance of the MainWindow
+	 * @return
+	 */
+	public EditorPanel getEditorPanel() {
+		return this.editorPanel;
 	}
 
 }
