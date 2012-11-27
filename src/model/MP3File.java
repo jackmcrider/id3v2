@@ -4,8 +4,8 @@ import java.io.File;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+@SuppressWarnings("serial")
 public class MP3File extends DefaultMutableTreeNode {
-	private static final long serialVersionUID = 6499167243937478419L;
 	private File representedFile;
 	
 	private String title;

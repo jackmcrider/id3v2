@@ -8,9 +8,8 @@ import java.awt.event.ComponentListener;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
+@SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-	private static final long serialVersionUID = -3497358611682975661L;
-
 	// Components
 	private JSplitPane mainSplitter;
 	private NavigationPanel navigationPanel;

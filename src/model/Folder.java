@@ -4,8 +4,8 @@ import java.io.File;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+@SuppressWarnings("serial")
 public class Folder extends DefaultMutableTreeNode {
-	private static final long serialVersionUID = -9065207958966277512L;
 	private File representedFolder;
 	private int amountOfChildren = 0;
 
