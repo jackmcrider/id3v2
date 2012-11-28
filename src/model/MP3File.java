@@ -6,7 +6,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 @SuppressWarnings("serial")
 public class MP3File extends DefaultMutableTreeNode {
-	private File representedFile;
 	
 	private String title;
 	private String artist;
@@ -14,16 +13,16 @@ public class MP3File extends DefaultMutableTreeNode {
 	private String year;
 
 	public MP3File(String path) {
-		representedFile = new File(path);
+		this.setUserObject(new File(path));
 		
-		this.title = representedFile.hashCode() + " title";
-		this.artist = representedFile.hashCode() + " artist";
-		this.album = representedFile.hashCode() + " album";
-		this.year = representedFile.hashCode() + " year";
+		this.title = ((File) this.getUserObject()).hashCode() + " title";
+		this.artist = ((File) this.getUserObject()).hashCode() + " artist";
+		this.album = ((File) this.getUserObject()).hashCode() + " album";
+		this.year = ((File) this.getUserObject()).hashCode() + " year";
 	}
 
 	public String toString() {
-		return representedFile.getName();
+		return ((File) this.getUserObject()).getName();
 	}
 	
 	public String getTitle() {
