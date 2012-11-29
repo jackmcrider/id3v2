@@ -40,9 +40,10 @@ public class NavigationPanel extends JPanel {
 			public void valueChanged(TreeSelectionEvent e) {
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e
 						.getPath().getLastPathComponent();
-
+					System.out.println(selected.toString());
 				if (selected instanceof model.MP3File) {
 					ep.load((MP3File) selected);
+				
 				}
 			}
 		});

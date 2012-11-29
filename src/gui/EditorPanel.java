@@ -146,7 +146,7 @@ public class EditorPanel extends JPanel {
 	}
 
 	public void load(MP3File n) {
-		if (this.currentlyOpenedMP3File != null) {
+	/*	if (this.currentlyOpenedMP3File != null) {
 			this.currentlyOpenedMP3File.setTitle(this.getTitle());
 			this.currentlyOpenedMP3File.setAlbum(this.getAlbum());
 			this.currentlyOpenedMP3File.setArtist(this.getArtist());
@@ -158,7 +158,13 @@ public class EditorPanel extends JPanel {
 		this.setAlbum(n.getAlbum());
 		this.setArtist(n.getArtist());
 		this.setYear(n.getYear());
-		// TODO: n.getCover()
+		// TODO: n.getCover()*/
+		n.parse();
+		this.setTitle(n.getTitle());
+		this.setAlbum(n.getAlbum());
+		this.setArtist(n.getArtist());
+		this.setYear(n.getYear());
+		this.setCover(n.getCover());
 	}
 
 	public void repaintCover() {
@@ -214,6 +220,9 @@ public class EditorPanel extends JPanel {
 
 	public void setYear(String s) {
 		yearField.setText(s);
+	}
+	public void setCover(ImageIcon i){
+		cover.setIcon(i);
 	}
 
 	public String getTitle() {
