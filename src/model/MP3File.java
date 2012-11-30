@@ -156,7 +156,6 @@ public class MP3File extends DefaultMutableTreeNode {
 		marker2 += description.getTerminator().length;
 		byte [] imageData = BufferTools.copyBuffer(bytes, marker2, bytes.length - marker2);
 		this.setCover(new ImageIcon(imageData));
-	
 	}
 
 	public String toString() {
