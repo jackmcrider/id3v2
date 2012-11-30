@@ -62,8 +62,8 @@ public class EditorPanel extends JPanel {
 
 		this.artistPanel = new JPanel();
 		this.artistPanel.setLayout(new GridLayout(2, 0));
-		this.artistLabel = new JLabel("Künstler");
-		this.artistField = new JTextField("Künstler");
+		this.artistLabel = new JLabel("KÃ¼nstler");
+		this.artistField = new JTextField("KÃ¼nstler");
 		this.artistPanel.add(artistLabel);
 		this.artistPanel.add(artistField);
 
@@ -74,7 +74,7 @@ public class EditorPanel extends JPanel {
 		this.jahrPanel.add(jahrLabel);
 		this.jahrPanel.add(yearField);
 
-		this.closeButton = new JButton("Schließen");
+		this.closeButton = new JButton("SchlieÃŸen");
 		this.closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -153,12 +153,19 @@ public class EditorPanel extends JPanel {
 			this.currentlyOpenedMP3File.setYear(this.getYear());
 		}
 
+		/*
 		this.currentlyOpenedMP3File = n;
 		this.setTitle(n.getTitle());
 		this.setAlbum(n.getAlbum());
 		this.setArtist(n.getArtist());
 		this.setYear(n.getYear());
-		// TODO: n.getCover()
+		// TODO: n.getCover()*/
+		n.parse();
+		this.setTitle(n.getTitle());
+		this.setAlbum(n.getAlbum());
+		this.setArtist(n.getArtist());
+		this.setYear(n.getYear());
+		this.setCover(n.getCover());
 	}
 
 	public void repaintCover() {
@@ -214,6 +221,9 @@ public class EditorPanel extends JPanel {
 
 	public void setYear(String s) {
 		yearField.setText(s);
+	}
+	public void setCover(ImageIcon i){
+		cover.setIcon(i);
 	}
 
 	public String getTitle() {

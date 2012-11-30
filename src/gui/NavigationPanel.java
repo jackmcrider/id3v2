@@ -44,10 +44,9 @@ public class NavigationPanel extends JPanel {
 			public void valueChanged(TreeSelectionEvent e) {
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e
 						.getPath().getLastPathComponent();
-
+					System.out.println(selected.toString());
 				if (selected instanceof model.MP3File) {
 					ep.load((MP3File) selected);
-					test(((File) selected.getUserObject()).getAbsolutePath());
 				}
 			}
 		});
@@ -108,6 +107,7 @@ public class NavigationPanel extends JPanel {
 		System.out.println(path);
 		try {
 			File file = new File(path);
+			@SuppressWarnings("resource")
 			DataInputStream dis = new DataInputStream(new FileInputStream(file));
 
 			dis.skipBytes(10); // Skip the first 10 bytes
@@ -115,6 +115,7 @@ public class NavigationPanel extends JPanel {
 			int y = 0;
 			while (x < 10) {
 				byte[] b = new byte[4];
+				@SuppressWarnings("unused")
 				int len = dis.read(b);
 				String keyword = new String(b);
 				System.out.println("Keyword: " + keyword);
@@ -154,6 +155,8 @@ public class NavigationPanel extends JPanel {
 				System.out.println("Text" + x + ": " + buffer.toString());
 				x++;
 			}
+			
+			dis.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
