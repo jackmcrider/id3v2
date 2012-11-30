@@ -4,7 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -43,7 +47,6 @@ public class NavigationPanel extends JPanel {
 					System.out.println(selected.toString());
 				if (selected instanceof model.MP3File) {
 					ep.load((MP3File) selected);
-				
 				}
 			}
 		});
@@ -97,6 +100,67 @@ public class NavigationPanel extends JPanel {
 		} else {
 			System.out
 					.println("replaceTree() was not called with the path of a directory!");
+		}
+	}
+	
+	public void test(String path) {
+		System.out.println(path);
+		try {
+			File file = new File(path);
+			@SuppressWarnings("resource")
+			DataInputStream dis = new DataInputStream(new FileInputStream(file));
+
+			dis.skipBytes(10); // Skip the first 10 bytes
+			int x = 0;
+			int y = 0;
+			while (x < 10) {
+				byte[] b = new byte[4];
+				@SuppressWarnings("unused")
+				int len = dis.read(b);
+				String keyword = new String(b);
+				System.out.println("Keyword: " + keyword);
+				int frameBodySize = dis.readInt();
+				if (frameBodySize == 0)
+					return;
+				System.out.println("FrameBodySize: " + frameBodySize); // Size
+																		// of
+																		// the
+																		// next
+																		// Frame
+				short flags = dis.readShort();
+				System.out.println("Flags: " + flags);
+
+				byte[] textBuffer = new byte[frameBodySize];
+				System.out.println(textBuffer.length);
+				len = dis.read(textBuffer);
+
+				y = 0;
+				StringBuffer buffer = new StringBuffer();
+				for (int i = 0; i < textBuffer.length; i++) {
+					if (textBuffer[i] == 0) {
+						System.out.println("x: " + x + " y: " + y);
+						continue;
+					}
+					if (keyword.startsWith("T")) {
+						if (i < 3) {
+							System.out.println("x: " + x + " y: " + y);
+							continue;
+						}
+					}
+
+					y++;
+					buffer.append((char) textBuffer[i]);
+				}
+
+				System.out.println("Text" + x + ": " + buffer.toString());
+				x++;
+			}
+			
+			dis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

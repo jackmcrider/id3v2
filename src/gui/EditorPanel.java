@@ -153,6 +153,16 @@ public class EditorPanel extends JPanel {
 			this.currentlyOpenedMP3File.setYear(this.getYear());
 		}
 
+<<<<<<< HEAD
+=======
+		/*
+		this.currentlyOpenedMP3File = n;
+		this.setTitle(n.getTitle());
+		this.setAlbum(n.getAlbum());
+		this.setArtist(n.getArtist());
+		this.setYear(n.getYear());
+		// TODO: n.getCover()*/
+>>>>>>> b1cc8845d824f87cebf7b962815fe133888e313d
 		n.parse();
 		this.setTitle(n.getTitle());
 		this.setAlbum(n.getAlbum());

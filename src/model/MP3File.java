@@ -10,10 +10,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.ImageIcon;
 
 @SuppressWarnings("serial")
 public class MP3File extends DefaultMutableTreeNode {
@@ -22,6 +20,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	private String artist;
 	private String album;
 	private String year;
+	@SuppressWarnings("unused")
 	private BufferedImage image;
 	private ImageIcon cover;
 
@@ -79,6 +78,8 @@ public class MP3File extends DefaultMutableTreeNode {
 					this.parseCover(textBuffer);
 				}
 				x++;
+				
+				data.close();
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
