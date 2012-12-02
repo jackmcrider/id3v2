@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -9,8 +10,10 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -18,8 +21,12 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -43,6 +50,8 @@ public class EditorPanel extends JPanel {
 	private ImageIcon icon;
 
 	private MP3File currentlyOpenedMP3File = null;
+	
+	private CoverDialog dialog;
 
 	public EditorPanel() {
 
@@ -93,6 +102,21 @@ public class EditorPanel extends JPanel {
 		this.closeButton.setSize(new Dimension(100, 40));
 		this.buttonsPanel.add(this.saveButton);
 		this.buttonsPanel.add(this.closeButton);
+		
+		this.coverPanel = new JPanel();
+		this.coverPanel.setLayout(new FlowLayout());
+		this.cover = new JLabel();
+		this.cover.setBorder(BorderFactory.createLineBorder(Color.black));
+		this.cover.addMouseListener(new MouseAdapter()  
+		{  
+			public void mouseClicked(MouseEvent e) {
+				handleEvent();
+			}
+		});  
+
+		this.cover.setPreferredSize(new Dimension(100, 100));
+		this.coverPanel.add(cover);
+		
 
 		this.editorStructure = new GridBagLayout();
 
@@ -103,8 +127,28 @@ public class EditorPanel extends JPanel {
 		addComponent(this, this.editorStructure, this.albumPanel, 1, 1, 1, 1, 0.5, 0);
 		addComponent(this, this.editorStructure, this.jahrPanel, 1, 2, 1, 1, 0.5, 0);
 		addComponent(this, this.editorStructure, this.buttonsPanel, 1, 3, 1, 1, 0.5, 1);
+		addComponent(this, this.editorStructure, this.coverPanel, 0, 2, 1, 3, 0, 0);
+	}
+	
+	public void handleEvent(){
+		final JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		int returnVal = fc.showOpenDialog(this);
+		
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			image = null;
+			try {
+				image = ImageIO.read(file);
+				this.setCover(new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+			} catch (IOException ioex) {
+				System.exit(1);
+			}
+			
+		}
 	}
 
+	
 	private void addComponent(Container cont, GridBagLayout gbl, Component c,
 			int x, int y, int width, int height, double weightx, double weighty) {
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -123,56 +167,24 @@ public class EditorPanel extends JPanel {
 		cont.add(c);
 	}
 
-	public void addCover() {
-		coverPanel = new JPanel();
-		coverPanel.setLayout(new GridLayout(1, 1));
-		imageFile = new File("testbild/bild.jpg");
-		image = null;
-		try {
-			image = ImageIO.read(imageFile);
-		} catch (IOException ioex) {
-			System.exit(1);
-		}
-
-		int minSpace = (artistPanel.getSize().width < buttonsPanel.getSize().height) ? artistPanel
-				.getSize().width : buttonsPanel.getSize().height;
-		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace,
-				Image.SCALE_SMOOTH));
-		cover = new JLabel(icon);
-		coverPanel.addMouseListener(new mListener());
-		cover.setPreferredSize(new Dimension(10, 10));
-		coverPanel.add(cover);
-		addComponent(this, editorStructure, coverPanel, 0, 2, 1, 3, 0, 0);
-	}
-
-	public void load(MP3File n) {
+	public void load(MP3File mp3) {
+		
 		if (this.currentlyOpenedMP3File != null) {
 			this.currentlyOpenedMP3File.setTitle(this.getTitle());
 			this.currentlyOpenedMP3File.setAlbum(this.getAlbum());
 			this.currentlyOpenedMP3File.setArtist(this.getArtist());
 			this.currentlyOpenedMP3File.setYear(this.getYear());
+			this.currentlyOpenedMP3File.setCover((ImageIcon)this.getCover());
 		}
-
-<<<<<<< HEAD
-=======
-		/*
-		this.currentlyOpenedMP3File = n;
-		this.setTitle(n.getTitle());
-		this.setAlbum(n.getAlbum());
-		this.setArtist(n.getArtist());
-		this.setYear(n.getYear());
-		// TODO: n.getCover()*/
->>>>>>> b1cc8845d824f87cebf7b962815fe133888e313d
-		n.parse();
-		this.setTitle(n.getTitle());
-		this.setAlbum(n.getAlbum());
-		this.setArtist(n.getArtist());
-		this.setYear(n.getYear());
-		this.setCover(n.getCover());
+		this.currentlyOpenedMP3File = mp3;
+		this.setTitle(mp3.getTitle());
+		this.setAlbum(mp3.getAlbum());
+		this.setArtist(mp3.getArtist());
+		this.setYear(mp3.getYear());
+		this.setCover(mp3.getCover());
 	}
 
 	public void repaintCover() {
-		// get the min space for cover, set it as size
 		int minSpace = (artistPanel.getSize().width < buttonsPanel.getSize().height) ? artistPanel
 				.getSize().width : buttonsPanel.getSize().height;
 
@@ -182,32 +194,6 @@ public class EditorPanel extends JPanel {
 		cover = new JLabel(icon);
 		cover.setPreferredSize(new Dimension(10, 10));
 		coverPanel.add(cover);
-	}
-
-	private class mListener implements MouseListener {
-		public void mousePressed(MouseEvent e) {
-
-		}
-
-		public void mouseReleased(MouseEvent e) {
-
-		}
-
-		public void mouseEntered(MouseEvent e) {
-
-		}
-
-		public void mouseExited(MouseEvent e) {
-		}
-
-		public void mouseClicked(MouseEvent e) {
-			CoverDialog dialog = new CoverDialog();
-			dialog.setVisible(true);
-		}
-	}
-
-	public JLabel getCover() {
-		return cover;
 	}
 
 	public void setTitle(String s) {
@@ -226,8 +212,12 @@ public class EditorPanel extends JPanel {
 		yearField.setText(s);
 	}
 	public void setCover(ImageIcon i){
-		cover.setIcon(i);
+		cover.setIcon(new ImageIcon(i.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 	}
+	
+	public Icon getCover(){
+		return this.cover.getIcon();
+	}	
 
 	public String getTitle() {
 		return titleField.getText();
@@ -243,6 +233,16 @@ public class EditorPanel extends JPanel {
 
 	public String getYear() {
 		return yearField.getText();
+	}
+	
+	public Point getFrameLoc(){
+		return this.getLocationOnScreen();
+	}
+	public int getFrameX(){
+		return this.getWidth();
+	}
+	public int getFrameY(){
+		return this.getHeight();
 	}
 
 }

@@ -11,6 +11,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 @SuppressWarnings("serial")
@@ -23,48 +24,32 @@ public class MP3File extends DefaultMutableTreeNode {
 	@SuppressWarnings("unused")
 	private BufferedImage image;
 	private ImageIcon cover;
+	private File file;
 
 	public MP3File(String path) {
-
 		this.setUserObject(new File(path));
 		parse();
-
-		this.title = ((File) this.getUserObject()).hashCode() + " title";
-		this.artist = ((File) this.getUserObject()).hashCode() + " artist";
-		this.album = ((File) this.getUserObject()).hashCode() + " album";
-		this.year = ((File) this.getUserObject()).hashCode() + " year";
 	}
 
 	public void parse() {
 		try {
+			boolean hasTagsLeft = true;
 			File file = new File(this.getUserObject().toString());
-			DataInputStream data = new DataInputStream(
-					new FileInputStream(file));
-
-			data.skipBytes(10); // Skip the first 10 bytes
-			int x = 0;
-			while (x < 1090) {
+			DataInputStream data = new DataInputStream(new FileInputStream(file));
+			data.skipBytes(10);
+			while (hasTagsLeft) {
 				byte[] keyArr = new byte[4]; // Keyword besteht aus 4 Bytes
 				data.read(keyArr);
 				String keyword = new String(keyArr);
 				int frameBodySize = data.readInt();
 				short flags = data.readShort();
-				if (frameBodySize == 0)
+				if (frameBodySize == 0){
+					hasTagsLeft = false;
 					return;
-
-				System.out.println("Keyword: " + keyword);
-				System.out.println("FrameBodySize: " + frameBodySize); // Frame
-				System.out.println("Flags: " + flags);
+				}
 
 				byte[] textBuffer = new byte[frameBodySize];
 				data.read(textBuffer);
-
-				/*
-				 * StringBuffer buffer = new StringBuffer(); for (int i = 0; i <
-				 * textBuffer.length; i++) { if (textBuffer[i] == 0) { continue;
-				 * } if (keyword.startsWith("T")) { if (i < 3) { continue; } }
-				 * buffer.append((char) textBuffer[i]); }
-				 */
 
 				if (keyword.equals("TALB"))
 					this.parseAlbum(textBuffer);
@@ -77,9 +62,6 @@ public class MP3File extends DefaultMutableTreeNode {
 				if (keyword.equals("APIC")) {
 					this.parseCover(textBuffer);
 				}
-				x++;
-				
-				data.close();
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -136,27 +118,37 @@ public class MP3File extends DefaultMutableTreeNode {
 	}
 
 	public void parseCover(byte[] bytes) {
-		int marker;
-		for (marker = 1; marker < bytes.length; marker++) {
-			if (bytes[marker] == 0)
+		int pointer;
+		for (pointer = 1; pointer < bytes.length; pointer++) {
+			if (bytes[pointer] == 0)
 				break;
 		}
 		try {
-			String mimeType = new String(bytes, 1, marker - 1, "ISO-8859-1");
+			String mimeType = new String(bytes, 1, pointer - 1, "ISO-8859-1");
 		} catch (UnsupportedEncodingException e) {
 			String mimeType = "image/unknown";
 		}
-		byte pictureType = bytes[marker + 1];
-		marker += 2;
-		int marker2;
-		for (marker2 = marker; marker2 < bytes.length; marker2++) {
-			if (bytes[marker2] == 0)
+		byte pictureType = bytes[pointer + 1];
+		pointer += 2;
+		int pointer2;
+		for (pointer2 = pointer; pointer2 < bytes.length; pointer2++) {
+			if (bytes[pointer2] == 0)
 				break;
 		}
-		EncodedText description = new EncodedText(bytes[0], BufferTools.copyBuffer(bytes, marker, marker2 - marker));
-		marker2 += description.getTerminator().length;
-		byte [] imageData = BufferTools.copyBuffer(bytes, marker2, bytes.length - marker2);
-		this.setCover(new ImageIcon(imageData));
+		int length = pointer2 - pointer;
+		byte[] copy = new byte[length];
+		if (length > 0) {
+			System.arraycopy(bytes, pointer, copy, 0, length);
+		}
+		
+		EncodedText description = new EncodedText(bytes[0], copy);
+		pointer2 += description.getTerminator().length;
+		
+		length = bytes.length - pointer2;
+		byte [] imageData = new byte[length];
+		System.arraycopy(bytes, pointer2, imageData, 0, length);
+		cover = new ImageIcon(imageData);
+		this.setCover(cover);
 	}
 
 	public String toString() {

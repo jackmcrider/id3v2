@@ -14,7 +14,7 @@ public class MainWindow extends JFrame {
 	private JSplitPane mainSplitter;
 	private NavigationPanel navigationPanel;
 	private EditorPanel editorPanel;
-	private int width = 800, height = 640;
+	private int width = 640, height = 320;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	/**
@@ -23,7 +23,7 @@ public class MainWindow extends JFrame {
 	public MainWindow() {
 		// Size and position
 		this.setSize(new Dimension(width, height));
-		this.setMinimumSize(new Dimension(600, 480));
+		this.setMinimumSize(new Dimension(600, 280));
 		this.setLocation(this.screenSize.width / 2 - width / 2,	this.screenSize.height / 2 - height / 2);
 		
 		// Exit on close
@@ -34,7 +34,7 @@ public class MainWindow extends JFrame {
 		this.setVisible(true);
 		
 		// Add the cover, when the panels know their size, after setVisible(true)
-		this.editorPanel.addCover();
+		
 	}
 
 	private void initializeComponents() {
@@ -65,7 +65,7 @@ public class MainWindow extends JFrame {
 				
 				// Resize cover
 				if (source.getEditorPanel().getCover() != null)
-					source.getEditorPanel().repaintCover();
+					//source.getEditorPanel().repaintCover();
 				
 				// Resize splitter
 				if (source.getNavigationPanel().getSize().width > 0)

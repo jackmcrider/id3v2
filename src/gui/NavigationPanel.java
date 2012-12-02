@@ -42,9 +42,7 @@ public class NavigationPanel extends JPanel {
 		this.visualTree = new JTree(this.tree);
 		this.visualTree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
-				DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e
-						.getPath().getLastPathComponent();
-					System.out.println(selected.toString());
+				DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
 				if (selected instanceof model.MP3File) {
 					ep.load((MP3File) selected);
 				}
