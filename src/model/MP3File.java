@@ -1,31 +1,23 @@
 package model;
 
-import java.awt.List;
-import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
+@SuppressWarnings("serial")
 public class MP3File extends DefaultMutableTreeNode {
-	
-	
 	private byte[] header = new byte[10];
 	private Vector<ID3TextFrame> tags = new Vector<ID3TextFrame>();
 	private ID3PicFrame pframe;
@@ -154,15 +146,22 @@ if(x==3){
 		String mimeType;
 		byte pictureType;
 		byte [] imageData;
+		
 		for (pointer = 1; pointer < bytes.length; pointer++) {
 			if (bytes[pointer] == 0)
 				break;
 		}
+		
 		try {
-			mimeType = new String(bytes, 1, pointer - 1, "ISO-8859-1");
+			if(bytes[0] == 0)
+				mimeType = new String(bytes, 1, pointer - 1, "ISO-8859-1");
+			else
+				mimeType = new String(bytes, 1, pointer - 1, "UTF-16");
 		} catch (UnsupportedEncodingException e) {
 			mimeType = "image/unknown";
 		}
+		System.out.println(bytes[0]);
+		System.out.println(mimeType);
 		pictureType = bytes[pointer + 1];
 		pointer += 2;
 		int pointer2;
