@@ -18,7 +18,9 @@ public class Folder extends DefaultMutableTreeNode {
 			if (f.isDirectory()) {
 				this.add(new Folder(f.getPath()));
 			} else if (f.getPath().endsWith("mp3")){
-				this.add(new MP3File(f.getPath()));
+				MP3File mp3File = new MP3File(f.getPath());
+				if(mp3File.isID3v2Tag())
+					this.add(mp3File);
 			} else {
 				this.add(new OrdinaryFile(f.getPath()));
 			}
