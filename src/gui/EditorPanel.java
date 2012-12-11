@@ -92,7 +92,7 @@ public class EditorPanel extends JPanel {
 		this.saveButton = new JButton("Speichern");
 		this.saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("noe saving bro");
+				currentlyOpenedMP3File.write();
 			}
 		});
 		
