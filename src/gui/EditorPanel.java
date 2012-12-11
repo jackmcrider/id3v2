@@ -71,8 +71,8 @@ public class EditorPanel extends JPanel {
 
 		this.artistPanel = new JPanel();
 		this.artistPanel.setLayout(new GridLayout(2, 0));
-		this.artistLabel = new JLabel("K√ºnstler");
-		this.artistField = new JTextField("K√ºnstler");
+		this.artistLabel = new JLabel("Künstler");
+		this.artistField = new JTextField("Künstler");
 		this.artistPanel.add(artistLabel);
 		this.artistPanel.add(artistField);
 
@@ -83,7 +83,7 @@ public class EditorPanel extends JPanel {
 		this.jahrPanel.add(jahrLabel);
 		this.jahrPanel.add(yearField);
 
-		this.closeButton = new JButton("Schlie√üen");
+		this.closeButton = new JButton("Schließen");
 		this.closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
