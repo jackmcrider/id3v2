@@ -24,10 +24,13 @@ public class ID3TextFrame {
 		this.keyword = s;
 	}
 	public void setData(String s){
-		if(type == 1)
-			this.size = s.getBytes().length*2;
-		else
-			this.size = s.getBytes().length;
+		if(type == 1){
+			new String(s.getBytes(), Charset.forName("UTF-16"));
+			this.size = s.getBytes().length*2+3;
+		}
+		else{
+			this.size = s.getBytes().length+1;
+		}
 		this.data = s;
 	}
 	
@@ -61,23 +64,8 @@ public class ID3TextFrame {
 
 			e.printStackTrace();
 		}
-		byte[] complete = new byte[keyword.length+size.length+flags.length+data.length+1];
-		//System.out.println("#keyword#");
-		//System.out.println(new String(keyword));
-		//System.out.println(new String(data));
-		//for(int i = 0; i < keyword.length; i++){
-			//System.out.println(i+"["+keyword[i]+"]");
-		//}
-		//System.out.println();
-		//System.out.println("#size#");
-		//for(int i = 0; i < size.length; i++){
-			//System.out.println(i+"["+size[i]+"]");
-		//}
-		//System.out.println();
-		//System.out.println("#flags#");
-		//for(int i = 0; i < flags.length; i++){
-			//System.out.println(i+"["+flags[i]+"]");
-		//}
+		byte[] complete = new byte[10+this.size];
+
 		for(int i = 0; i < complete.length; i++){
 			if(i < keyword.length)
 				complete[i] = keyword[i];
@@ -90,11 +78,7 @@ public class ID3TextFrame {
 			if(i > keyword.length+6)
 				complete[i] = data[i-keyword.length-7];
 		}
-		//System.out.println();
-		//System.out.println("#complete#");
-		//for(int i = 0; i < complete.length; i++){
-			//System.out.println(i+":["+complete[i]+"]");
-		//}
+
 		return complete;
 	}
 	

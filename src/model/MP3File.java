@@ -1,8 +1,13 @@
 package model;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.List;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -18,14 +23,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-
 public class MP3File extends DefaultMutableTreeNode {
-	
-	
+
 	private byte[] header = new byte[10];
 	private Vector<ID3TextFrame> tags = new Vector<ID3TextFrame>();
 	private ID3PicFrame pframe;
@@ -36,7 +40,6 @@ public class MP3File extends DefaultMutableTreeNode {
 	private String artist;
 	private String album;
 	private String year;
-	
 
 	public MP3File(String path) {
 		this.setUserObject(new File(path));
@@ -47,53 +50,44 @@ public class MP3File extends DefaultMutableTreeNode {
 		try {
 			boolean hasTagsLeft = true;
 			file = new File(this.getUserObject().toString());
-			DataInputStream data = new DataInputStream(new FileInputStream(file));
-			System.out.println("dataSize_before:"+data.available());
-			//System.out.println("bytes: "+data.available());
+			DataInputStream data = new DataInputStream(
+					new FileInputStream(file));
 			data.read(header);
 			int x = 0;
 			while (hasTagsLeft) {
 				byte[] keyArr = new byte[4];
-				
+
 				data.read(keyArr);
 				String keyword = new String(keyArr);
-				
+
 				int frameBodySize = data.readInt();
 				short flags = data.readShort();
-				
-				if (frameBodySize == 0){
-					rest = new byte[data.available()+6];
-					for(int i = 0; data.available() > 0;i++){	
-						data.read(rest);						
+				if (frameBodySize == 0) {
+					rest = new byte[data.available() + 6];
+					for (int i = 0; data.available() > 0; i++) {
+						data.read(rest);
 					}
-					//rest = this.shiftZeros(6,rest);
-					System.out.println("audioSize_before:"+rest.length);
 					data.close();
 					hasTagsLeft = false;
 					return;
 				}
-				
 
 				byte[] textBuffer = new byte[frameBodySize];
 				data.read(textBuffer);
-if(x==3){
-	System.out.println(keyword);
-	System.out.println(frameBodySize);
-}
-				
-				if (keyword.startsWith("T")){
-					System.out.println("tagSize_before"+x+":"+(textBuffer.length+10));
-					this.parseText(textBuffer,keyword, frameBodySize,flags);
+				/*if (x == 3) {
+					System.out.println(keyword);
+					System.out.println(frameBodySize);
+				}*/
+
+				if (keyword.startsWith("T")) {
+					this.parseText(textBuffer, keyword, frameBodySize, flags);
 				}
 				if (keyword.equals("APIC")) {
-					System.out.println("picSize_before:"+(textBuffer.length+10));
-					this.parseCover(textBuffer, keyword, frameBodySize,flags);
+					this.parseCover(textBuffer, keyword, frameBodySize, flags);
 				}
 				x++;
 			}
-			
-			
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -102,58 +96,39 @@ if(x==3){
 
 	}
 
-	public byte[] shiftZeros(int amount, byte[] data){
-		byte[] tmp = new byte [data.length];
-		for(int i = 0; i < data.length; i++){
-			if(i < amount)
-				tmp[i] = 0;
-			else
-				tmp[i] = data[i-amount];
-		}
-		return tmp;
-	}
-	public void parseText(byte[] frame, String keyword, int size, short flags){
+	public void parseText(byte[] frame, String keyword, int size, short flags) {
 		String s;
 		Byte type = frame[0];
 		ID3TextFrame id3frame;
-		if (type == 1){
+		if (type == 1) {
 			s = new String(Arrays.copyOfRange(frame, 1, frame.length),
 					Charset.forName("UTF-16"));
-			
-		}else{
-			s = new String(Arrays.copyOfRange(frame, 1, frame.length),Charset.forName("ISO-8859-1"));
-			
+
+		} else {
+			s = new String(Arrays.copyOfRange(frame, 1, frame.length),
+					Charset.forName("ISO-8859-1"));
+
 		}
-		if(keyword.equals("TPE1"))
+		if (keyword.equals("TPE1"))
 			this.setArtist(s);
-		if(keyword.equals("TALB"))
+		if (keyword.equals("TALB"))
 			this.setAlbum(s);
-		if(keyword.equals("TIT2"))
+		if (keyword.equals("TIT2"))
 			this.setTitle(s);
-		if(keyword.equals("TYER"))
+		if (keyword.equals("TYER"))
 			this.setYear(s);
-		id3frame = new ID3TextFrame(keyword,s,type,size,flags);
+		
+		id3frame = new ID3TextFrame(keyword, s, type, size, flags);
 		tags.add(id3frame);
 	}
-	
 
-	public void parseCover(byte[] bytes,String keyword, int frameBodySize, short flags) {
-//		for(int i = 0; i < keyword.getBytes().length; i++)
-//			System.out.println("1k["+keyword.getBytes()[i]+"]");
-//		
-//		for(int i = 0; i < 4; i++)
-//			System.out.println("1s["+ByteBuffer.allocate(4).putInt(frameBodySize).array()[i]+"]");
-//		
-//		for(int i = 0; i < 2; i++)
-//			System.out.println("1f["+ByteBuffer.allocate(2).putShort(flags).array()[i]+"]");
-//		
-//		for(int i = 0; i < (20-6-keyword.getBytes().length); i++)
-//			System.out.println("1["+bytes[i]+"]");
-//		
+	public void parseCover(byte[] bytes, String keyword, int frameBodySize,
+			short flags) {
 		int pointer;
 		String mimeType;
+		
 		byte pictureType;
-		byte [] imageData;
+		byte[] imageData;
 		for (pointer = 1; pointer < bytes.length; pointer++) {
 			if (bytes[pointer] == 0)
 				break;
@@ -175,72 +150,70 @@ if(x==3){
 		if (length > 0) {
 			System.arraycopy(bytes, pointer, copy, 0, length);
 		}
-		//System.out.println("c:"+copy.length);
 		EncodedText description = new EncodedText(bytes[0], copy);
 		pointer2 += description.getTerminator().length;
-		
-		
+
 		length = bytes.length - pointer2;
 		imageData = new byte[length];
 		System.arraycopy(bytes, pointer2, imageData, 0, length);
-		pframe = new ID3PicFrame(mimeType, pictureType, description, imageData, keyword, frameBodySize, flags);
+		pframe = new ID3PicFrame(mimeType, pictureType, description, imageData,
+				keyword, frameBodySize, flags);
 		cover = new ImageIcon(imageData);
 		this.setCover(cover);
 	}
 
-    public void write(){
-    	 try{
-    		 File f = new File(this.getUserObject().toString());
-    		 FileOutputStream fos= new FileOutputStream(f, false);
-    		 DataOutputStream dos= new DataOutputStream(fos);
-    		 // FileWriter fstream = new FileWriter(this.getUserObject().toString(),false);
-    		 // BufferedWriter out = new BufferedWriter(fstream);
-    		  for(int i = 0; i < header.length; i++){
-    			//  out.write(header[i]);
-    			  dos.write(header[i]);
-    		  }
-    		  byte[] tag;
-    		  for(int i = 0; i < tags.size(); i++){
-    			  tag = tags.get(i).getBytes();
-    			  System.out.println("tagSize_after"+i+":"+tag.length);
-    			  for(int k = 0; k < tag.length; k++){
-    				//out.write(tag[k]);
-    				dos.write(tag[k]);
-    			  }
-    			  
-    		  }
-    		  
-    		  tag = pframe.getBytes();
-    		  System.out.println("picSize_after:"+tag.length);
-    		//  System.out.println("p1:"+tag.length);
-    		  for(int k = 0; k < tag.length; k++){
+	public void write() {
+		try {
+			File f = new File(this.getUserObject().toString());
+			FileOutputStream fos = new FileOutputStream(f, false);
+			DataOutputStream dos = new DataOutputStream(fos);
+			 FileWriter fstream = new FileWriter(this.getUserObject().toString(),true);
+			 BufferedWriter out = new BufferedWriter(fstream);
+			for (int i = 0; i < header.length; i++) {
+				//out.write(header[i]);
+				dos.write(header[i]);
+			}
+			byte[] tag;
+			for (int i = 0; i < tags.size(); i++) {
+				tag = tags.get(i).getBytes();
+				for (int k = 0; k < tag.length; k++) {
+					//out.write(tag[k]);
+					dos.write(tag[k]);
+				}
+			}
+
+			tag = pframe.getBytes();
+			for (int k = 0; k < tag.length; k++) {
 				//out.write(tag[k]);
 				dos.write(tag[k]);
-    		  }   		  
-    		  System.out.println("audioSize_after:"+rest.length);
-    		  for(int i = 0; i < rest.length; i++){
-    			 //System.out.println(i+"/"+rest.length);
-    			// out.write(rest[i]);
-    			 dos.write(rest[i]);
-    		  }
-    		  System.out.println("size_after:"+dos.size());
-    		  
-    		dos.flush();
-   		    dos.close();
-   		    fos.close();
-    		  
-    		//  out.flush();
-    		  //out.close();
-    		  //fstream.close();
-    		  }catch (Exception e){//Catch exception if any
-    		  System.err.println("Error: " + e.getMessage());
-    		  }
-    }
-	
-	
-	
+			}
+			for (int i = 0; i < rest.length; i++) {
+				//out.write(rest[i]);
+				dos.write(rest[i]);
+			}
+			dos.flush();
+			dos.close();
+			fos.close();
+
+			//out.flush();
+			//out.close();
+			//fstream.close();
+		} catch (Exception e) {// Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
+	}
+
 	public String toString() {
 		return ((File) this.getUserObject()).getName();
+	}
+	
+	public ID3TextFrame getTag(String keyword){
+		for(int k = 0; k < tags.size(); k++){
+			if(tags.get(k).getKeyword().equals(keyword)){
+				return tags.get(k);
+			}
+		}
+		return null;
 	}
 
 	public ImageIcon getCover() {
@@ -264,32 +237,61 @@ if(x==3){
 	}
 
 	public void setCover(ImageIcon i) {
+		//System.out.println( i.getIconWidth()+" "+i.getIconHeight());
+		if(pframe != null && i.getIconWidth()>0 &&i.getIconHeight()>0){
+			try {
+				BufferedImage buImg = new BufferedImage(i.getIconWidth(), i.getIconHeight(), BufferedImage.TYPE_INT_ARGB); 
+				Graphics2D g2 = buImg.createGraphics();
+				g2.drawImage(i.getImage(), 0, 0, null);
+				//g2.dispose();
+				//buImg.flush();
+	            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+	            ImageIO.write(buImg, "png", outStream);
+	            //outStream.flush();
+	            pframe.setData(outStream.toByteArray());
+	            outStream.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
 		this.cover = i;
 	}
 
 	public void setTitle(String title) {
-		/*ID3TextFrame tag = null;
-		int i = 0;
 		if(tags.size() > 0){
-			tag = this.tags.get(i);
-			while(!tag.getKeyword().equals("TPE1")){
-				i++;
-				tag = tags.get(i);
-			}
+			ID3TextFrame tag = getTag("TIT2");
+			if(tag != null)
+			tag.setData(title);
 		}
-		tag.setData(title);*/
 		this.title = title;
 	}
 
 	public void setArtist(String artist) {
+		if(tags.size() > 0){
+			ID3TextFrame tag = getTag("TPE1");
+			if(tag != null)
+			tag.setData(artist);
+		}
 		this.artist = artist;
 	}
+	
+
 
 	public void setAlbum(String album) {
+		if(tags.size() > 0){
+			ID3TextFrame tag = getTag("TALB");
+			if(tag != null)
+			tag.setData(album);
+		}
 		this.album = album;
 	}
 
 	public void setYear(String year) {
+		if(tags.size() > 0){
+			ID3TextFrame tag = getTag("TYER");
+			if(tag != null)
+			tag.setData(year);
+		}
 		this.year = year;
 	}
 }

@@ -140,6 +140,7 @@ public class EditorPanel extends JPanel {
 			image = null;
 			try {
 				image = ImageIO.read(file);
+				
 				this.setCover(new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 			} catch (IOException ioex) {
 				System.exit(1);
