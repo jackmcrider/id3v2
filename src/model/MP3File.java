@@ -59,7 +59,9 @@ public class MP3File extends DefaultMutableTreeNode {
 
 			// Check if we have a header???
 			if (data.available() < 10) {
+				System.out.println("Header smaller than 10 bytes!");
 				this.isID3v2Tag = false;
+				this.setParent(null);
 				data.close();
 				return;
 			}
@@ -76,7 +78,9 @@ public class MP3File extends DefaultMutableTreeNode {
 					&& Integer.toHexString(this.header[9]).compareTo("80") < 0) {
 				this.isID3v2Tag = true;
 			} else {
+				System.out.println("Header is not id3v2!");
 				this.isID3v2Tag = false;
+				this.setParent(null);
 				data.close();
 				return;
 			}

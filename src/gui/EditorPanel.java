@@ -209,7 +209,7 @@ public class EditorPanel extends JPanel {
 	}
 	public void setCover(ImageIcon i){
 		if(i != null)
-		cover.setIcon(new ImageIcon(i.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+			cover.setIcon(new ImageIcon(i.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 	}
 	
 	public Icon getCover(){
