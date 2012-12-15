@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -207,40 +208,42 @@ public class MP3File extends DefaultMutableTreeNode {
 
 	public void write() {
 		try {
-			File f = new File(this.getUserObject().toString());
-			FileOutputStream fos = new FileOutputStream(f, false);
-			DataOutputStream dos = new DataOutputStream(fos);
-			 //FileWriter fstream = new FileWriter(this.getUserObject().toString(),true);
-			 //BufferedWriter out = new BufferedWriter(fstream);
+			//File f = new File(this.getUserObject().toString());
+			//FileOutputStream fos = new FileOutputStream(f, false);
+			//DataOutputStream dos = new DataOutputStream(fos);
+			 FileWriter fstream = new FileWriter(this.getUserObject().toString(),false);
+			 BufferedWriter out = new BufferedWriter(fstream);
 			for (int i = 0; i < header.length; i++) {
-				//out.write(header[i]);
-				dos.write(header[i]);
+				out.write(header[i]);
+				//dos.write(header[i]);
 			}
 			byte[] tag;
 			for (int i = 0; i < tags.size(); i++) {
 				tag = tags.get(i).getBytes();
 				for (int k = 0; k < tag.length; k++) {
-					//out.write(tag[k]);
-					dos.write(tag[k]);
+					out.write(tag[k]);
+					//dos.write(tag[k]);
 				}
 			}
 
 			tag = pframe.getBytes();
 			for (int k = 0; k < tag.length; k++) {
-				//out.write(tag[k]);
-				dos.write(tag[k]);
+				out.write(tag[k]);
+				//dos.write(tag[k]);
 			}
 			for (int i = 0; i < rest.length; i++) {
-				//out.write(rest[i]);
-				dos.write(rest[i]);
+				out.write(rest[i]);
+				//dos.write(rest[i]);
 			}
-			dos.flush();
-			dos.close();
-			fos.close();
+			//dos.flush();
+			//dos.close();
+			//fos.close();
 
-			//out.flush();
-			//out.close();
-			//fstream.close();
+			out.flush();
+			fstream.flush();
+			out.close();
+			
+			fstream.close();
 
 		} catch (Exception e) {// Catch exception if any
 			System.err.println("Error: " + e.getMessage());
