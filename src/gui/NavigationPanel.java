@@ -4,11 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -43,9 +39,11 @@ public class NavigationPanel extends JPanel {
 		this.visualTree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-				if (selected instanceof model.MP3File) {
-					System.out.println("manmanmanana");
-					ep.load((MP3File) selected);
+				if (selected instanceof MP3File) {
+					MP3File current = (MP3File) selected;
+					if(!current.isParsed())
+						current.parse();
+					ep.load(current);
 				}
 			}
 		});
