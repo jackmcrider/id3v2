@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,9 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 
 import model.DirectoryTree;
 import model.Folder;
@@ -48,10 +45,8 @@ public class NavigationPanel extends JPanel {
 			}
 		});
 
-		this.visualTree.setCellRenderer(new FileTreeCellRenderer());
-
 		// Logic for changing directory
-		this.directoryChooser = new JButton("Verzeichnis wechseln");
+		this.directoryChooser = new JButton("Change directory");
 		this.directoryChooser.addActionListener(new ActionListener() {
 
 			@Override
@@ -80,7 +75,7 @@ public class NavigationPanel extends JPanel {
 		});
 
 		// Add components
-		this.add(new JLabel("Verzeichnisbaum"), BorderLayout.NORTH);
+		this.add(new JLabel("Directory tree"), BorderLayout.NORTH);
 		this.add(this.visualTree, BorderLayout.CENTER);
 		this.add(this.directoryChooser, BorderLayout.SOUTH);
 	}
@@ -95,46 +90,7 @@ public class NavigationPanel extends JPanel {
 		if (newRoot.exists() && newRoot.isDirectory()) {
 			this.tree.setRoot(new Folder(path));
 		} else {
-			System.out
-					.println("replaceTree() was not called with the path of a directory!");
+			System.out.println("replaceTree() was not called with the path of a directory!");
 		}
-	}
-	
-
-}
-
-@SuppressWarnings("serial")
-class FileTreeCellRenderer extends DefaultTreeCellRenderer {
-
-	private FileSystemView fileSystemView;
-
-	private JLabel label;
-
-	FileTreeCellRenderer() {
-		label = new JLabel();
-		label.setOpaque(true);
-		fileSystemView = FileSystemView.getFileSystemView();
-	}
-
-	@Override
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean selected, boolean expanded, boolean leaf, int row,
-			boolean hasFocus) {
-
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-		File file = (File) node.getUserObject();
-		label.setIcon(fileSystemView.getSystemIcon(file));
-		label.setText(fileSystemView.getSystemDisplayName(file));
-		label.setToolTipText(file.getPath());
-
-		if (selected) {
-			label.setBackground(backgroundSelectionColor);
-			label.setForeground(this.textSelectionColor);
-		} else {
-			label.setBackground(backgroundNonSelectionColor);
-			label.setForeground(this.textNonSelectionColor);
-		}
-
-		return label;
 	}
 }

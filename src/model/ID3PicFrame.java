@@ -1,11 +1,7 @@
 package model;
 
-import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-
-import javax.swing.ImageIcon;
 
 public class ID3PicFrame {
 	String keyword, mimeType;

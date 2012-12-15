@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +24,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -45,20 +43,17 @@ public class EditorPanel extends JPanel {
 
 	private JButton saveButton, closeButton;
 
-	private File imageFile;
 	private BufferedImage image;
 	private ImageIcon icon;
 
 	private MP3File currentlyOpenedMP3File = null;
-	
-	private CoverDialog dialog;
 
 	public EditorPanel() {
 
 		this.titlePanel = new JPanel();
 		this.titlePanel.setLayout(new GridLayout(2, 0));
-		this.titleLabel = new JLabel("Titel");
-		this.titleField = new JTextField("Titel");
+		this.titleLabel = new JLabel("Title");
+		this.titleField = new JTextField("Title");
 		this.titlePanel.add(titleLabel);
 		this.titlePanel.add(titleField);
 
@@ -71,25 +66,25 @@ public class EditorPanel extends JPanel {
 
 		this.artistPanel = new JPanel();
 		this.artistPanel.setLayout(new GridLayout(2, 0));
-		this.artistLabel = new JLabel("K�nstler");
-		this.artistField = new JTextField("K�nstler");
+		this.artistLabel = new JLabel("Artist");
+		this.artistField = new JTextField("Artist");
 		this.artistPanel.add(artistLabel);
 		this.artistPanel.add(artistField);
 
 		this.jahrPanel = new JPanel();
 		this.jahrPanel.setLayout(new GridLayout(2, 0));
-		this.jahrLabel = new JLabel("Jahr");
-		this.yearField = new JTextField("Jahr");
+		this.jahrLabel = new JLabel("Year");
+		this.yearField = new JTextField("Year");
 		this.jahrPanel.add(jahrLabel);
 		this.jahrPanel.add(yearField);
 
-		this.closeButton = new JButton("Schlie�en");
+		this.closeButton = new JButton("Close");
 		this.closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		this.saveButton = new JButton("Speichern");
+		this.saveButton = new JButton("Save");
 		this.saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				currentlyOpenedMP3File.write();
