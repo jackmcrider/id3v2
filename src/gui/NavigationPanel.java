@@ -71,7 +71,6 @@ public class NavigationPanel extends JPanel {
 					navigationPanel.replaceTree(file.getAbsolutePath());
 				}
 			}
-
 		});
 
 		// Add components
