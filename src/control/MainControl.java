@@ -145,7 +145,6 @@ public class MainControl {
 			}
 
 			changedFiles.clear();
-			
 			mainWindow.getNavigationPanel().updateUI();
 		}
 	}
