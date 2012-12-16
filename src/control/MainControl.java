@@ -110,6 +110,7 @@ public class MainControl {
 					.getAlbum());
 			currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 					.getYear());
+			if(mainWindow.getEditorPanel().getCover() != null)
 			currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
 					.getCover());
 			
@@ -130,8 +131,7 @@ public class MainControl {
 
 		mainWindow.getEditorPanel().setTitle(currentlyOpenedMP3File.getTitle());
 		mainWindow.getEditorPanel().setAlbum(currentlyOpenedMP3File.getAlbum());
-		mainWindow.getEditorPanel().setArtist(
-				currentlyOpenedMP3File.getArtist());
+		mainWindow.getEditorPanel().setArtist(currentlyOpenedMP3File.getArtist());
 		mainWindow.getEditorPanel().setYear(currentlyOpenedMP3File.getYear());
 		mainWindow.getEditorPanel().setCover(currentlyOpenedMP3File.getCover());
 	}

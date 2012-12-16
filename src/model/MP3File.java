@@ -28,6 +28,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 @SuppressWarnings("serial")
 public class MP3File extends DefaultMutableTreeNode {
 
+	private byte[] descriptionBytes;
+	private byte encodingType;
+	private static final byte[][] terminators = {
+		{0},
+		{0, 0},
+		{0, 0},
+		{0}
+	};
+	
+	
 	// Holds the header
 	private byte[] header = new byte[10];
 	// Holds all the tags
@@ -221,17 +231,47 @@ public class MP3File extends DefaultMutableTreeNode {
 		if (length > 0) {
 			System.arraycopy(bytes, pointer, copy, 0, length);
 		}
-
-		EncodedText description = new EncodedText(bytes[0], copy);
-		pointer2 += description.getTerminator().length;
+		
+		this.encodingType = bytes[0];
+		this.descriptionBytes = copy;
+		stripBomAndTerminator();
+		pointer2 += getTerminator().length;
 
 		length = bytes.length - pointer2;
 		imageData = new byte[length];
 		System.arraycopy(bytes, pointer2, imageData, 0, length);
-		this.pframe = new ID3PicFrame(mimeType, pictureType, description,
+		this.pframe = new ID3PicFrame(mimeType, pictureType, encodingType, descriptionBytes,
 				imageData, keyword, frameBodySize, flags);
 		this.cover = new ImageIcon(imageData);
 		this.setCover(this.cover);
+	}
+	public byte[] getTerminator() {
+		return terminators[encodingType];
+	}
+	
+	private void stripBomAndTerminator() {
+		int leadingCharsToRemove = 0;
+		if (this.descriptionBytes.length >= 2 && ((this.descriptionBytes[0] == (byte)0xfe && this.descriptionBytes[1] == (byte)0xff) || (this.descriptionBytes[0] == (byte)0xff && this.descriptionBytes[1] == (byte)0xfe))) {
+			leadingCharsToRemove = 2;
+		} else if (this.descriptionBytes.length >= 3 && (this.descriptionBytes[0] == (byte)0xef && this.descriptionBytes[1] == (byte)0xbb && this.descriptionBytes[2] == (byte)0xbf)) {
+			leadingCharsToRemove = 3;
+		}
+		int trailingCharsToRemove = 0;
+		for (int i = 1; i <= 2; i++) {
+			if ((this.descriptionBytes.length - leadingCharsToRemove - trailingCharsToRemove) >= i && this.descriptionBytes[this.descriptionBytes.length - i] == 0) {
+				trailingCharsToRemove++;
+			} else {
+				break;
+			}
+		}
+		if (leadingCharsToRemove + trailingCharsToRemove > 0) {
+			int newLength = this.descriptionBytes.length - leadingCharsToRemove - trailingCharsToRemove;
+			byte[] newValue = new byte[newLength];
+			if (newLength > 0) {
+				System.arraycopy(this.descriptionBytes, leadingCharsToRemove, newValue, 0, newValue.length);
+			}
+			this.descriptionBytes = newValue;
+		}
 	}
 
 	/**
@@ -361,17 +401,16 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * @param i
 	 */
 	public void setCover(ImageIcon i) {
-		if (pframe != null && i.getIconWidth() > 0 && i.getIconHeight() > 0) {
+		if (pframe != null && i.getIconWidth() > 0 && i.getIconHeight() > 0 && i != null) {
 			try {
 				BufferedImage buImg = new BufferedImage(i.getIconWidth(), i.getIconHeight(), BufferedImage.TYPE_INT_ARGB); 
 				Graphics2D g2 = buImg.createGraphics();
 				g2.drawImage(i.getImage(), 0, 0, null);
-				System.out.println("asdasd");
-				// g2.dispose();
-				// buImg.flush();
+				g2.dispose();
+				buImg.flush();
 				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 				ImageIO.write(buImg, "png", outStream);
-				// outStream.flush();
+				outStream.flush();
 				pframe.setData(outStream.toByteArray());
 				outStream.close();
 			} catch (IOException e) {
