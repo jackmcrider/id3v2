@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -231,43 +232,38 @@ public class MP3File extends DefaultMutableTreeNode {
 
 	public void write() {
 		try {
-			File f = new File(this.getUserObject().toString());
+			File f = (File) this.getUserObject();
+			
 			FileOutputStream fos = new FileOutputStream(f, false);
 			DataOutputStream dos = new DataOutputStream(fos);
-			// FileWriter fstream = new
-			// FileWriter(this.getUserObject().toString(),true);
-			// BufferedWriter out = new BufferedWriter(fstream);
+			BufferedOutputStream bos = new BufferedOutputStream(dos);
+			
 			for (int i = 0; i < header.length; i++) {
 				// out.write(header[i]);
-				dos.write(header[i]);
+				bos.write(header[i]);
 			}
 			byte[] tag;
 			for (int i = 0; i < tags.size(); i++) {
 				tag = tags.get(i).getBytes();
 				for (int k = 0; k < tag.length; k++) {
 					// out.write(tag[k]);
-					dos.write(tag[k]);
+					bos.write(tag[k]);
 				}
 			}
 
 			tag = pframe.getBytes();
 			for (int k = 0; k < tag.length; k++) {
 				// out.write(tag[k]);
-				dos.write(tag[k]);
+				bos.write(tag[k]);
 			}
 			for (int i = 0; i < audioPart.length; i++) {
 				// out.write(rest[i]);
-				dos.write(audioPart[i]);
+				bos.write(audioPart[i]);
 			}
-			dos.flush();
-			dos.close();
+			bos.flush();
 			fos.close();
 
-			// out.flush();
-			// out.close();
-			// fstream.close();
-
-		} catch (Exception e) {// Catch exception if any
+		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
 	}
@@ -330,6 +326,7 @@ public class MP3File extends DefaultMutableTreeNode {
 
 	public void setTitle(String title) {
 		if (tags.size() > 0) {
+			System.out.println(title);
 			ID3TextFrame tag = getTag("TIT2");
 			if (tag != null)
 				tag.setData(title);

@@ -39,28 +39,46 @@ public class EditorPanel extends JPanel {
 	private class addFileToChangedFiles implements KeyListener {
 
 		@Override
-		public void keyPressed(KeyEvent e) {}
+		public void keyPressed(KeyEvent e) {
+		}
 
 		@Override
-		public void keyReleased(KeyEvent e) {}
+		public void keyReleased(KeyEvent e) {
+			if (!changedFiles.contains(currentlyOpenedMP3File)
+					&& currentlyOpenedMP3File != null
+					&& currentlyOpenedMP3File.isParsed()) {
+				
+				if (e.getSource() == titleField)
+					currentlyOpenedMP3File.setTitle(titleField.getText());
 
-		@Override
-		public void keyTyped(KeyEvent e) {
-			if(!changedFiles.contains(currentlyOpenedMP3File)){
+				if (e.getSource() == albumField)
+					currentlyOpenedMP3File.setTitle(albumField.getText());
+
+				if (e.getSource() == artistField)
+					currentlyOpenedMP3File.setTitle(artistField.getText());
+
+				if (e.getSource() == yearField)
+					currentlyOpenedMP3File.setTitle(yearField.getText());
+
 				System.out.println("Changed " + currentlyOpenedMP3File);
 				changedFiles.add(currentlyOpenedMP3File);
 			}
 		}
+
+		@Override
+		public void keyTyped(KeyEvent e) { }
 	}
-	
+
 	private class saveChangedFiles implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(changedFiles.size() > 0){
-				for(MP3File changed : changedFiles){
+			if (changedFiles.size() > 0) {
+				for (MP3File changed : changedFiles) {
 					System.out.println("Write " + changed);
 					changed.write();
 					System.out.println("Written " + changed);
 				}
+				
+				changedFiles.clear();
 			}
 		}
 	}
@@ -78,12 +96,12 @@ public class EditorPanel extends JPanel {
 	private ImageIcon icon;
 
 	private MP3File currentlyOpenedMP3File = null;
-	
+
 	private LinkedList<MP3File> changedFiles = new LinkedList<MP3File>();
 
 	public EditorPanel() {
 		addFileToChangedFiles addFileToChangedFiles = new addFileToChangedFiles();
-		
+
 		this.titlePanel = new JPanel();
 		this.titlePanel.setLayout(new GridLayout(2, 0));
 		this.titleLabel = new JLabel("Title");
