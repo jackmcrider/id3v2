@@ -30,7 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import control.MainControl;
+import control.Program;
 
 @SuppressWarnings("serial")
 public class EditorPanel extends JPanel {
@@ -42,7 +42,7 @@ public class EditorPanel extends JPanel {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			mainControl.updateCurrentlyOpenedMP3File();
+			Program.getControl().updateCurrentlyOpenedMP3File();
 		}
 
 		@Override
@@ -52,7 +52,7 @@ public class EditorPanel extends JPanel {
 
 	private class saveChangedFiles implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			mainControl.saveChangedFiles();
+			Program.getControl().saveChangedFiles();
 		}
 	}
 
@@ -68,11 +68,7 @@ public class EditorPanel extends JPanel {
 	private BufferedImage image;
 	private ImageIcon icon;
 
-	private MainControl mainControl;
-
-	public EditorPanel(MainControl control) {
-		mainControl = control;
-
+	public EditorPanel() {
 		addFileToChangedFiles addFileToChangedFiles = new addFileToChangedFiles();
 
 		this.titlePanel = new JPanel();
@@ -155,6 +151,9 @@ public class EditorPanel extends JPanel {
 	}
 
 	public void handleEvent() {
+		if(!Program.getControl().currentlyOpenedMP3FileIsParsed())
+			return;
+		
 		final JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		int returnVal = fc.showOpenDialog(this);
@@ -167,10 +166,10 @@ public class EditorPanel extends JPanel {
 				icon = new ImageIcon(image.getScaledInstance(100, 100,
 						Image.SCALE_SMOOTH));
 				this.setCover(icon);
-			} catch (IOException ioex) {
-				System.exit(1);
+				Program.getControl().updateCurrentlyOpenedMP3File();
+			} catch (IOException e) {
+				Program.getControl().setStatus(e.getMessage());
 			}
-
 		}
 	}
 

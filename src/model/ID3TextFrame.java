@@ -46,9 +46,6 @@ public class ID3TextFrame {
 		return this.size;
 	}
 
-	/*
-	 * 1: keyword 2: bodysize 3: flags 4: data
-	 */
 	public byte[] getBytes() {
 		byte[] keyword = this.keyword.getBytes();
 		byte[] size = ByteBuffer.allocate(4).putInt(this.size).array();

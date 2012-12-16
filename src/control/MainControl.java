@@ -25,7 +25,7 @@ public class MainControl {
 			e.printStackTrace();
 		}
 
-		mainWindow = new MainWindow(this);
+		mainWindow = new MainWindow();
 		mainWindow.setTitle("ID3-Tag Editor");
 		setStatus("Everything is fine!");
 	}
@@ -143,11 +143,13 @@ public class MainControl {
 		if (changedFiles.size() > 0) {
 			for (MP3File changed : changedFiles) {
 				changed.write();
-				setStatus("Saved " + changed.getAbsolutePath());
+				//setStatus("Saved " + changed.getAbsolutePath());
 			}
 
 			changedFiles.clear();
 			mainWindow.getNavigationPanel().updateUI();
+		}else{
+			setStatus("Nothing to do!");
 		}
 	}
 

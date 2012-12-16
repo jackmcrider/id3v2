@@ -13,30 +13,19 @@ public class ID3PicFrame {
 	public static final String CHARSET_UTF_16 = "UTF-16LE";
 	public static final String CHARSET_UTF_16BE = "UTF-16BE";
 	public static final String CHARSET_UTF_8 = "UTF-8";
-	
-	private static final String[] characterSets = {
-		CHARSET_ISO_8859_1,
-		CHARSET_UTF_16,
-		CHARSET_UTF_16BE,
-		CHARSET_UTF_8
-	};
-	
-	private static final byte[][] boms = {
-		{},
-		{(byte)0xff, (byte)0xfe},
-		{(byte) 0xfe, (byte) 0xff},
-		{}
-	};
-	
-	private static final byte[][] terminators = {
-		{0},
-		{0, 0},
-		{0, 0},
-		{0}
-	};
 
-	public ID3PicFrame(String mimeType, byte type, byte dtype, byte[] descriptionBytes,
-			byte[] data, String keyword, int bodysize, short flags) {
+	private static final String[] characterSets = { CHARSET_ISO_8859_1,
+			CHARSET_UTF_16, CHARSET_UTF_16BE, CHARSET_UTF_8 };
+
+	private static final byte[][] boms = { {}, { (byte) 0xff, (byte) 0xfe },
+			{ (byte) 0xfe, (byte) 0xff }, {} };
+
+	private static final byte[][] terminators = { { 0 }, { 0, 0 }, { 0, 0 },
+			{ 0 } };
+
+	public ID3PicFrame(String mimeType, byte type, byte dtype,
+			byte[] descriptionBytes, byte[] data, String keyword, int bodysize,
+			short flags) {
 		this.mimeType = mimeType;
 		this.type = type;
 		this.dtype = dtype;
@@ -50,22 +39,22 @@ public class ID3PicFrame {
 	public String getKeyword() {
 		return this.keyword;
 	}
-	public void setKeyword(String s){
+
+	public void setKeyword(String s) {
 		this.keyword = s;
 	}
-	public void setData(byte[] bytes){
-		
+
+	public void setData(byte[] bytes) {
+
 		data = bytes;
-		
+
 		this.mimeType = "image/jpeg";
-		
-			this.bodysize = data.length+mimeType.getBytes().length+ toBytes(false,false).length;
+
+		this.bodysize = data.length + mimeType.getBytes().length
+				+ toBytes(false, false).length;
 
 	}
 
-	/*
-	 * 1: keyword 2: bodysize 3: flags 4: data
-	 */
 	public byte[] getBytes() {
 		byte[] keyword = this.keyword.getBytes();
 		byte[] size = ByteBuffer.allocate(4).putInt(this.bodysize).array();
@@ -120,35 +109,39 @@ public class ID3PicFrame {
 		int marker = mimeTypeLength + 1;
 		bytes[marker++] = 0;
 		bytes[marker++] = type;
-		if (description != null && toBytes(false,false).length > 0) {
-			byte[] descriptionBytes = toBytes(true,true);
-				if (descriptionBytes.length > 0) {
-					System.arraycopy(descriptionBytes, 0, bytes, marker, descriptionBytes.length);
-				}
+		if (description != null && toBytes(false, false).length > 0) {
+			byte[] descriptionBytes = toBytes(true, true);
+			if (descriptionBytes.length > 0) {
+				System.arraycopy(descriptionBytes, 0, bytes, marker,
+						descriptionBytes.length);
+			}
 			marker += descriptionBytes.length;
 		} else {
 			bytes[marker++] = 0;
 		}
 		if (data != null && data.length > 0) {
-				if (data.length > 0) {
-					System.arraycopy(data, 0, bytes, marker, data.length);
-				}
+			if (data.length > 0) {
+				System.arraycopy(data, 0, bytes, marker, data.length);
+			}
 		}
 		return bytes;
 
 	}
-	
+
 	private static String characterSetForTextEncoding(byte textEncoding) {
 		try {
 			return characterSets[textEncoding];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new IllegalArgumentException("Invalid text encoding " + textEncoding);
+			throw new IllegalArgumentException("Invalid text encoding "
+					+ textEncoding);
 		}
 	}
-	
+
 	public byte[] toBytes(boolean includeBom, boolean includeTerminator) {
 		characterSetForTextEncoding(dtype); // ensured textEncoding is valid
-		int newLength = this.description.length + (includeBom ? boms[dtype].length : 0) + (includeTerminator ? getTerminator().length : 0);
+		int newLength = this.description.length
+				+ (includeBom ? boms[dtype].length : 0)
+				+ (includeTerminator ? getTerminator().length : 0);
 		if (newLength == this.description.length) {
 			return this.description;
 		} else {
@@ -157,12 +150,14 @@ public class ID3PicFrame {
 			if (includeBom) {
 				byte[] bom = boms[dtype];
 				if (bom.length > 0) {
-					System.arraycopy(boms[dtype], 0, bytes, i, boms[dtype].length);
+					System.arraycopy(boms[dtype], 0, bytes, i,
+							boms[dtype].length);
 					i += boms[dtype].length;
 				}
 			}
 			if (this.description.length > 0) {
-				System.arraycopy(this.description, 0, bytes, i, this.description.length);
+				System.arraycopy(this.description, 0, bytes, i,
+						this.description.length);
 				i += this.description.length;
 			}
 			if (includeTerminator) {
@@ -174,9 +169,9 @@ public class ID3PicFrame {
 			return bytes;
 		}
 	}
+
 	public byte[] getTerminator() {
 		return terminators[dtype];
 	}
-
 
 }

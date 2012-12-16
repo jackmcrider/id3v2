@@ -15,7 +15,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 
 import model.Folder;
-import control.MainControl;
+import control.Program;
 
 @SuppressWarnings("serial")
 public class NavigationPanel extends JPanel {
@@ -23,11 +23,7 @@ public class NavigationPanel extends JPanel {
 	private JTree visualTree;
 	private JButton directoryChooser;
 
-	private MainControl mainControl;
-
-	public NavigationPanel(MainControl control) {
-		mainControl = control;
-
+	public NavigationPanel() {
 		// Set layout of NavigationPanel
 		this.setLayout(new BorderLayout());
 
@@ -38,7 +34,7 @@ public class NavigationPanel extends JPanel {
 		this.visualTree = new JTree(this.tree);
 		this.visualTree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
-				mainControl.clickedOnFileInTree(e);
+				Program.getControl().clickedOnFileInTree(e);
 			}
 		});
 
@@ -86,7 +82,7 @@ public class NavigationPanel extends JPanel {
 		if (newRoot.exists() && newRoot.isDirectory()) {
 			this.tree.setRoot(new Folder(path));
 		} else {
-			mainControl.setStatus("The thing that you selected was not a directory.");
+			Program.getControl().setStatus("The thing that you selected was not a directory.");
 		}
 	}
 }

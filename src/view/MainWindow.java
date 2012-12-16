@@ -10,13 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 
-import control.MainControl;
-
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-	// Control reference
-	private MainControl mainControl;
-
 	// Components
 	private JSplitPane mainSplitter;
 	private JLabel statusBar;
@@ -28,9 +23,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * Create a new main window and setup the basics.
 	 */
-	public MainWindow(MainControl control) {
-		mainControl = control;
-
+	public MainWindow() {
 		// Size and position
 		setSize(new Dimension(width, height));
 		setMinimumSize(new Dimension(600, 280));
@@ -54,8 +47,8 @@ public class MainWindow extends JFrame {
 		setLayout(new BorderLayout());
 
 		// Initialize editor and navigation panel
-		editorPanel = new EditorPanel(mainControl);
-		navigationPanel = new NavigationPanel(mainControl);
+		editorPanel = new EditorPanel();
+		navigationPanel = new NavigationPanel();
 		statusBar = new JLabel("Statusbar");
 
 		// Initialize the splitter

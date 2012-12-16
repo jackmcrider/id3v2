@@ -19,7 +19,7 @@ public class Folder extends DefaultMutableTreeNode {
 				MP3File mp3File = new MP3File(f.getPath());
 				this.add(mp3File);
 			} else {
-				this.add(new OrdinaryFile(f.getPath()));
+				// this.add(new OrdinaryFile(f.getPath()));
 			}
 		}
 	}

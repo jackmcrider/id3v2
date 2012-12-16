@@ -20,12 +20,14 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import control.Program;
+
 @SuppressWarnings("serial")
 public class MP3File extends DefaultMutableTreeNode {
-
-	private byte[] descriptionBytes;
-	private byte encodingType;
-	private static final byte[][] terminators = { { 0 }, { 0, 0 }, { 0, 0 },
+	// Encoding variables
+	private byte[] finalImageData;
+	private byte finalImageDataEncoding;
+	private static final byte[][] textTerminators = { { 0 }, { 0, 0 }, { 0, 0 },
 			{ 0 } };
 
 	// Holds the header
@@ -195,11 +197,13 @@ public class MP3File extends DefaultMutableTreeNode {
 		byte pictureType;
 		byte[] imageData;
 
+		// Read empty stuff
 		for (pointer = 1; pointer < bytes.length; pointer++) {
 			if (bytes[pointer] == 0)
 				break;
 		}
 
+		// Determine image encoding
 		try {
 			if (bytes[0] == 0)
 				mimeType = new String(bytes, 1, pointer - 1, "ISO-8859-1");
@@ -209,65 +213,86 @@ public class MP3File extends DefaultMutableTreeNode {
 			mimeType = "image/unknown";
 		}
 
+		// Determine image type
 		pictureType = bytes[pointer + 1];
+
+		// Read more empty stuff
 		pointer += 2;
 		int pointer2;
 		for (pointer2 = pointer; pointer2 < bytes.length; pointer2++) {
 			if (bytes[pointer2] == 0)
 				break;
 		}
+
+		// Get image data
 		int length = pointer2 - pointer;
 		byte[] copy = new byte[length];
 		if (length > 0) {
 			System.arraycopy(bytes, pointer, copy, 0, length);
 		}
 
-		this.encodingType = bytes[0];
-		this.descriptionBytes = copy;
+		// Extract only needed data
+		this.finalImageDataEncoding = bytes[0];
+		this.finalImageData = copy;
 		stripBomAndTerminator();
 		pointer2 += getTerminator().length;
 
+		// Save data
 		length = bytes.length - pointer2;
 		imageData = new byte[length];
 		System.arraycopy(bytes, pointer2, imageData, 0, length);
-		this.pframe = new ID3PicFrame(mimeType, pictureType, encodingType,
-				descriptionBytes, imageData, keyword, frameBodySize, flags);
+		this.pframe = new ID3PicFrame(mimeType, pictureType, finalImageDataEncoding,
+				finalImageData, imageData, keyword, frameBodySize, flags);
 		this.cover = new ImageIcon(imageData);
 		this.setCover(this.cover);
 	}
 
+	/**
+	 * Get terminator of text for encoding
+	 * 
+	 * @return
+	 */
 	public byte[] getTerminator() {
-		return terminators[encodingType];
+		return textTerminators[finalImageDataEncoding];
 	}
 
+	/**
+	 * Strip BOM (if present) and terminator of text
+	 */
 	private void stripBomAndTerminator() {
 		int leadingCharsToRemove = 0;
-		if (this.descriptionBytes.length >= 2
-				&& ((this.descriptionBytes[0] == (byte) 0xfe && this.descriptionBytes[1] == (byte) 0xff) || (this.descriptionBytes[0] == (byte) 0xff && this.descriptionBytes[1] == (byte) 0xfe))) {
+
+		// Determine encoding and how long the BOM is
+		if (this.finalImageData.length >= 2
+				&& ((this.finalImageData[0] == (byte) 0xfe && this.finalImageData[1] == (byte) 0xff) || (this.finalImageData[0] == (byte) 0xff && this.finalImageData[1] == (byte) 0xfe))) {
 			leadingCharsToRemove = 2;
-		} else if (this.descriptionBytes.length >= 3
-				&& (this.descriptionBytes[0] == (byte) 0xef
-						&& this.descriptionBytes[1] == (byte) 0xbb && this.descriptionBytes[2] == (byte) 0xbf)) {
+		} else if (this.finalImageData.length >= 3
+				&& (this.finalImageData[0] == (byte) 0xef
+						&& this.finalImageData[1] == (byte) 0xbb && this.finalImageData[2] == (byte) 0xbf)) {
 			leadingCharsToRemove = 3;
 		}
+
+		// Determine how long the terminator is
 		int trailingCharsToRemove = 0;
 		for (int i = 1; i <= 2; i++) {
-			if ((this.descriptionBytes.length - leadingCharsToRemove - trailingCharsToRemove) >= i
-					&& this.descriptionBytes[this.descriptionBytes.length - i] == 0) {
+			if ((this.finalImageData.length - leadingCharsToRemove - trailingCharsToRemove) >= i
+					&& this.finalImageData[this.finalImageData.length - i] == 0) {
 				trailingCharsToRemove++;
 			} else {
 				break;
 			}
 		}
+
+		// Remove BOM and terminator if present
 		if (leadingCharsToRemove + trailingCharsToRemove > 0) {
-			int newLength = this.descriptionBytes.length - leadingCharsToRemove
+			int newLength = this.finalImageData.length - leadingCharsToRemove
 					- trailingCharsToRemove;
 			byte[] newValue = new byte[newLength];
 			if (newLength > 0) {
-				System.arraycopy(this.descriptionBytes, leadingCharsToRemove,
+				System.arraycopy(this.finalImageData, leadingCharsToRemove,
 						newValue, 0, newValue.length);
 			}
-			this.descriptionBytes = newValue;
+			this.finalImageData = newValue;
 		}
 	}
 
@@ -283,7 +308,7 @@ public class MP3File extends DefaultMutableTreeNode {
 			BufferedOutputStream bos = new BufferedOutputStream(dos);
 
 			for (int i = 0; i < header.length; i++) {
-				// out.write(header[i]);
+				
 				bos.write(header[i]);
 			}
 			byte[] tag;
@@ -297,7 +322,6 @@ public class MP3File extends DefaultMutableTreeNode {
 
 			tag = pframe.getBytes();
 			for (int k = 0; k < tag.length; k++) {
-				// out.write(tag[k]);
 				bos.write(tag[k]);
 			}
 			for (int i = 0; i < audioPart.length; i++) {
@@ -308,9 +332,11 @@ public class MP3File extends DefaultMutableTreeNode {
 			fos.close();
 
 			isChanged = false;
+			
+			throw new Exception("BLABLA");
 
 		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
+			Program.getControl().setStatus(e.getMessage());
 		}
 	}
 
@@ -413,7 +439,7 @@ public class MP3File extends DefaultMutableTreeNode {
 				pframe.setData(outStream.toByteArray());
 				outStream.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Program.getControl().setStatus(e.getMessage());
 			}
 		}
 		this.cover = i;
@@ -493,6 +519,9 @@ public class MP3File extends DefaultMutableTreeNode {
 		return this.isParsed;
 	}
 
+	/**
+	 * Notify file that it has changed
+	 */
 	public void changed() {
 		isChanged = true;
 	}
