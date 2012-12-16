@@ -41,6 +41,7 @@ public class MP3File extends DefaultMutableTreeNode {
 
 	private boolean isID3v2Tag = true;
 	private boolean isParsed = false;
+	private boolean isChanged = false;
 
 	// Create MP3 file and set represented file as its user object
 	public MP3File(String path) {
@@ -61,7 +62,6 @@ public class MP3File extends DefaultMutableTreeNode {
 
 			// Check if we have a header???
 			if (data.available() < 10) {
-				System.out.println("Header smaller than 10 bytes!");
 				this.isID3v2Tag = false;
 				this.setParent(null);
 				data.close();
@@ -80,7 +80,6 @@ public class MP3File extends DefaultMutableTreeNode {
 					&& Integer.toHexString(this.header[9]).compareTo("80") < 0) {
 				this.isID3v2Tag = true;
 			} else {
-				System.out.println("Header is not id3v2!");
 				this.isID3v2Tag = false;
 				this.setParent(null);
 				data.close();
@@ -265,6 +264,8 @@ public class MP3File extends DefaultMutableTreeNode {
 			}
 			bos.flush();
 			fos.close();
+			
+			isChanged = false;
 
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
@@ -272,7 +273,11 @@ public class MP3File extends DefaultMutableTreeNode {
 	}
 
 	public String toString() {
-		return ((File) this.getUserObject()).getName();
+		String name = ((File) this.getUserObject()).getName();
+		if(isChanged)
+			name = "*" + name;
+		
+		return name;
 	}
 
 	/**
@@ -351,7 +356,6 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * @param i
 	 */
 	public void setCover(ImageIcon i) {
-		// System.out.println( i.getIconWidth()+" "+i.getIconHeight());
 		if (pframe != null && i.getIconWidth() > 0 && i.getIconHeight() > 0) {
 			try {
 				BufferedImage buImg = new BufferedImage(i.getIconWidth(),
@@ -379,7 +383,6 @@ public class MP3File extends DefaultMutableTreeNode {
 	 */
 	public void setTitle(String title) {
 		if (tags.size() > 0) {
-			System.out.println(title);
 			ID3TextFrame tag = getTag("TIT2");
 			if (tag != null)
 				tag.setData(title);
@@ -445,5 +448,9 @@ public class MP3File extends DefaultMutableTreeNode {
 	 */
 	public boolean isParsed() {
 		return this.isParsed;
+	}
+	
+	public void changed() {
+		isChanged = true;
 	}
 }

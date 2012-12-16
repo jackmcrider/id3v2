@@ -27,6 +27,7 @@ public class MainControl {
 
 		mainWindow = new MainWindow(this);
 		mainWindow.setTitle("ID3-Tag Editor");
+		setStatus("Everything is fine!");
 	}
 
 	/**
@@ -85,9 +86,12 @@ public class MainControl {
 	 * 
 	 * @param changed
 	 */
-	public void addChangedFile(MP3File changed) {
-		if (!currentlyOpenedMP3FileIsChanged())
-			changedFiles.add(changed);
+	public void addChangedFile() {
+		if (!currentlyOpenedMP3FileIsChanged()){
+			currentlyOpenedMP3File.changed();
+			changedFiles.add(currentlyOpenedMP3File);
+			mainWindow.getNavigationPanel().updateUI();
+		}
 	}
 
 	/**
@@ -106,8 +110,9 @@ public class MainControl {
 					.getAlbum());
 			currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 					.getYear());
-
-			addChangedFile(currentlyOpenedMP3File);
+			
+			addChangedFile();
+			setStatus(currentlyOpenedMP3File + " was changed.");
 		}
 	}
 
@@ -136,10 +141,12 @@ public class MainControl {
 		if (changedFiles.size() > 0) {
 			for (MP3File changed : changedFiles) {
 				changed.write();
-				mainWindow.setStatus("Saved " + changed.getAbsolutePath());
+				setStatus("Saved " + changed.getAbsolutePath());
 			}
 
 			changedFiles.clear();
+			
+			mainWindow.getNavigationPanel().updateUI();
 		}
 	}
 

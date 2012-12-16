@@ -86,8 +86,7 @@ public class NavigationPanel extends JPanel {
 		if (newRoot.exists() && newRoot.isDirectory()) {
 			this.tree.setRoot(new Folder(path));
 		} else {
-			System.out
-					.println("replaceTree() was not called with the path of a directory!");
+			mainControl.setStatus("The thing that you selected was not a directory.");
 		}
 	}
 }
