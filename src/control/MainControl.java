@@ -171,6 +171,10 @@ public class MainControl {
 			} else {
 				mainWindow
 						.setStatus("This is not an MP3 file with ID3v2 tags.");
+				
+				// TODO: does not work?!
+				current.removeFromParent();
+				mainWindow.getNavigationPanel().updateUI();
 			}
 		}
 	}
