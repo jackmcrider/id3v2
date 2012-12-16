@@ -11,6 +11,14 @@ public class ID3TextFrame {
 	private int size;
 	private short flags;
 
+	/**
+	 * creates a new instance of a id3textFrame.
+	 * @param keyword
+	 * @param data
+	 * @param type
+	 * @param size
+	 * @param flags
+	 */
 	public ID3TextFrame(String keyword, String data, byte type, int size,
 			short flags) {
 		this.keyword = keyword;
@@ -20,10 +28,18 @@ public class ID3TextFrame {
 		this.flags = flags;
 	}
 
+	/**
+	 * set a new keyword
+	 * @param s
+	 */
 	public void setKeyword(String s) {
 		this.keyword = s;
 	}
 
+	/**
+	 * change the string of the id3textframe
+	 * @param s
+	 */
 	public void setData(String s) {
 		if (type == 1) {
 			new String(s.getBytes(), Charset.forName("UTF-16"));
@@ -34,18 +50,34 @@ public class ID3TextFrame {
 		this.data = s;
 	}
 
+	/**
+	 * returns the keyword
+	 * @return 
+	 */
 	public String getKeyword() {
 		return this.keyword;
 	}
 
+	/**
+	 * returns the string
+	 * @return
+	 */
 	public String getData() {
 		return this.data;
 	}
 
+	/**
+	 * returns the size of the id3textFrame
+	 * @return
+	 */
 	public int getFrameBodySize() {
 		return this.size;
 	}
 
+	/**
+	 * returns the comlete id3textFrame as a byte-array ready to write in a file.
+	 * @return
+	 */
 	public byte[] getBytes() {
 		byte[] keyword = this.keyword.getBytes();
 		byte[] size = ByteBuffer.allocate(4).putInt(this.size).array();
