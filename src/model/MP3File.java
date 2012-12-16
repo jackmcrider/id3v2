@@ -230,14 +230,17 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.setCover(this.cover);
 	}
 
+	/**
+	 * Write out changes
+	 */
 	public void write() {
 		try {
 			File f = (File) this.getUserObject();
-			
+
 			FileOutputStream fos = new FileOutputStream(f, false);
 			DataOutputStream dos = new DataOutputStream(fos);
 			BufferedOutputStream bos = new BufferedOutputStream(dos);
-			
+
 			for (int i = 0; i < header.length; i++) {
 				// out.write(header[i]);
 				bos.write(header[i]);
@@ -272,6 +275,21 @@ public class MP3File extends DefaultMutableTreeNode {
 		return ((File) this.getUserObject()).getName();
 	}
 
+	/**
+	 * Get absolute path of file
+	 * 
+	 * @return
+	 */
+	public String getAbsolutePath() {
+		return ((File) this.getUserObject()).getAbsolutePath();
+	}
+
+	/**
+	 * Get specific tag of file specified by its ID3v2 keyword
+	 * 
+	 * @param keyword
+	 * @return
+	 */
 	public ID3TextFrame getTag(String keyword) {
 		for (int k = 0; k < tags.size(); k++) {
 			if (tags.get(k).getKeyword().equals(keyword)) {
@@ -282,26 +300,56 @@ public class MP3File extends DefaultMutableTreeNode {
 		return null;
 	}
 
+	/**
+	 * Get cover of file
+	 * 
+	 * @return
+	 */
 	public ImageIcon getCover() {
 		return this.cover;
 	}
 
+	/**
+	 * Get title of file
+	 * 
+	 * @return
+	 */
 	public String getTitle() {
 		return this.title;
 	}
 
+	/**
+	 * Get artist of file
+	 * 
+	 * @return
+	 */
 	public String getArtist() {
 		return this.artist;
 	}
 
+	/**
+	 * Get album of file
+	 * 
+	 * @return
+	 */
 	public String getAlbum() {
 		return this.album;
 	}
 
+	/**
+	 * Get year of file
+	 * 
+	 * @return
+	 */
 	public String getYear() {
 		return this.year;
 	}
 
+	/**
+	 * Set cover of file
+	 * 
+	 * @param i
+	 */
 	public void setCover(ImageIcon i) {
 		// System.out.println( i.getIconWidth()+" "+i.getIconHeight());
 		if (pframe != null && i.getIconWidth() > 0 && i.getIconHeight() > 0) {
@@ -324,6 +372,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.cover = i;
 	}
 
+	/**
+	 * Set title of file
+	 * 
+	 * @param title
+	 */
 	public void setTitle(String title) {
 		if (tags.size() > 0) {
 			System.out.println(title);
@@ -334,6 +387,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.title = title;
 	}
 
+	/**
+	 * Set artist of file
+	 * 
+	 * @param artist
+	 */
 	public void setArtist(String artist) {
 		if (tags.size() > 0) {
 			ID3TextFrame tag = getTag("TPE1");
@@ -343,6 +401,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.artist = artist;
 	}
 
+	/**
+	 * Set album of file
+	 * 
+	 * @param album
+	 */
 	public void setAlbum(String album) {
 		if (tags.size() > 0) {
 			ID3TextFrame tag = getTag("TALB");
@@ -352,6 +415,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.album = album;
 	}
 
+	/**
+	 * Set year of file
+	 * 
+	 * @param year
+	 */
 	public void setYear(String year) {
 		if (tags.size() > 0) {
 			ID3TextFrame tag = getTag("TYER");
@@ -361,10 +429,20 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.year = year;
 	}
 
+	/**
+	 * Check if this file contains ID3v2 tags
+	 * 
+	 * @return
+	 */
 	public boolean isID3v2Tag() {
 		return this.isID3v2Tag;
 	}
 
+	/**
+	 * Check if the file is parsed
+	 * 
+	 * @return
+	 */
 	public boolean isParsed() {
 		return this.isParsed;
 	}

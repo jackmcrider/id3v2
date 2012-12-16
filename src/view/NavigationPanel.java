@@ -12,11 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import model.Folder;
-import model.MP3File;
+import control.MainControl;
 
 @SuppressWarnings("serial")
 public class NavigationPanel extends JPanel {
@@ -24,7 +23,11 @@ public class NavigationPanel extends JPanel {
 	private JTree visualTree;
 	private JButton directoryChooser;
 
-	public NavigationPanel(final EditorPanel ep) {
+	private MainControl mainControl;
+
+	public NavigationPanel(MainControl control) {
+		mainControl = control;
+
 		// Set layout of NavigationPanel
 		this.setLayout(new BorderLayout());
 
@@ -35,13 +38,7 @@ public class NavigationPanel extends JPanel {
 		this.visualTree = new JTree(this.tree);
 		this.visualTree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
-				DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-				if (selected instanceof MP3File) {
-					MP3File current = (MP3File) selected;
-					if(!current.isParsed())
-						current.parse();
-					ep.load(current);
-				}
+				mainControl.clickedOnFileInTree(e);
 			}
 		});
 
@@ -89,7 +86,8 @@ public class NavigationPanel extends JPanel {
 		if (newRoot.exists() && newRoot.isDirectory()) {
 			this.tree.setRoot(new Folder(path));
 		} else {
-			System.out.println("replaceTree() was not called with the path of a directory!");
+			System.out
+					.println("replaceTree() was not called with the path of a directory!");
 		}
 	}
 }

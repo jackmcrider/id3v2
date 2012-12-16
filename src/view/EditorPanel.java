@@ -20,7 +20,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -32,7 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import model.MP3File;
+import control.MainControl;
 
 @SuppressWarnings("serial")
 public class EditorPanel extends JPanel {
@@ -44,42 +43,17 @@ public class EditorPanel extends JPanel {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if (!changedFiles.contains(currentlyOpenedMP3File)
-					&& currentlyOpenedMP3File != null
-					&& currentlyOpenedMP3File.isParsed()) {
-				
-				if (e.getSource() == titleField)
-					currentlyOpenedMP3File.setTitle(titleField.getText());
-
-				if (e.getSource() == albumField)
-					currentlyOpenedMP3File.setTitle(albumField.getText());
-
-				if (e.getSource() == artistField)
-					currentlyOpenedMP3File.setTitle(artistField.getText());
-
-				if (e.getSource() == yearField)
-					currentlyOpenedMP3File.setTitle(yearField.getText());
-
-				System.out.println("Changed " + currentlyOpenedMP3File);
-				changedFiles.add(currentlyOpenedMP3File);
-			}
+			mainControl.updateCurrentlyOpenedMP3File();
 		}
 
 		@Override
-		public void keyTyped(KeyEvent e) { }
+		public void keyTyped(KeyEvent e) {
+		}
 	}
 
 	private class saveChangedFiles implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (changedFiles.size() > 0) {
-				for (MP3File changed : changedFiles) {
-					System.out.println("Write " + changed);
-					changed.write();
-					System.out.println("Written " + changed);
-				}
-				
-				changedFiles.clear();
-			}
+			mainControl.saveChangedFiles();
 		}
 	}
 
@@ -95,11 +69,11 @@ public class EditorPanel extends JPanel {
 	private BufferedImage image;
 	private ImageIcon icon;
 
-	private MP3File currentlyOpenedMP3File = null;
+	private MainControl mainControl;
 
-	private LinkedList<MP3File> changedFiles = new LinkedList<MP3File>();
+	public EditorPanel(MainControl control) {
+		mainControl = control;
 
-	public EditorPanel() {
 		addFileToChangedFiles addFileToChangedFiles = new addFileToChangedFiles();
 
 		this.titlePanel = new JPanel();
@@ -217,23 +191,6 @@ public class EditorPanel extends JPanel {
 		gbc.weighty = weighty;
 		gbl.setConstraints(c, gbc);
 		cont.add(c);
-	}
-
-	public void load(MP3File mp3) {
-
-		if (this.currentlyOpenedMP3File != null) {
-			this.currentlyOpenedMP3File.setTitle(this.getTitle());
-			this.currentlyOpenedMP3File.setAlbum(this.getAlbum());
-			this.currentlyOpenedMP3File.setArtist(this.getArtist());
-			this.currentlyOpenedMP3File.setYear(this.getYear());
-			this.currentlyOpenedMP3File.setCover((ImageIcon) this.getCover());
-		}
-		this.currentlyOpenedMP3File = mp3;
-		this.setTitle(mp3.getTitle());
-		this.setAlbum(mp3.getAlbum());
-		this.setArtist(mp3.getArtist());
-		this.setYear(mp3.getYear());
-		this.setCover(mp3.getCover());
 	}
 
 	public void repaintCover() {
