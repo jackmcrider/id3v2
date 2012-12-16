@@ -1,10 +1,6 @@
 package model;
 
-
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.List;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,7 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -30,14 +25,9 @@ public class MP3File extends DefaultMutableTreeNode {
 
 	private byte[] descriptionBytes;
 	private byte encodingType;
-	private static final byte[][] terminators = {
-		{0},
-		{0, 0},
-		{0, 0},
-		{0}
-	};
-	
-	
+	private static final byte[][] terminators = { { 0 }, { 0, 0 }, { 0, 0 },
+			{ 0 } };
+
 	// Holds the header
 	private byte[] header = new byte[10];
 	// Holds all the tags
@@ -231,7 +221,7 @@ public class MP3File extends DefaultMutableTreeNode {
 		if (length > 0) {
 			System.arraycopy(bytes, pointer, copy, 0, length);
 		}
-		
+
 		this.encodingType = bytes[0];
 		this.descriptionBytes = copy;
 		stripBomAndTerminator();
@@ -240,35 +230,42 @@ public class MP3File extends DefaultMutableTreeNode {
 		length = bytes.length - pointer2;
 		imageData = new byte[length];
 		System.arraycopy(bytes, pointer2, imageData, 0, length);
-		this.pframe = new ID3PicFrame(mimeType, pictureType, encodingType, descriptionBytes,
-				imageData, keyword, frameBodySize, flags);
+		this.pframe = new ID3PicFrame(mimeType, pictureType, encodingType,
+				descriptionBytes, imageData, keyword, frameBodySize, flags);
 		this.cover = new ImageIcon(imageData);
 		this.setCover(this.cover);
 	}
+
 	public byte[] getTerminator() {
 		return terminators[encodingType];
 	}
-	
+
 	private void stripBomAndTerminator() {
 		int leadingCharsToRemove = 0;
-		if (this.descriptionBytes.length >= 2 && ((this.descriptionBytes[0] == (byte)0xfe && this.descriptionBytes[1] == (byte)0xff) || (this.descriptionBytes[0] == (byte)0xff && this.descriptionBytes[1] == (byte)0xfe))) {
+		if (this.descriptionBytes.length >= 2
+				&& ((this.descriptionBytes[0] == (byte) 0xfe && this.descriptionBytes[1] == (byte) 0xff) || (this.descriptionBytes[0] == (byte) 0xff && this.descriptionBytes[1] == (byte) 0xfe))) {
 			leadingCharsToRemove = 2;
-		} else if (this.descriptionBytes.length >= 3 && (this.descriptionBytes[0] == (byte)0xef && this.descriptionBytes[1] == (byte)0xbb && this.descriptionBytes[2] == (byte)0xbf)) {
+		} else if (this.descriptionBytes.length >= 3
+				&& (this.descriptionBytes[0] == (byte) 0xef
+						&& this.descriptionBytes[1] == (byte) 0xbb && this.descriptionBytes[2] == (byte) 0xbf)) {
 			leadingCharsToRemove = 3;
 		}
 		int trailingCharsToRemove = 0;
 		for (int i = 1; i <= 2; i++) {
-			if ((this.descriptionBytes.length - leadingCharsToRemove - trailingCharsToRemove) >= i && this.descriptionBytes[this.descriptionBytes.length - i] == 0) {
+			if ((this.descriptionBytes.length - leadingCharsToRemove - trailingCharsToRemove) >= i
+					&& this.descriptionBytes[this.descriptionBytes.length - i] == 0) {
 				trailingCharsToRemove++;
 			} else {
 				break;
 			}
 		}
 		if (leadingCharsToRemove + trailingCharsToRemove > 0) {
-			int newLength = this.descriptionBytes.length - leadingCharsToRemove - trailingCharsToRemove;
+			int newLength = this.descriptionBytes.length - leadingCharsToRemove
+					- trailingCharsToRemove;
 			byte[] newValue = new byte[newLength];
 			if (newLength > 0) {
-				System.arraycopy(this.descriptionBytes, leadingCharsToRemove, newValue, 0, newValue.length);
+				System.arraycopy(this.descriptionBytes, leadingCharsToRemove,
+						newValue, 0, newValue.length);
 			}
 			this.descriptionBytes = newValue;
 		}
@@ -309,7 +306,7 @@ public class MP3File extends DefaultMutableTreeNode {
 			}
 			bos.flush();
 			fos.close();
-			
+
 			isChanged = false;
 
 		} catch (Exception e) {
@@ -319,9 +316,9 @@ public class MP3File extends DefaultMutableTreeNode {
 
 	public String toString() {
 		String name = ((File) this.getUserObject()).getName();
-		if(isChanged)
+		if (isChanged)
 			name = "*" + name;
-		
+
 		return name;
 	}
 
@@ -401,9 +398,11 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * @param i
 	 */
 	public void setCover(ImageIcon i) {
-		if (pframe != null && i.getIconWidth() > 0 && i.getIconHeight() > 0 && i != null) {
+		if (pframe != null && i.getIconWidth() > 0 && i.getIconHeight() > 0
+				&& i != null) {
 			try {
-				BufferedImage buImg = new BufferedImage(i.getIconWidth(), i.getIconHeight(), BufferedImage.TYPE_INT_ARGB); 
+				BufferedImage buImg = new BufferedImage(i.getIconWidth(),
+						i.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2 = buImg.createGraphics();
 				g2.drawImage(i.getImage(), 0, 0, null);
 				g2.dispose();
@@ -493,7 +492,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	public boolean isParsed() {
 		return this.isParsed;
 	}
-	
+
 	public void changed() {
 		isChanged = true;
 	}

@@ -13,9 +13,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+@SuppressWarnings("serial")
 public class CoverDialog extends JFrame {
 	
-	private static final long serialVersionUID = 2263996958694171526L;
 	private BufferedImage image;
 	private JButton saveButton, cancelButton;
 	JLabel cover2 ,cover;
