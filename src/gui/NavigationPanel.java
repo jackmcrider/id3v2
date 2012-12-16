@@ -13,14 +13,14 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
-import model.DirectoryTree;
 import model.Folder;
 import model.MP3File;
 
 @SuppressWarnings("serial")
 public class NavigationPanel extends JPanel {
-	private DirectoryTree tree;
+	private DefaultTreeModel tree;
 	private JTree visualTree;
 	private JButton directoryChooser;
 
@@ -29,7 +29,7 @@ public class NavigationPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 
 		// Create tree of folders and files
-		this.tree = new DirectoryTree(new Folder(null));
+		this.tree = new DefaultTreeModel(new Folder(null));
 
 		// Initialize the visual tree
 		this.visualTree = new JTree(this.tree);
