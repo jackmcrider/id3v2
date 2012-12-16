@@ -46,7 +46,6 @@ public class ID3PicFrame {
 		byte[] size = ByteBuffer.allocate(4).putInt(this.bodysize).array();
 		byte[] flags = ByteBuffer.allocate(2).putShort(this.flags).array();
 		byte[] data = this.getPicBytes();
-		// System.out.println("l22"+data.length);
 		byte[] complete = new byte[keyword.length + size.length + flags.length
 				+ data.length];
 		for (int i = 0; i < complete.length; i++) {
@@ -59,8 +58,6 @@ public class ID3PicFrame {
 			if (i >= keyword.length + 6)
 				complete[i] = data[i - keyword.length - 6];
 		}
-		// for(int i = 0; i < 20; i++)
-		// System.out.println("2["+complete[i]+"]");
 		return complete;
 	}
 
@@ -107,20 +104,7 @@ public class ID3PicFrame {
 			BufferTools.copyIntoByteBuffer(data, 0, data.length, bytes, marker);
 		}
 		return bytes;
-		/*
-		 * byte[] mimeType = this.mimeType.getBytes(); byte[] type = new
-		 * byte[1]; type[0] = this.type; byte[] des
-		 * =this.description.toString().getBytes();
-		 * //System.out.println("c1:"+des.length); byte[] complete = new
-		 * byte[mimeType.length + type.length + des.length + this.data.length];
-		 * for(int i = 0; i < complete.length; i++){ if(i < mimeType.length)
-		 * complete[i] = mimeType[i]; if(i >= mimeType.length && i <
-		 * mimeType.length+1) complete[i] = type[i-mimeType.length]; if(i >=
-		 * mimeType.length+1 && i < mimeType.length+1+des.length) complete[i] =
-		 * des[i-mimeType.length-1]; if(i >= mimeType.length+1+des.length)
-		 * complete[i] = data[i-mimeType.length-des.length-1]; }
-		 * //System.out.println("l2: "+data.length); return complete;
-		 */
+
 	}
 
 }

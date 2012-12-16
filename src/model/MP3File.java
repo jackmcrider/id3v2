@@ -366,6 +366,7 @@ public class MP3File extends DefaultMutableTreeNode {
 				BufferedImage buImg = new BufferedImage(i.getIconWidth(), i.getIconHeight(), BufferedImage.TYPE_INT_ARGB); 
 				Graphics2D g2 = buImg.createGraphics();
 				g2.drawImage(i.getImage(), 0, 0, null);
+				System.out.println("asdasd");
 				// g2.dispose();
 				// buImg.flush();
 				ByteArrayOutputStream outStream = new ByteArrayOutputStream();

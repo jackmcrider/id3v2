@@ -110,6 +110,8 @@ public class MainControl {
 					.getAlbum());
 			currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 					.getYear());
+			currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
+					.getCover());
 			
 			addChangedFile();
 			setStatus(currentlyOpenedMP3File + " was changed.");

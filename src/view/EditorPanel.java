@@ -165,9 +165,9 @@ public class EditorPanel extends JPanel {
 			image = null;
 			try {
 				image = ImageIO.read(file);
-
-				this.setCover(new ImageIcon(image.getScaledInstance(100, 100,
-						Image.SCALE_SMOOTH)));
+				icon = new ImageIcon(image.getScaledInstance(100, 100,
+						Image.SCALE_SMOOTH));
+				this.setCover(icon);
 			} catch (IOException ioex) {
 				System.exit(1);
 			}
@@ -227,8 +227,8 @@ public class EditorPanel extends JPanel {
 					100, Image.SCALE_SMOOTH)));
 	}
 
-	public Icon getCover() {
-		return this.cover.getIcon();
+	public ImageIcon getCover() {
+		return this.icon;
 	}
 
 	public String getTitle() {
