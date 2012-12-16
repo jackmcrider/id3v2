@@ -6,8 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.List;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.BufferedWriter;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -47,6 +46,7 @@ public class MP3File extends DefaultMutableTreeNode {
 
 	private boolean isID3v2Tag = true;
 	private boolean isParsed = false;
+	private boolean isChanged = false;
 
 	// Create MP3 file and set represented file as its user object
 	public MP3File(String path) {
@@ -57,20 +57,20 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * Parse id3v2 tags of mp3 file
 	 */
 	@SuppressWarnings("resource")
-	public void parse() {
+	public boolean parse() {
 		boolean hasTagsLeft = true;
 		try {
-			DataInputStream data = new DataInputStream(new FileInputStream((File) this.getUserObject()));
+			DataInputStream data = new DataInputStream(new FileInputStream(
+					(File) this.getUserObject()));
 			data.read(header);
 			// Point to the file
 
 			// Check if we have a header???
 			if (data.available() < 10) {
-				System.out.println("Header smaller than 10 bytes!");
 				this.isID3v2Tag = false;
 				this.setParent(null);
 				data.close();
-				return;
+				return false;
 			}
 
 			// Read header and check if it is ID3v2
@@ -85,13 +85,12 @@ public class MP3File extends DefaultMutableTreeNode {
 					&& Integer.toHexString(this.header[9]).compareTo("80") < 0) {
 				this.isID3v2Tag = true;
 			} else {
-				System.out.println("Header is not id3v2!");
 				this.isID3v2Tag = false;
 				this.setParent(null);
 				data.close();
-				return;
+				return false;
 			}
-			
+
 			while (hasTagsLeft) {
 				// Read first for bytes to determine which tag it is
 				byte[] keyArr = new byte[4];
@@ -111,14 +110,13 @@ public class MP3File extends DefaultMutableTreeNode {
 					for (i = 0; data.available() > 0; i++) {
 						data.read(this.audioPart);
 					}
-					for(i = this.audioPart.length - 1; i >= 6; i--){
-						this.audioPart[i] =
-								this.audioPart[i - 6];
+					for (i = this.audioPart.length - 1; i >= 6; i--) {
+						this.audioPart[i] = this.audioPart[i - 6];
 					}
 					data.close();
 					hasTagsLeft = false;
 					this.isParsed = true;
-					return;
+					return true;
 				}
 
 				// Read content of tag
@@ -140,16 +138,18 @@ public class MP3File extends DefaultMutableTreeNode {
 			e.printStackTrace();
 		}
 
+		return false;
 	}
 
 	/**
 	 * Parse text tag
+	 * 
 	 * @param frame
 	 * @param keyword
 	 * @param size
 	 * @param flags
 	 */
-	public void parseText(byte[] frame, String keyword, int size, short flags) {		
+	public void parseText(byte[] frame, String keyword, int size, short flags) {
 		String s;
 		Byte type = frame[0];
 		ID3TextFrame id3frame;
@@ -163,7 +163,7 @@ public class MP3File extends DefaultMutableTreeNode {
 			s = new String(Arrays.copyOfRange(frame, 1, frame.length),
 					Charset.forName("ISO-8859-1"));
 		}
-		
+
 		// Save content of tag to appropriate tag
 		if (keyword.equals("TPE1"))
 			this.setArtist(s);
@@ -174,19 +174,21 @@ public class MP3File extends DefaultMutableTreeNode {
 		if (keyword.equals("TYER"))
 			this.setYear(s);
 
-		// Save 
+		// Save
 		id3frame = new ID3TextFrame(keyword, s, type, size, flags);
 		tags.add(id3frame);
 	}
 
 	/**
 	 * Parse cover
+	 * 
 	 * @param bytes
 	 * @param keyword
 	 * @param frameBodySize
 	 * @param flags
 	 */
-	public void parseCover(byte[] bytes, String keyword, int frameBodySize, short flags) {
+	public void parseCover(byte[] bytes, String keyword, int frameBodySize,
+			short flags) {
 		int pointer;
 		String mimeType;
 
@@ -206,7 +208,7 @@ public class MP3File extends DefaultMutableTreeNode {
 		} catch (UnsupportedEncodingException e) {
 			mimeType = "image/unknown";
 		}
-		
+
 		pictureType = bytes[pointer + 1];
 		pointer += 2;
 		int pointer2;
@@ -226,89 +228,138 @@ public class MP3File extends DefaultMutableTreeNode {
 		length = bytes.length - pointer2;
 		imageData = new byte[length];
 		System.arraycopy(bytes, pointer2, imageData, 0, length);
-		this.pframe = new ID3PicFrame(mimeType, pictureType, description, imageData,
-				keyword, frameBodySize, flags);
+		this.pframe = new ID3PicFrame(mimeType, pictureType, description,
+				imageData, keyword, frameBodySize, flags);
 		this.cover = new ImageIcon(imageData);
 		this.setCover(this.cover);
 	}
 
+	/**
+	 * Write out changes
+	 */
 	public void write() {
 		try {
-			File f = new File(this.getUserObject().toString());
+			File f = (File) this.getUserObject();
+
 			FileOutputStream fos = new FileOutputStream(f, false);
 			DataOutputStream dos = new DataOutputStream(fos);
-			// FileWriter fstream = new
-			// FileWriter(this.getUserObject().toString(),true);
-			// BufferedWriter out = new BufferedWriter(fstream);
+			BufferedOutputStream bos = new BufferedOutputStream(dos);
+
 			for (int i = 0; i < header.length; i++) {
 				// out.write(header[i]);
-				dos.write(header[i]);
+				bos.write(header[i]);
 			}
 			byte[] tag;
 			for (int i = 0; i < tags.size(); i++) {
 				tag = tags.get(i).getBytes();
 				for (int k = 0; k < tag.length; k++) {
 					// out.write(tag[k]);
-					dos.write(tag[k]);
+					bos.write(tag[k]);
 				}
 			}
 
 			tag = pframe.getBytes();
 			for (int k = 0; k < tag.length; k++) {
 				// out.write(tag[k]);
-				dos.write(tag[k]);
+				bos.write(tag[k]);
 			}
 			for (int i = 0; i < audioPart.length; i++) {
 				// out.write(rest[i]);
-				dos.write(audioPart[i]);
+				bos.write(audioPart[i]);
 			}
-			dos.flush();
-			dos.close();
+			bos.flush();
 			fos.close();
+			
+			isChanged = false;
 
-			// out.flush();
-			// out.close();
-			// fstream.close();
-
-		} catch (Exception e) {// Catch exception if any
+		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
 	}
 
 	public String toString() {
-		return ((File) this.getUserObject()).getName();
+		String name = ((File) this.getUserObject()).getName();
+		if(isChanged)
+			name = "*" + name;
+		
+		return name;
 	}
 
+	/**
+	 * Get absolute path of file
+	 * 
+	 * @return
+	 */
+	public String getAbsolutePath() {
+		return ((File) this.getUserObject()).getAbsolutePath();
+	}
+
+	/**
+	 * Get specific tag of file specified by its ID3v2 keyword
+	 * 
+	 * @param keyword
+	 * @return
+	 */
 	public ID3TextFrame getTag(String keyword) {
 		for (int k = 0; k < tags.size(); k++) {
 			if (tags.get(k).getKeyword().equals(keyword)) {
 				return tags.get(k);
 			}
 		}
-		
+
 		return null;
 	}
 
+	/**
+	 * Get cover of file
+	 * 
+	 * @return
+	 */
 	public ImageIcon getCover() {
 		return this.cover;
 	}
 
+	/**
+	 * Get title of file
+	 * 
+	 * @return
+	 */
 	public String getTitle() {
 		return this.title;
 	}
 
+	/**
+	 * Get artist of file
+	 * 
+	 * @return
+	 */
 	public String getArtist() {
 		return this.artist;
 	}
 
+	/**
+	 * Get album of file
+	 * 
+	 * @return
+	 */
 	public String getAlbum() {
 		return this.album;
 	}
 
+	/**
+	 * Get year of file
+	 * 
+	 * @return
+	 */
 	public String getYear() {
 		return this.year;
 	}
 
+	/**
+	 * Set cover of file
+	 * 
+	 * @param i
+	 */
 	public void setCover(ImageIcon i) {
 		if (pframe != null && i.getIconWidth() > 0 && i.getIconHeight() > 0) {
 			try {
@@ -329,6 +380,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.cover = i;
 	}
 
+	/**
+	 * Set title of file
+	 * 
+	 * @param title
+	 */
 	public void setTitle(String title) {
 		if (tags.size() > 0) {
 			ID3TextFrame tag = getTag("TIT2");
@@ -338,6 +394,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.title = title;
 	}
 
+	/**
+	 * Set artist of file
+	 * 
+	 * @param artist
+	 */
 	public void setArtist(String artist) {
 		if (tags.size() > 0) {
 			ID3TextFrame tag = getTag("TPE1");
@@ -347,6 +408,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.artist = artist;
 	}
 
+	/**
+	 * Set album of file
+	 * 
+	 * @param album
+	 */
 	public void setAlbum(String album) {
 		if (tags.size() > 0) {
 			ID3TextFrame tag = getTag("TALB");
@@ -356,6 +422,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.album = album;
 	}
 
+	/**
+	 * Set year of file
+	 * 
+	 * @param year
+	 */
 	public void setYear(String year) {
 		if (tags.size() > 0) {
 			ID3TextFrame tag = getTag("TYER");
@@ -365,11 +436,25 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.year = year;
 	}
 
+	/**
+	 * Check if this file contains ID3v2 tags
+	 * 
+	 * @return
+	 */
 	public boolean isID3v2Tag() {
 		return this.isID3v2Tag;
 	}
-	
+
+	/**
+	 * Check if the file is parsed
+	 * 
+	 * @return
+	 */
 	public boolean isParsed() {
 		return this.isParsed;
+	}
+	
+	public void changed() {
+		isChanged = true;
 	}
 }
