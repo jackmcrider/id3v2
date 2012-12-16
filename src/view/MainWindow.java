@@ -1,17 +1,20 @@
-package gui;
+package view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
 	// Components
 	private JSplitPane mainSplitter;
+	private JLabel statusBar;
 	private NavigationPanel navigationPanel;
 	private EditorPanel editorPanel;
 	private int width = 640, height = 320;
@@ -38,14 +41,20 @@ public class MainWindow extends JFrame {
 	}
 
 	private void initializeComponents() {
+		// Set layout
+		setLayout(new BorderLayout());
+		
 		// Initialize editor and navigation panel
-		this.editorPanel = new EditorPanel();
-		this.navigationPanel = new NavigationPanel(editorPanel);
+		editorPanel = new EditorPanel();
+		navigationPanel = new NavigationPanel(editorPanel);
+		statusBar = new JLabel("Statusbar");
 
 		// Initialize the splitter
-		this.mainSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navigationPanel, editorPanel);
-		this.mainSplitter.setDividerLocation(width / 3);
-		this.add(mainSplitter);
+		mainSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, navigationPanel, editorPanel);
+		mainSplitter.setDividerLocation(width / 3);
+		this.add(mainSplitter, BorderLayout.CENTER);
+		
+		this.add(statusBar, BorderLayout.SOUTH);
 		
 		// Resize panels and cover
 		this.addComponentListener(new ComponentListener() {

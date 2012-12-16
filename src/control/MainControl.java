@@ -1,13 +1,13 @@
-package program;
+package control;
 
 import javax.swing.UIManager;
 
-import gui.MainWindow;
+import view.MainWindow;
 
-public class Program {
-	public MainWindow window;
+public class MainControl {
+	private MainWindow window;
 
-	public static void main(String[] args) {
+	public MainControl() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
@@ -17,5 +17,4 @@ public class Program {
 		MainWindow window = new MainWindow();
 		window.setTitle("ID3-Tag Editor");
 	}
-
 }
