@@ -13,48 +13,23 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import control.Program;
+import control.handlers.ChangedMP3Tags;
+import control.handlers.SaveChangedMP3Files;
 
 @SuppressWarnings("serial")
 public class EditorPanel extends JPanel {
-	private class addFileToChangedFiles implements KeyListener {
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			Program.getControl().updateCurrentlyOpenedMP3File();
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-		}
-	}
-
-	private class saveChangedFiles implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			Program.getControl().saveChangedFiles();
-		}
-	}
 
 	private GridBagLayout editorStructure;
 
@@ -69,7 +44,7 @@ public class EditorPanel extends JPanel {
 	private ImageIcon icon;
 
 	public EditorPanel() {
-		addFileToChangedFiles addFileToChangedFiles = new addFileToChangedFiles();
+		ChangedMP3Tags addFileToChangedFiles = new ChangedMP3Tags();
 
 		this.titlePanel = new JPanel();
 		this.titlePanel.setLayout(new GridLayout(2, 0));
@@ -110,7 +85,7 @@ public class EditorPanel extends JPanel {
 			}
 		});
 		this.saveButton = new JButton("Save");
-		this.saveButton.addActionListener(new saveChangedFiles());
+		this.saveButton.addActionListener(new SaveChangedMP3Files());
 
 		this.buttonsPanel = new JPanel();
 		this.buttonsPanel.setLayout(new FlowLayout());
@@ -125,7 +100,7 @@ public class EditorPanel extends JPanel {
 		this.cover.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.cover.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				handleEvent();
+				Program.getControl().chooseNewCover();
 			}
 		});
 
@@ -149,28 +124,10 @@ public class EditorPanel extends JPanel {
 		addComponent(this, this.editorStructure, this.coverPanel, 0, 2, 1, 3,
 				0, 0);
 	}
-
-	public void handleEvent() {
-		if(!Program.getControl().currentlyOpenedMP3FileIsParsed())
-			return;
-		
-		final JFileChooser fc = new JFileChooser();
-		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		int returnVal = fc.showOpenDialog(this);
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = fc.getSelectedFile();
-			image = null;
-			try {
-				image = ImageIO.read(file);
-				icon = new ImageIcon(image.getScaledInstance(100, 100,
-						Image.SCALE_SMOOTH));
-				this.setCover(icon);
-				Program.getControl().updateCurrentlyOpenedMP3File();
-			} catch (IOException e) {
-				Program.getControl().setStatus(e.getMessage());
-			}
-		}
+	
+	public void setImage(BufferedImage newImage) {
+		image = newImage;
+		repaintCover();
 	}
 
 	private void addComponent(Container cont, GridBagLayout gbl, Component c,

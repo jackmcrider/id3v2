@@ -1,9 +1,18 @@
 package control;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.MP3File;
@@ -87,7 +96,7 @@ public class MainControl {
 	 * @param changed
 	 */
 	public void addChangedFile() {
-		if (!currentlyOpenedMP3FileIsChanged()){
+		if (!currentlyOpenedMP3FileIsChanged()) {
 			currentlyOpenedMP3File.changed();
 			changedFiles.add(currentlyOpenedMP3File);
 			mainWindow.getNavigationPanel().updateUI();
@@ -110,10 +119,10 @@ public class MainControl {
 					.getAlbum());
 			currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 					.getYear());
-			if(mainWindow.getEditorPanel().getCover() != null)
-			currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
-					.getCover());
-			
+			if (mainWindow.getEditorPanel().getCover() != null)
+				currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
+						.getCover());
+
 			addChangedFile();
 			setStatus(currentlyOpenedMP3File + " was changed.");
 		}
@@ -131,7 +140,8 @@ public class MainControl {
 
 		mainWindow.getEditorPanel().setTitle(currentlyOpenedMP3File.getTitle());
 		mainWindow.getEditorPanel().setAlbum(currentlyOpenedMP3File.getAlbum());
-		mainWindow.getEditorPanel().setArtist(currentlyOpenedMP3File.getArtist());
+		mainWindow.getEditorPanel().setArtist(
+				currentlyOpenedMP3File.getArtist());
 		mainWindow.getEditorPanel().setYear(currentlyOpenedMP3File.getYear());
 		mainWindow.getEditorPanel().setCover(currentlyOpenedMP3File.getCover());
 	}
@@ -143,12 +153,12 @@ public class MainControl {
 		if (changedFiles.size() > 0) {
 			for (MP3File changed : changedFiles) {
 				changed.write();
-				//setStatus("Saved " + changed.getAbsolutePath());
+				// setStatus("Saved " + changed.getAbsolutePath());
 			}
 
 			changedFiles.clear();
 			mainWindow.getNavigationPanel().updateUI();
-		}else{
+		} else {
 			setStatus("Nothing to do!");
 		}
 	}
@@ -175,12 +185,52 @@ public class MainControl {
 			} else {
 				mainWindow
 						.setStatus("This is not an MP3 file with ID3v2 tags.");
-				
+
 				// TODO: does not work?!
 				current.removeFromParent();
 				mainWindow.getNavigationPanel().updateUI();
 			}
 		}
+	}
+
+	public void chooseNewCover() {
+		if (!Program.getControl().currentlyOpenedMP3FileIsParsed())
+			return;
+
+		FileFilter filter = new FileNameExtensionFilter("Image", "jpg", "jpeg",
+				"png");
+
+		JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(filter);
+		fc.setFileFilter(filter);
+		fc.setAcceptAllFileFilterUsed(false);
+		fc.setApproveButtonText("Choose");
+		fc.setDialogTitle("Choose new cover");
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int returnVal = fc.showOpenDialog(mainWindow);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			
+			BufferedImage image;
+			ImageIcon icon;
+			
+			try {
+				image = ImageIO.read(file);
+				icon = new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+				
+				mainWindow.getEditorPanel().setImage(image);
+				mainWindow.getEditorPanel().setCover(icon);
+				
+				Program.getControl().updateCurrentlyOpenedMP3File();
+			} catch (IOException e) {
+				Program.getControl().setStatus(e.getMessage());
+			}
+		}
+	}
+
+	public void selectAnotherDirectory() {
+
 	}
 
 }
