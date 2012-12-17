@@ -9,11 +9,14 @@ public class ID3PicFrame {
 	byte type, dtype;
 	byte[] data, description;
 	short flags;
+	
+	//different charsets
 	public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
 	public static final String CHARSET_UTF_16 = "UTF-16LE";
 	public static final String CHARSET_UTF_16BE = "UTF-16BE";
 	public static final String CHARSET_UTF_8 = "UTF-8";
 
+	//array of different charsets
 	private static final String[] characterSets = { CHARSET_ISO_8859_1,
 			CHARSET_UTF_16, CHARSET_UTF_16BE, CHARSET_UTF_8 };
 
@@ -23,6 +26,28 @@ public class ID3PicFrame {
 	private static final byte[][] terminators = { { 0 }, { 0, 0 }, { 0, 0 },
 			{ 0 } };
 
+	/**
+	 * Creats a new instance of ID3PicFrame.
+	 * 
+	 * @param mimeType
+	 * @param type
+	 * @param dtype
+	 * @param descriptionBytes
+	 * @param data
+	 * @param keyword
+	 * @param bodysize
+	 * @param flags
+	 */
+	/**
+	 * @param mimeType
+	 * @param type
+	 * @param dtype
+	 * @param descriptionBytes
+	 * @param data
+	 * @param keyword
+	 * @param bodysize
+	 * @param flags
+	 */
 	public ID3PicFrame(String mimeType, byte type, byte dtype,
 			byte[] descriptionBytes, byte[] data, String keyword, int bodysize,
 			short flags) {
@@ -36,14 +61,27 @@ public class ID3PicFrame {
 		this.flags = flags;
 	}
 
+	/**
+	 * returns the keyword of the ID3PicFrame
+	 * 
+	 * @return keyword of the ID3PicFrame
+	 */
 	public String getKeyword() {
 		return this.keyword;
 	}
 
+	/**
+	 * set a new keyword 
+	 * @param s new keyword
+	 */
 	public void setKeyword(String s) {
 		this.keyword = s;
 	}
 
+	/**
+	 * set new PictureData of the ID3PicFrame
+	 * @param bytes PictureData in byte[]
+	 */
 	public void setData(byte[] bytes) {
 
 		data = bytes;
@@ -55,6 +93,10 @@ public class ID3PicFrame {
 
 	}
 
+	/**
+	 * returns the complete ID3PicFrame in a byte-array ready to write in a file.
+	 * @return
+	 */
 	public byte[] getBytes() {
 		byte[] keyword = this.keyword.getBytes();
 		byte[] size = ByteBuffer.allocate(4).putInt(this.bodysize).array();
@@ -75,6 +117,10 @@ public class ID3PicFrame {
 		return complete;
 	}
 
+	/**
+	 * returns the size of the complete ID3PicFrame
+	 * @return
+	 */
 	protected int getLength() {
 		int length = 3;
 		if (mimeType != null)
@@ -88,6 +134,10 @@ public class ID3PicFrame {
 		return length;
 	}
 
+	/**
+	 * returns a byte-array of the picture, including mimeType, encodingType, description and the picutredata. 
+	 * @return
+	 */
 	public byte[] getPicBytes() {
 		byte[] bytes = new byte[getLength()];
 		if (description != null)
@@ -128,6 +178,11 @@ public class ID3PicFrame {
 
 	}
 
+	/**
+	 * returns the characterSet for the description.
+	 * @param textEncoding
+	 * @return
+	 */
 	private static String characterSetForTextEncoding(byte textEncoding) {
 		try {
 			return characterSets[textEncoding];
@@ -137,6 +192,12 @@ public class ID3PicFrame {
 		}
 	}
 
+	/**
+	 * returns a byte-array of the description. and you can choose with the params weather you want include the terminator and bom or not.
+	 * @param includeBom
+	 * @param includeTerminator
+	 * @return
+	 */
 	public byte[] toBytes(boolean includeBom, boolean includeTerminator) {
 		characterSetForTextEncoding(dtype); // ensured textEncoding is valid
 		int newLength = this.description.length
