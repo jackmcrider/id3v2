@@ -332,9 +332,6 @@ public class MP3File extends DefaultMutableTreeNode {
 			fos.close();
 
 			isChanged = false;
-			
-			throw new Exception("BLABLA");
-
 		} catch (Exception e) {
 			Program.getControl().setStatus(e.getMessage());
 		}
