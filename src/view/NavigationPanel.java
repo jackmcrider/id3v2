@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -22,6 +23,7 @@ public class NavigationPanel extends JPanel {
 	private DefaultTreeModel tree;
 	private JTree visualTree;
 	private JButton directoryChooser;
+	private JScrollPane scrollTree;
 
 	public NavigationPanel() {
 		// Set layout of NavigationPanel
@@ -37,7 +39,10 @@ public class NavigationPanel extends JPanel {
 				Program.getControl().clickedOnFileInTree(e);
 			}
 		});
-
+		
+		// Initialize the Scrollpane of the Tree
+		scrollTree = new JScrollPane(this.visualTree);
+		
 		// Logic for changing directory
 		this.directoryChooser = new JButton("Change directory");
 		this.directoryChooser.addActionListener(new ActionListener() {
@@ -68,7 +73,8 @@ public class NavigationPanel extends JPanel {
 
 		// Add components
 		this.add(new JLabel("Directory tree"), BorderLayout.NORTH);
-		this.add(this.visualTree, BorderLayout.CENTER);
+		
+		this.add(scrollTree, BorderLayout.CENTER);
 		this.add(this.directoryChooser, BorderLayout.SOUTH);
 	}
 
