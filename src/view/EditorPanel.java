@@ -156,7 +156,7 @@ public class EditorPanel extends JPanel {
 		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace,
 				Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
-		cover.setPreferredSize(new Dimension(10, 10));
+		cover.setPreferredSize(new Dimension(100, 100));
 		coverPanel.add(cover);
 	}
 
@@ -178,8 +178,7 @@ public class EditorPanel extends JPanel {
 
 	public void setCover(ImageIcon i) {
 		if (i != null)
-			cover.setIcon(new ImageIcon(i.getImage().getScaledInstance(100,
-					100, Image.SCALE_SMOOTH)));
+			cover.setIcon(i);
 	}
 
 	public ImageIcon getCover() {

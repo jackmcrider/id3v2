@@ -119,11 +119,11 @@ public class MainControl {
 					.getAlbum());
 			currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 					.getYear());
-			if (mainWindow.getEditorPanel().getCover() != null)
+			if (mainWindow.getEditorPanel().getCover() != null){
 				currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
 						.getCover());
-
-			addChangedFile();
+			}
+			
 			setStatus(currentlyOpenedMP3File + " was changed.");
 		}
 	}
@@ -223,6 +223,7 @@ public class MainControl {
 				mainWindow.getEditorPanel().setCover(icon);
 				
 				Program.getControl().updateCurrentlyOpenedMP3File();
+				Program.getControl().addChangedFile();
 			} catch (IOException e) {
 				Program.getControl().setStatus(e.getMessage());
 			}
