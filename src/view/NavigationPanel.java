@@ -1,12 +1,9 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,6 +13,7 @@ import javax.swing.tree.DefaultTreeModel;
 import model.Folder;
 import control.Program;
 import control.handlers.ClickedOnFileInTree;
+import control.handlers.DirectoryChooser;
 
 @SuppressWarnings("serial")
 public class NavigationPanel extends JPanel {
@@ -40,31 +38,7 @@ public class NavigationPanel extends JPanel {
 		
 		// Logic for changing directory
 		this.directoryChooser = new JButton("Change directory");
-		this.directoryChooser.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// Get source of action
-				JButton source = (JButton) arg0.getSource();
-
-				// Get navigation panel
-				NavigationPanel navigationPanel = (NavigationPanel) source
-						.getParent();
-
-				// Initialize file chooser
-				final JFileChooser fc = new JFileChooser();
-
-				// Show only directories
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-				// Choose a directory
-				int returnVal = fc.showOpenDialog(navigationPanel);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
-					navigationPanel.replaceTree(file.getAbsolutePath());
-				}
-			}
-		});
+		this.directoryChooser.addActionListener(new DirectoryChooser());
 
 		// Add components
 		this.add(new JLabel("Directory tree"), BorderLayout.NORTH);
