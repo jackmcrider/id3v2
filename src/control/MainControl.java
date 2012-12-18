@@ -3,8 +3,6 @@ package control;
 import java.util.LinkedList;
 
 import javax.swing.UIManager;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.MP3File;
 import view.MainWindow;
@@ -87,7 +85,7 @@ public class MainControl {
 	 * @param changed
 	 */
 	public void addChangedFile() {
-		if (!currentlyOpenedMP3FileIsChanged()){
+		if (!currentlyOpenedMP3FileIsChanged()) {
 			currentlyOpenedMP3File.changed();
 			changedFiles.add(currentlyOpenedMP3File);
 			mainWindow.getNavigationPanel().updateUI();
@@ -110,12 +108,10 @@ public class MainControl {
 					.getAlbum());
 			currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 					.getYear());
-			if(mainWindow.getEditorPanel().getCover() != null){
-				System.out.println("hallo");
-			currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel().getCover());
-			
+			if (mainWindow.getEditorPanel().getCover() != null){
+				currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
+						.getCover());
 			}
-			addChangedFile();
 			setStatus(currentlyOpenedMP3File + " was changed.");
 		}
 	}
@@ -126,15 +122,14 @@ public class MainControl {
 	 * @param loadFile
 	 */
 	public void loadMP3File(MP3File loadFile) {
-		if(currentlyOpenedMP3File != null)
-		System.out.println("old: "+currentlyOpenedMP3File.getTitle());
 		updateCurrentlyOpenedMP3File();
 
 		currentlyOpenedMP3File = loadFile;
-		System.out.println("new: "+currentlyOpenedMP3File.getTitle());
+
 		mainWindow.getEditorPanel().setTitle(currentlyOpenedMP3File.getTitle());
 		mainWindow.getEditorPanel().setAlbum(currentlyOpenedMP3File.getAlbum());
-		mainWindow.getEditorPanel().setArtist(currentlyOpenedMP3File.getArtist());
+		mainWindow.getEditorPanel().setArtist(
+				currentlyOpenedMP3File.getArtist());
 		mainWindow.getEditorPanel().setYear(currentlyOpenedMP3File.getYear());
 		mainWindow.getEditorPanel().setCover(currentlyOpenedMP3File.getCover());
 	}
@@ -146,43 +141,13 @@ public class MainControl {
 		if (changedFiles.size() > 0) {
 			for (MP3File changed : changedFiles) {
 				changed.write();
-				//setStatus("Saved " + changed.getAbsolutePath());
+				// setStatus("Saved " + changed.getAbsolutePath());
 			}
 
 			changedFiles.clear();
 			mainWindow.getNavigationPanel().updateUI();
-		}else{
+		} else {
 			setStatus("Nothing to do!");
-		}
-	}
-
-	/**
-	 * Handle the event that something was selected in the tree
-	 * 
-	 * @param e
-	 */
-	public void clickedOnFileInTree(TreeSelectionEvent e) {
-		// Get the selected node from the tree
-		DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e.getPath()
-				.getLastPathComponent();
-
-		// Check if it is an mp3 file
-		if (selected instanceof MP3File) {
-			MP3File current = (MP3File) selected;
-
-			if (!current.isParsed())
-				current.parse();
-
-			if (current.isID3v2Tag()) {
-				loadMP3File(current);
-			} else {
-				mainWindow
-						.setStatus("This is not an MP3 file with ID3v2 tags.");
-				
-				// TODO: does not work?!
-				current.removeFromParent();
-				mainWindow.getNavigationPanel().updateUI();
-			}
 		}
 	}
 
