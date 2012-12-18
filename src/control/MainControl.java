@@ -1,19 +1,8 @@
 package control;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.UIManager;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.MP3File;
 import view.MainWindow;
@@ -161,47 +150,6 @@ public class MainControl {
 		} else {
 			setStatus("Nothing to do!");
 		}
-	}
-
-	public void chooseNewCover() {
-		if (!Program.getControl().currentlyOpenedMP3FileIsParsed())
-			return;
-
-		FileFilter filter = new FileNameExtensionFilter("Image", "jpg", "jpeg",
-				"png");
-
-		JFileChooser fc = new JFileChooser();
-		fc.addChoosableFileFilter(filter);
-		fc.setFileFilter(filter);
-		fc.setAcceptAllFileFilterUsed(false);
-		fc.setApproveButtonText("Choose");
-		fc.setDialogTitle("Choose new cover");
-		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int returnVal = fc.showOpenDialog(mainWindow);
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = fc.getSelectedFile();
-			
-			BufferedImage image;
-			ImageIcon icon;
-			
-			try {
-				image = ImageIO.read(file);
-				icon = new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-				
-				mainWindow.getEditorPanel().setImage(image);
-				mainWindow.getEditorPanel().setCover(icon);
-				
-				Program.getControl().updateCurrentlyOpenedMP3File();
-				Program.getControl().addChangedFile();
-			} catch (IOException e) {
-				Program.getControl().setStatus(e.getMessage());
-			}
-		}
-	}
-
-	public void selectAnotherDirectory() {
-		
 	}
 
 }

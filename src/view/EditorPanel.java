@@ -13,8 +13,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
@@ -24,8 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import control.Program;
 import control.handlers.ChangedMP3Tags;
+import control.handlers.CoverChooser;
 import control.handlers.SaveChangedMP3Files;
 
 @SuppressWarnings("serial")
@@ -98,11 +96,7 @@ public class EditorPanel extends JPanel {
 		this.coverPanel.setLayout(new FlowLayout());
 		this.cover = new JLabel();
 		this.cover.setBorder(BorderFactory.createLineBorder(Color.black));
-		this.cover.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				Program.getControl().chooseNewCover();
-			}
-		});
+		this.cover.addMouseListener(new CoverChooser());
 
 		this.cover.setPreferredSize(new Dimension(100, 100));
 		this.coverPanel.add(cover);
