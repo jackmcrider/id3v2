@@ -110,10 +110,11 @@ public class MainControl {
 					.getAlbum());
 			currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 					.getYear());
-			if(mainWindow.getEditorPanel().getCover() != null)
-			currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
-					.getCover());
+			if(mainWindow.getEditorPanel().getCover() != null){
+				System.out.println("hallo");
+			currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel().getCover());
 			
+			}
 			addChangedFile();
 			setStatus(currentlyOpenedMP3File + " was changed.");
 		}
@@ -125,10 +126,12 @@ public class MainControl {
 	 * @param loadFile
 	 */
 	public void loadMP3File(MP3File loadFile) {
+		if(currentlyOpenedMP3File != null)
+		System.out.println("old: "+currentlyOpenedMP3File.getTitle());
 		updateCurrentlyOpenedMP3File();
 
 		currentlyOpenedMP3File = loadFile;
-
+		System.out.println("new: "+currentlyOpenedMP3File.getTitle());
 		mainWindow.getEditorPanel().setTitle(currentlyOpenedMP3File.getTitle());
 		mainWindow.getEditorPanel().setAlbum(currentlyOpenedMP3File.getAlbum());
 		mainWindow.getEditorPanel().setArtist(currentlyOpenedMP3File.getArtist());
