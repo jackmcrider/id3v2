@@ -11,12 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 
 import model.Folder;
 import control.Program;
+import control.handlers.ClickedOnFileInTree;
 
 @SuppressWarnings("serial")
 public class NavigationPanel extends JPanel {
@@ -34,11 +33,7 @@ public class NavigationPanel extends JPanel {
 
 		// Initialize the visual tree
 		this.visualTree = new JTree(this.tree);
-		this.visualTree.addTreeSelectionListener(new TreeSelectionListener() {
-			public void valueChanged(TreeSelectionEvent e) {
-				Program.getControl().clickedOnFileInTree(e);
-			}
-		});
+		this.visualTree.addTreeSelectionListener(new ClickedOnFileInTree());
 		
 		// Initialize the Scrollpane of the Tree
 		scrollTree = new JScrollPane(this.visualTree);

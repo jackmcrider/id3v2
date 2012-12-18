@@ -163,36 +163,6 @@ public class MainControl {
 		}
 	}
 
-	/**
-	 * Handle the event that something was selected in the tree
-	 * 
-	 * @param e
-	 */
-	public void clickedOnFileInTree(TreeSelectionEvent e) {
-		// Get the selected node from the tree
-		DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e.getPath()
-				.getLastPathComponent();
-
-		// Check if it is an mp3 file
-		if (selected instanceof MP3File) {
-			MP3File current = (MP3File) selected;
-
-			if (!current.isParsed())
-				current.parse();
-
-			if (current.isID3v2Tag()) {
-				loadMP3File(current);
-			} else {
-				mainWindow
-						.setStatus("This is not an MP3 file with ID3v2 tags.");
-
-				// TODO: does not work?!
-				current.removeFromParent();
-				mainWindow.getNavigationPanel().updateUI();
-			}
-		}
-	}
-
 	public void chooseNewCover() {
 		if (!Program.getControl().currentlyOpenedMP3FileIsParsed())
 			return;
@@ -231,7 +201,7 @@ public class MainControl {
 	}
 
 	public void selectAnotherDirectory() {
-
+		
 	}
 
 }
