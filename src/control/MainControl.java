@@ -100,12 +100,24 @@ public class MainControl {
 	public void updateCurrentlyOpenedMP3File() {
 		// Update tags when edited
 		if (currentlyOpenedMP3FileIsParsed()) {
+			if(mainWindow.getEditorPanel().getTitle().length() == 0)
+				currentlyOpenedMP3File.setTitle(" ");
+			else
 			currentlyOpenedMP3File.setTitle(mainWindow.getEditorPanel()
 					.getTitle());
+			if(mainWindow.getEditorPanel().getArtist().length() == 0)
+				currentlyOpenedMP3File.setArtist(" ");
+			else
 			currentlyOpenedMP3File.setArtist(mainWindow.getEditorPanel()
 					.getArtist());
+			if(mainWindow.getEditorPanel().getAlbum().length() == 0)
+				currentlyOpenedMP3File.setAlbum(" ");
+			else
 			currentlyOpenedMP3File.setAlbum(mainWindow.getEditorPanel()
 					.getAlbum());
+			if(mainWindow.getEditorPanel().getYear().length() == 0 )
+				currentlyOpenedMP3File.setYear(" ");
+			else
 			currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 					.getYear());
 			if (mainWindow.getEditorPanel().getCover() != null){

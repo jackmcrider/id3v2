@@ -19,6 +19,8 @@ public class CoverChooser extends MouseAdapter {
 	public void mouseClicked(MouseEvent e) {
 		if (!Program.getControl().currentlyOpenedMP3FileIsParsed())
 			return;
+		
+		System.out.println("Called");
 
 		FileFilter filter = new FileNameExtensionFilter("Image", "jpg", "jpeg",
 				"png");
@@ -31,7 +33,7 @@ public class CoverChooser extends MouseAdapter {
 		fc.setDialogTitle("Choose new cover");
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int returnVal = fc.showOpenDialog(Program.getControl().getMainWindow());
-
+System.out.println(returnVal);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 
@@ -48,6 +50,8 @@ public class CoverChooser extends MouseAdapter {
 
 				Program.getControl().updateCurrentlyOpenedMP3File();
 				Program.getControl().addChangedFile();
+				
+				fc.cancelSelection();
 			} catch (IOException ex) {
 				Program.getControl().setStatus(ex.getMessage());
 			}

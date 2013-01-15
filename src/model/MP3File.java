@@ -53,6 +53,8 @@ public class MP3File extends DefaultMutableTreeNode {
 	// Create MP3 file and set represented file as its user object
 	public MP3File(String path) {
 		this.setUserObject(new File(path));
+		parse();
+		
 	}
 
 	/**
@@ -314,8 +316,12 @@ public class MP3File extends DefaultMutableTreeNode {
 			byte[] tag;
 			for (int i = 0; i < tags.size(); i++) {
 				tag = tags.get(i).getBytes();
+				
+				
 				for (int k = 0; k < tag.length; k++) {
 					// out.write(tag[k]);
+					System.out.print(new String(tag));
+					
 					bos.write(tag[k]);
 				}
 			}
@@ -490,11 +496,15 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * @param year
 	 */
 	public void setYear(String year) {
+		if(year.length() > 4){
+			year = year.substring(0, 4);
+		}
 		if (tags.size() > 0) {
 			ID3TextFrame tag = getTag("TYER");
 			if (tag != null)
 				tag.setData(year);
 		}
+		
 		this.year = year;
 	}
 
