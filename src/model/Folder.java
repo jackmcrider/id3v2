@@ -11,7 +11,9 @@ public class Folder extends DefaultMutableTreeNode {
 			path = "resources" + File.separator + "mp3s";
 
 		this.setUserObject(new File(path));
-
+		File xml = searchForCache();
+		if(xml == null){
+			
 		for (File f : ((File) this.getUserObject()).listFiles()) {
 			if (f.isDirectory()) {
 				this.add(new Folder(f.getPath()));
@@ -22,6 +24,18 @@ public class Folder extends DefaultMutableTreeNode {
 				// this.add(new OrdinaryFile(f.getPath()));
 			}
 		}
+		}else{
+			XMLReader reader = new XMLReader(xml);
+		}
+	}
+	
+	public File searchForCache(){
+		for (File f : ((File) this.getUserObject()).listFiles()) {
+			if(f.toString().endsWith(".xml")){
+				return f;
+			}
+		}
+		return null;
 	}
 
 	public String toString() {
