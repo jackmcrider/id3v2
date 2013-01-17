@@ -5,6 +5,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import model.Folder;
+import model.XMLWriter;
 
 import control.Program;
 
@@ -21,7 +25,7 @@ public class DirectoryChooser implements ActionListener {
 		// Choose a directory
 		int returnVal = fc.showOpenDialog(Program.getControl().getMainWindow().getNavigationPanel());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			
+			XMLWriter xw = new XMLWriter((DefaultMutableTreeNode)Program.getControl().getMainWindow().getNavigationPanel().getRoot());
 			File file = fc.getSelectedFile();
 			Program.getControl().getMainWindow().getNavigationPanel().replaceTree(file.getAbsolutePath());
 		}

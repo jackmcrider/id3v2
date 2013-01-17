@@ -56,6 +56,11 @@ public class MP3File extends DefaultMutableTreeNode {
 		parse();
 		
 	}
+	
+	public int getSize(){
+		//muss noch genauer berechnet werden
+		return audioPart.length + finalImageData.length;
+	}
 
 	/**
 	 * Parse id3v2 tags of mp3 file
