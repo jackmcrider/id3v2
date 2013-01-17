@@ -23,27 +23,28 @@ public class XMLReader {
 			builder = factory.newDocumentBuilder();
 			Document document;
 			document = builder.parse(file);
-			NodeList nl = document.getElementsByTagName("tags");
-			if(nl != null){
-			for (int i = 0; i < nl.getLength(); i++) {
-				Node node = nl.item(i);
-			      Element fstElmnt = (Element) node;
-			      NodeList fstNmElmntLst = fstElmnt.getElementsByTagName("artist");
-			      Element fstNmElmnt = (Element) fstNmElmntLst.item(0);
-			      NodeList fstNm = fstNmElmnt.getChildNodes();
-			      if(fstNm.item(0) != null)
-			      System.out.println("First Name : "  + ((Node) fstNm.item(0)).getNodeValue());
-			//	System.out.println(node.getFirstChild().getFirstChild().toString());
-//				if (node.getNodeType() == Node.ELEMENT_NODE) {
-//				Element element = (Element) node;
-//				System.out.println("Stock Symbol: "+ getValue("artist", element));
-//				System.out.println("Stock Price: " + getValue("title", element));
-//				System.out.println("Stock Quantity: " + getValue("album", element));
-//				}
+			NodeList tags = document.getElementsByTagName("tags");
+			if (tags != null) {
+				for (int i = 0; i < tags.getLength(); i++) {
+					Node tagNode = tags.item(i);
+					Element tagElem = (Element) tagNode;
+					
+					NodeList artists = tagElem.getElementsByTagName("artist");
+					Element artist = (Element) artists.item(0);
+					NodeList bla = artist.getChildNodes();
+					if (bla.item(0) != null)
+						System.out.println("artist : "
+								+ ((Node) bla.item(0)).getNodeValue());
+					
+					NodeList titles = tagElem.getElementsByTagName("title");
+					Element title = (Element) titles.item(0);
+					NodeList bla2 = title.getChildNodes();
+					if (bla2.item(0) != null)
+						System.out.println("title : "
+								+ ((Node) bla2.item(0)).getNodeValue());
 				}
 			}
 
-		
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,11 +56,5 @@ public class XMLReader {
 			e.printStackTrace();
 		}
 	}
-
-	private static String getValue(String tag, Element element) {
-		NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
-		Node node = (Node) nodes.item(0);
-		return node.getNodeValue();
-		}
 
 }
