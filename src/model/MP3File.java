@@ -215,7 +215,6 @@ public class MP3File extends DefaultMutableTreeNode {
 		String mimeType;
 
 		byte pictureType;
-		byte[] imageData;
 
 		// Read empty stuff
 		for (pointer = 1; pointer < bytes.length; pointer++) {
@@ -259,11 +258,16 @@ public class MP3File extends DefaultMutableTreeNode {
 
 		// Save data
 		length = bytes.length - pointer2;
-		imageData = new byte[length];
-		System.arraycopy(bytes, pointer2, imageData, 0, length);
+		System.arraycopy(bytes, pointer2, imageDataBytes, 0, length);
 		this.pframe = new ID3PicFrame(mimeType, pictureType, finalImageDataEncoding,
-				finalImageData, imageData, keyword, frameBodySize, flags);
-		this.cover = new ImageIcon(imageData);
+				finalImageData, imageDataBytes, keyword, frameBodySize, flags);
+		this.cover = new ImageIcon(imageDataBytes);
+		this.setCover(this.cover);
+	}
+	
+	public void cachedCover(byte[] imageData) {
+		imageDataBytes = imageData;
+		this.cover = new ImageIcon(imageDataBytes);
 		this.setCover(this.cover);
 	}
 

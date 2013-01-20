@@ -115,7 +115,7 @@ public class XMLReader {
 						try {
 							byte[] cover = Base64.decode(coverStr);
 							System.out.println("Cover " + cover.length);
-							mp3.setCover(new ImageIcon(cover));
+							mp3.cachedCover(cover);
 						} catch (Base64DecodingException e1) {
 							e1.printStackTrace();
 						}
