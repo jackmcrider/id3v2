@@ -11,8 +11,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
@@ -22,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import control.handlers.ApplicationCloser;
 import control.handlers.ChangedMP3Tags;
 import control.handlers.CoverChooser;
 import control.handlers.SaveChangedMP3Files;
@@ -77,11 +76,7 @@ public class EditorPanel extends JPanel {
 		this.yearField.addKeyListener(addFileToChangedFiles);
 
 		this.closeButton = new JButton("Close");
-		this.closeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		this.closeButton.addActionListener(new ApplicationCloser());
 		this.saveButton = new JButton("Save");
 		this.saveButton.addActionListener(new SaveChangedMP3Files());
 
