@@ -45,12 +45,10 @@ public class XMLReader {
 	}
 
 	public DefaultMutableTreeNode readXML() {
-
 		NodeList folders = document.getElementsByTagName("folder");
 		Node root = folders.item(0);
 		Element e = (Element) root;
-		DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode(
-				e.getAttribute("name"));
+		DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode(e.getAttribute("name"));
 		this.createTree(root, treeRoot);
 		return treeRoot;
 	}

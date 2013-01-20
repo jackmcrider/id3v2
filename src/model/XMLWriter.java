@@ -20,9 +20,9 @@ public class XMLWriter {
 
 		factory = XMLOutputFactory.newInstance();
 		try {
+			System.out.println(new File(root.getUserObject().toString()).getPath()+ File.separator + "cache.xml");
 			writer = factory.createXMLStreamWriter(new FileOutputStream(
-					new File(root.getUserObject().toString()).getPath()
-							+ File.separator + "cache.xml"));
+					new File(root.getUserObject().toString()).getPath()+ File.separator + "cache.xml"));
 
 			writer.writeStartDocument();
 			writer.writeCharacters("\n");

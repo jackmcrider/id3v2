@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import model.Folder;
+import model.XMLReader;
 import control.Program;
 import control.handlers.ClickedOnFileInTree;
 import control.handlers.DirectoryChooser;
@@ -23,53 +24,81 @@ public class NavigationPanel extends JPanel {
 	private JButton directoryChooser;
 	private JScrollPane scrollTree;
 	private Folder folder;
+	private String standardPath = "resources" + File.separator + "mp3s";
+	File xml = null;
+	XMLReader reader;
 
 	public NavigationPanel() {
 		// Set layout of NavigationPanel
 		this.setLayout(new BorderLayout());
 
 		// Create tree of folders and files
-		this.tree = new DefaultTreeModel(new Folder(null));
+		xml = searchForCache(new File(standardPath));
+		if (xml == null){
+			System.out.println("disk");
+			this.tree = new DefaultTreeModel(new Folder(standardPath));
+		}else{
+			System.out.println("xml");
+			reader = new XMLReader(xml);
+			this.tree = new DefaultTreeModel(reader.readXML());
+		}
 
 		// Initialize the visual tree
 		this.visualTree = new JTree(this.tree);
 		this.visualTree.addTreeSelectionListener(new ClickedOnFileInTree());
-		
+
 		// Initialize the Scrollpane of the Tree
 		scrollTree = new JScrollPane(this.visualTree);
-		
+
 		// Logic for changing directory
 		this.directoryChooser = new JButton("Change directory");
 		this.directoryChooser.addActionListener(new DirectoryChooser());
 
 		// Add components
 		this.add(new JLabel("Directory tree"), BorderLayout.NORTH);
-		
+
 		this.add(scrollTree, BorderLayout.CENTER);
 		this.add(this.directoryChooser, BorderLayout.SOUTH);
 	}
-	
-	public Object getRoot(){
+
+	public Object getRoot() {
 		return this.tree.getRoot();
 	}
 
-	
 	/**
 	 * Replace the tree in the navigation panel with a new root directory
 	 * 
 	 * @param path
 	 */
 	public void replaceTree(String path) {
-		folder = new Folder(path);
-		File newRoot = new File(path);
-		if (newRoot.exists() && newRoot.isDirectory()) {
-			this.tree.setRoot(folder);
+		xml = searchForCache(new File(path));
+		if (xml == null) {
+			System.out.println("disk");
+			folder = new Folder(path);
+			File newRoot = new File(path);
+			if (newRoot.exists() && newRoot.isDirectory()) {
+				this.tree.setRoot(folder);
+			} else {
+				Program.getControl().setStatus(
+						"The thing that you selected was not a directory.");
+			}
 		} else {
-			Program.getControl().setStatus("The thing that you selected was not a directory.");
+			System.out.println("xml");
+			XMLReader reader = new XMLReader(xml);
+			this.setTree(reader.readXML());
 		}
 	}
-	
-	public void setTree(DefaultMutableTreeNode n){
+
+	public File searchForCache(File root) {
+		for (File f : root.listFiles()) {
+			if (f.toString().endsWith(".xml")) {
+				return f;
+			}
+		}
+		return null;
+	}
+
+	public void setTree(DefaultMutableTreeNode n) {
 		this.tree.setRoot(n);
 	}
 }

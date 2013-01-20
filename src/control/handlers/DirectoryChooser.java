@@ -25,6 +25,7 @@ public class DirectoryChooser implements ActionListener {
 		// Choose a directory
 		int returnVal = fc.showOpenDialog(Program.getControl().getMainWindow().getNavigationPanel());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			System.out.println(Program.getControl().getMainWindow().getNavigationPanel().getRoot());
 			XMLWriter xw = new XMLWriter((DefaultMutableTreeNode)Program.getControl().getMainWindow().getNavigationPanel().getRoot());
 			File file = fc.getSelectedFile();
 			Program.getControl().getMainWindow().getNavigationPanel().replaceTree(file.getAbsolutePath());
