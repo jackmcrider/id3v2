@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -46,7 +47,6 @@ public class XMLReader {
 	public DefaultMutableTreeNode readXML() {
 		Element cache = (Element) document.getElementsByTagName("cache").item(0);
 		timestampFormatted = cache.getAttribute("timestamp");
-		System.out.println(timestampFormatted);
 		
 	    SimpleDateFormat formater = new SimpleDateFormat();
 	    try {
@@ -54,8 +54,6 @@ public class XMLReader {
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
-	    
-	    System.out.println(timestamp);
 		
 		NodeList folders = document.getElementsByTagName("folder");
 		Node root = folders.item(0);
@@ -87,6 +85,21 @@ public class XMLReader {
 			MP3File mp3 = null;
 			if (n.getParentNode() == node) {
 				Element ele = (Element) n;
+				
+				byte[] header = null;
+				try {
+					header = Base64.decode(((Element) ele.getElementsByTagName("header").item(0)).getTextContent());
+				} catch (Base64DecodingException | DOMException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+
+				/*NodeList tagframes = ele.getElementsByTagName("data").item(0).getChildNodes();				
+				for(int tagCounter = 0; tagCounter < tagframes.getLength(); tagCounter++){
+					Element tagElement = (Element) tagframes.item(tagCounter);
+					((Element) tagElement.getElementsByTagName("tagkeyword").item(0)).getChildNodes().item(0).getNodeValue());
+				}*/
+				
 				File file = new File(ele.getAttribute("path"));
 				if(file.lastModified() > timestamp){
 					mp3 = new MP3File(ele.getAttribute("path"));
@@ -137,7 +150,6 @@ public class XMLReader {
 							mp3 = new MP3File(artistStr, albumStr, titleStr, yearStr, ele.getAttribute("path"));
 							try {
 								byte[] cover = Base64.decode(coverStr);
-								System.out.println("Cover " + cover.length);
 								mp3.cachedCover(cover);
 							} catch (Base64DecodingException e1) {
 								e1.printStackTrace();

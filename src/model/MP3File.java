@@ -90,6 +90,22 @@ public class MP3File extends DefaultMutableTreeNode {
 	public ID3PicFrame getPicFrame() {
 		return this.pframe;
 	}
+	
+	public void setTags(Vector<ID3TextFrame> tags){
+		this.tags = tags;
+	}
+	
+	public void setAudioPart(byte[] audioPart) {
+		this.audioPart = audioPart;
+	}
+	
+	public void setPicFrame(ID3PicFrame pframe) {
+		this.pframe = pframe;
+	}
+	
+	public void setHeader(byte[] header) {
+		this.header = header;
+	}
 
 	/**
 	 * Parse id3v2 tags of mp3 file
