@@ -29,7 +29,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	private byte finalImageDataEncoding;
 	private static final byte[][] textTerminators = { { 0 }, { 0, 0 }, { 0, 0 },
 			{ 0 } };
-
+	
 	// Holds the header
 	private byte[] header = new byte[10];
 	// Holds all the tags
@@ -46,6 +46,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	// Holds the audioPart of the MP3 file (music)
 	private byte[] audioPart;
 
+	private boolean cached = false;
 	private boolean isID3v2Tag = true;
 	private boolean isParsed = false;
 	private boolean isChanged = false;
@@ -53,8 +54,15 @@ public class MP3File extends DefaultMutableTreeNode {
 	// Create MP3 file and set represented file as its user object
 	public MP3File(String path) {
 		this.setUserObject(new File(path));
-		parse();
-		
+		parse();	
+	}
+	public MP3File(String artist, String album, String title, String year, String path){
+		cached = true;
+		this.setAlbum(album);
+		this.setArtist(artist);
+		this.setTitle(title);
+		this.setYear(year);
+		this.setUserObject(new File(path));
 	}
 	
 	public int getSize(){
@@ -349,11 +357,15 @@ public class MP3File extends DefaultMutableTreeNode {
 	}
 
 	public String toString() {
+		if(this.getUserObject() != null){
 		String name = ((File) this.getUserObject()).getName();
 		if (isChanged)
 			name = "*" + name;
 
 		return name;
+		}
+		return null;
+		
 	}
 
 	/**

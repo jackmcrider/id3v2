@@ -2,7 +2,10 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,37 +16,21 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import control.Program;
+
 public class XMLReader {
+
+	Document document;
+	DocumentBuilderFactory factory;
+	DocumentBuilder builder;
 
 	public XMLReader(File file) {
 
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
+		factory = DocumentBuilderFactory.newInstance();
+
 		try {
 			builder = factory.newDocumentBuilder();
-			Document document;
 			document = builder.parse(file);
-			NodeList tags = document.getElementsByTagName("tags");
-			if (tags != null) {
-				for (int i = 0; i < tags.getLength(); i++) {
-					Node tagNode = tags.item(i);
-					Element tagElem = (Element) tagNode;
-					
-					NodeList artists = tagElem.getElementsByTagName("artist");
-					Element artist = (Element) artists.item(0);
-					NodeList bla = artist.getChildNodes();
-					if (bla.item(0) != null)
-						System.out.println("artist : "
-								+ ((Node) bla.item(0)).getNodeValue());
-					
-					NodeList titles = tagElem.getElementsByTagName("title");
-					Element title = (Element) titles.item(0);
-					NodeList bla2 = title.getChildNodes();
-					if (bla2.item(0) != null)
-						System.out.println("title : "
-								+ ((Node) bla2.item(0)).getNodeValue());
-				}
-			}
 
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
@@ -54,6 +41,82 @@ public class XMLReader {
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	public DefaultMutableTreeNode readXML() {
+
+		NodeList folders = document.getElementsByTagName("folder");
+		Node root = folders.item(0);
+		Element e = (Element) root;
+		DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode(
+				e.getAttribute("name"));
+		this.createTree(root, treeRoot);
+		return treeRoot;
+	}
+
+	public void createTree(Node node, DefaultMutableTreeNode parent) {
+		DefaultMutableTreeNode childNode = null;
+		Element e = (Element) node;
+		NodeList list = e.getElementsByTagName("folder");
+
+		for (int i = 0; i < list.getLength(); i++) {
+			Node n = list.item(i);
+			Element ele = (Element) n;
+			if (((Element) ele.getParentNode()).getAttribute("name").equals(
+					parent.toString())) {
+				childNode = new DefaultMutableTreeNode(ele.getAttribute("name"));
+				parent.add(childNode);
+				createTree(n, childNode);
+			}
+		}
+
+		NodeList fileList = e.getElementsByTagName("file");
+		for (int i = 0; i < fileList.getLength(); i++) {
+			Node n = fileList.item(i);
+			Element ele = (Element) n;
+			if (((Element) ele.getParentNode()).getAttribute("name").equals(parent.toString())){
+				NodeList tags = ele.getElementsByTagName("tags");
+				MP3File mp3 = null;
+				if (tags != null) {
+					for (int k = 0; k < tags.getLength(); k++) {
+						String titleStr="";
+						String albumStr="";
+						String artistStr="";
+						String yearStr="";
+						Node tagNode = tags.item(k);
+						Element tagElem = (Element) tagNode;
+
+						NodeList list1 = tagElem.getElementsByTagName("artist");
+						Element tag = (Element) list1.item(0);
+						NodeList list2 = tag.getChildNodes();
+						if (list2.item(0) != null)
+							artistStr = ((Node) list2.item(0)).getNodeValue();
+						
+						list1 = tagElem.getElementsByTagName("title");
+						tag = (Element) list1.item(0);
+						list2 = tag.getChildNodes();
+						if (list2.item(0) != null)
+							titleStr = ((Node) list2.item(0)).getNodeValue();
+						
+						list1 = tagElem.getElementsByTagName("album");
+						tag = (Element) list1.item(0);
+						list2 = tag.getChildNodes();
+						if (list2.item(0) != null)
+							albumStr = ((Node) list2.item(0)).getNodeValue();
+						
+						list1 = tagElem.getElementsByTagName("year");
+						tag = (Element) list1.item(0);
+						list2 = tag.getChildNodes();
+						if (list2.item(0) != null)
+							yearStr = ((Node) list2.item(0)).getNodeValue();
+						
+						mp3 = new MP3File(artistStr, albumStr, titleStr, yearStr, ele.getAttribute("path"));
+
+					}
+				}
+				parent.add(mp3);
+			}
 		}
 	}
 

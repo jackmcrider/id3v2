@@ -21,7 +21,7 @@ public class XMLWriter {
 		factory = XMLOutputFactory.newInstance();
 		try {
 			writer = factory.createXMLStreamWriter(new FileOutputStream(
-					new File(root.getUserObject().toString()).getAbsolutePath()
+					new File(root.getUserObject().toString()).getPath()
 							+ File.separator + "cache.xml"));
 
 			writer.writeStartDocument();
@@ -64,6 +64,7 @@ public class XMLWriter {
 			throws XMLStreamException {
 		MP3File m;
 		Enumeration en = n.children();
+		int ctr = 0;
 		while (en.hasMoreElements()) {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) en
 					.nextElement();
@@ -77,11 +78,16 @@ public class XMLWriter {
 				w.writeEndElement();
 				w.writeCharacters("\n");
 			} else {
-				if (n.getChildAt(0).toString().endsWith(".mp3")) {
-					m = (MP3File) n.getChildAt(0);
+				if (n.getChildAt(ctr).toString().endsWith(".mp3")) {
+					
+					m = (MP3File) n.getChildAt(ctr);
+					//System.out.println("child found: "+n.getChildAt(ctr).toString() +" at: "+m.getAbsolutePath());
+					ctr++;
 					writeSpaces(depth + 1, w);
 					w.writeStartElement("file");
-					w.writeAttribute("name", m.toString());
+					w.writeAttribute("path", m.getAbsolutePath());
+					File f = new File(m.getAbsolutePath());
+					w.writeAttribute("name", f.getName());
 					w.writeAttribute("size", "1337");
 					w.writeCharacters("\n");
 					writeSpaces(depth + 2, w);

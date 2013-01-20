@@ -68,4 +68,8 @@ public class NavigationPanel extends JPanel {
 			Program.getControl().setStatus("The thing that you selected was not a directory.");
 		}
 	}
+	
+	public void setTree(DefaultMutableTreeNode n){
+		this.tree.setRoot(n);
+	}
 }
