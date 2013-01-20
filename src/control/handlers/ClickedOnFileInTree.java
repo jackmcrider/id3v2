@@ -18,7 +18,7 @@ public class ClickedOnFileInTree implements TreeSelectionListener {
 		if (selected instanceof MP3File) {
 			MP3File current = (MP3File) selected;
 
-			if (!current.isParsed())
+			if (!current.isParsed() && !current.isCached())
 				current.parse();
 
 			if (current.isID3v2Tag()) {

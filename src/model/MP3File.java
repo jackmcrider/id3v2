@@ -65,6 +65,9 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.setUserObject(new File(path));
 	}
 	
+	public boolean isCached(){
+		return this.cached;
+	}
 	public int getSize(){
 		//muss noch genauer berechnet werden
 		return audioPart.length + finalImageData.length;
