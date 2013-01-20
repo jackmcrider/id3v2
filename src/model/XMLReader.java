@@ -2,8 +2,9 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
-import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,6 +24,9 @@ public class XMLReader {
 	Document document;
 	DocumentBuilderFactory factory;
 	DocumentBuilder builder;
+	
+	String timestampFormatted;
+	long timestamp;
 
 	public XMLReader(File file) {
 		factory = DocumentBuilderFactory.newInstance();
@@ -40,6 +44,19 @@ public class XMLReader {
 	}
 
 	public DefaultMutableTreeNode readXML() {
+		Element cache = (Element) document.getElementsByTagName("cache").item(0);
+		timestampFormatted = cache.getAttribute("timestamp");
+		System.out.println(timestampFormatted);
+		
+	    SimpleDateFormat formater = new SimpleDateFormat();
+	    try {
+			timestamp = formater.parse(timestampFormatted).getTime();
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+	    
+	    System.out.println(timestamp);
+		
 		NodeList folders = document.getElementsByTagName("folder");
 		Node root = folders.item(0);
 		Element e = (Element) root;
@@ -67,61 +84,69 @@ public class XMLReader {
 		NodeList fileList = e.getElementsByTagName("file");
 		for (int i = 0; i < fileList.getLength(); i++) {
 			Node n = fileList.item(i);
+			MP3File mp3 = null;
 			if (n.getParentNode() == node) {
 				Element ele = (Element) n;
-				NodeList tags = ele.getElementsByTagName("tags");
-				MP3File mp3 = null;
-				if (tags != null) {
-					for (int k = 0; k < tags.getLength(); k++) {
-						String titleStr = "";
-						String albumStr = "";
-						String artistStr = "";
-						String yearStr = "";
-						String coverStr = "";
-						Node tagNode = tags.item(k);
-						Element tagElem = (Element) tagNode;
-
-						NodeList list1 = tagElem.getElementsByTagName("artist");
-						Element tag = (Element) list1.item(0);
-						NodeList list2 = tag.getChildNodes();
-						if (list2.item(0) != null)
-							artistStr = ((Node) list2.item(0)).getNodeValue();
-
-						list1 = tagElem.getElementsByTagName("title");
-						tag = (Element) list1.item(0);
-						list2 = tag.getChildNodes();
-						if (list2.item(0) != null)
-							titleStr = ((Node) list2.item(0)).getNodeValue();
-
-						list1 = tagElem.getElementsByTagName("album");
-						tag = (Element) list1.item(0);
-						list2 = tag.getChildNodes();
-						if (list2.item(0) != null)
-							albumStr = ((Node) list2.item(0)).getNodeValue();
-
-						list1 = tagElem.getElementsByTagName("year");
-						tag = (Element) list1.item(0);
-						list2 = tag.getChildNodes();
-						if (list2.item(0) != null)
-							yearStr = ((Node) list2.item(0)).getNodeValue();
-						
-						list1 = tagElem.getElementsByTagName("cover");
-						tag = (Element) list1.item(0);
-						list2 = tag.getChildNodes();
-						if (list2.item(0) != null)
-							coverStr = ((Node) list2.item(0)).getNodeValue();
-
-						mp3 = new MP3File(artistStr, albumStr, titleStr, yearStr, ele.getAttribute("path"));
-						try {
-							byte[] cover = Base64.decode(coverStr);
-							System.out.println("Cover " + cover.length);
-							mp3.cachedCover(cover);
-						} catch (Base64DecodingException e1) {
-							e1.printStackTrace();
+				File file = new File(ele.getAttribute("path"));
+				if(file.lastModified() > timestamp){
+					mp3 = new MP3File(ele.getAttribute("path"));
+					parent.add(mp3);
+					System.out.println("[DISK] " + mp3);
+				}else{
+					NodeList tags = ele.getElementsByTagName("tags");
+					if (tags != null) {
+						for (int k = 0; k < tags.getLength(); k++) {
+							String titleStr = "";
+							String albumStr = "";
+							String artistStr = "";
+							String yearStr = "";
+							String coverStr = "";
+							Node tagNode = tags.item(k);
+							Element tagElem = (Element) tagNode;
+	
+							NodeList list1 = tagElem.getElementsByTagName("artist");
+							Element tag = (Element) list1.item(0);
+							NodeList list2 = tag.getChildNodes();
+							if (list2.item(0) != null)
+								artistStr = ((Node) list2.item(0)).getNodeValue();
+	
+							list1 = tagElem.getElementsByTagName("title");
+							tag = (Element) list1.item(0);
+							list2 = tag.getChildNodes();
+							if (list2.item(0) != null)
+								titleStr = ((Node) list2.item(0)).getNodeValue();
+	
+							list1 = tagElem.getElementsByTagName("album");
+							tag = (Element) list1.item(0);
+							list2 = tag.getChildNodes();
+							if (list2.item(0) != null)
+								albumStr = ((Node) list2.item(0)).getNodeValue();
+	
+							list1 = tagElem.getElementsByTagName("year");
+							tag = (Element) list1.item(0);
+							list2 = tag.getChildNodes();
+							if (list2.item(0) != null)
+								yearStr = ((Node) list2.item(0)).getNodeValue();
+							
+							list1 = tagElem.getElementsByTagName("cover");
+							tag = (Element) list1.item(0);
+							list2 = tag.getChildNodes();
+							if (list2.item(0) != null)
+								coverStr = ((Node) list2.item(0)).getNodeValue();
+	
+							mp3 = new MP3File(artistStr, albumStr, titleStr, yearStr, ele.getAttribute("path"));
+							try {
+								byte[] cover = Base64.decode(coverStr);
+								System.out.println("Cover " + cover.length);
+								mp3.cachedCover(cover);
+							} catch (Base64DecodingException e1) {
+								e1.printStackTrace();
+							}
+							parent.add(mp3);
+							System.out.println("[CACHE] " + mp3);
 						}
 					}
 				}
-				parent.add(mp3);
 			}
 		}
 	}

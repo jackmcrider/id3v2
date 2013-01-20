@@ -32,7 +32,7 @@ public class XMLWriter {
 			writer.writeCharacters("\n");
 			writer.writeStartElement("cache");
 			Calendar cal = Calendar.getInstance();
-		    SimpleDateFormat formater = new SimpleDateFormat();  
+		    SimpleDateFormat formater = new SimpleDateFormat();
 			writer.writeAttribute("timestamp", formater.format(cal.getTime()));
 		//	writer.writeAttribute("path",xmlFile.getAbsolutePath());
 			writer.writeCharacters("\n");
