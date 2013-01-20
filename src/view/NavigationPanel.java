@@ -36,7 +36,7 @@ public class NavigationPanel extends JPanel {
 		xml = searchForCache(new File(standardPath));
 		if (xml == null){
 			System.out.println("disk");
-			this.tree = new DefaultTreeModel(new Folder(standardPath));
+			this.tree = new DefaultTreeModel(new Folder(standardPath, true));
 		}else{
 			System.out.println("xml");
 			reader = new XMLReader(xml);
@@ -74,7 +74,7 @@ public class NavigationPanel extends JPanel {
 		xml = searchForCache(new File(path));
 		if (xml == null) {
 			System.out.println("disk");
-			folder = new Folder(path);
+			folder = new Folder(path, true);
 			File newRoot = new File(path);
 			if (newRoot.exists() && newRoot.isDirectory()) {
 				this.tree.setRoot(folder);

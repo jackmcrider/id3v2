@@ -13,7 +13,7 @@ public class FolderTest {
 
 	@Before
 	public void setUp() throws Exception {
-		testFiles = new Folder(testFilesPath);
+		testFiles = new Folder(testFilesPath, true);
 	}
 
 	@Test

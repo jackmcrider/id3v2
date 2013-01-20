@@ -44,7 +44,8 @@ public class XMLReader {
 		NodeList folders = document.getElementsByTagName("folder");
 		Node root = folders.item(0);
 		Element e = (Element) root;
-		DefaultMutableTreeNode treeRoot = new Folder(e.getAttribute("path"));
+		DefaultMutableTreeNode treeRoot = new Folder(e.getAttribute("path"),
+				false);
 		this.createTree(root, treeRoot);
 		return treeRoot;
 	}
@@ -56,12 +57,9 @@ public class XMLReader {
 
 		for (int i = 0; i < list.getLength(); i++) {
 			Node n = list.item(i);
-			Element ele = (Element) n;
-			System.out.println(((Element) ele.getParentNode()).getAttribute("path"));
-			System.out.println(parent.toString());
-			if (((Element) ele.getParentNode()).getAttribute("path").equals(
-					parent.toString())) {
-				childNode = new Folder(ele.getAttribute("path"));
+			if (n.getParentNode() == node) {
+				Element ele = (Element) n;
+				childNode = new Folder(ele.getAttribute("path"), false);
 				parent.add(childNode);
 				createTree(n, childNode);
 			}
@@ -70,16 +68,16 @@ public class XMLReader {
 		NodeList fileList = e.getElementsByTagName("file");
 		for (int i = 0; i < fileList.getLength(); i++) {
 			Node n = fileList.item(i);
-			Element ele = (Element) n;
-			if (((Element) ele.getParentNode()).getAttribute("path").equals(parent.toString())){
+			if (n.getParentNode() == node) {
+				Element ele = (Element) n;
 				NodeList tags = ele.getElementsByTagName("tags");
 				MP3File mp3 = null;
 				if (tags != null) {
 					for (int k = 0; k < tags.getLength(); k++) {
-						String titleStr="";
-						String albumStr="";
-						String artistStr="";
-						String yearStr="";
+						String titleStr = "";
+						String albumStr = "";
+						String artistStr = "";
+						String yearStr = "";
 						Node tagNode = tags.item(k);
 						Element tagElem = (Element) tagNode;
 
@@ -88,26 +86,27 @@ public class XMLReader {
 						NodeList list2 = tag.getChildNodes();
 						if (list2.item(0) != null)
 							artistStr = ((Node) list2.item(0)).getNodeValue();
-						
+
 						list1 = tagElem.getElementsByTagName("title");
 						tag = (Element) list1.item(0);
 						list2 = tag.getChildNodes();
 						if (list2.item(0) != null)
 							titleStr = ((Node) list2.item(0)).getNodeValue();
-						
+
 						list1 = tagElem.getElementsByTagName("album");
 						tag = (Element) list1.item(0);
 						list2 = tag.getChildNodes();
 						if (list2.item(0) != null)
 							albumStr = ((Node) list2.item(0)).getNodeValue();
-						
+
 						list1 = tagElem.getElementsByTagName("year");
 						tag = (Element) list1.item(0);
 						list2 = tag.getChildNodes();
 						if (list2.item(0) != null)
 							yearStr = ((Node) list2.item(0)).getNodeValue();
-						
-						mp3 = new MP3File(artistStr, albumStr, titleStr, yearStr, ele.getAttribute("path"));
+
+						mp3 = new MP3File(artistStr, albumStr, titleStr,
+								yearStr, ele.getAttribute("path"));
 
 					}
 				}
