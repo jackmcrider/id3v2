@@ -44,7 +44,7 @@ public class XMLReader {
 		NodeList folders = document.getElementsByTagName("folder");
 		Node root = folders.item(0);
 		Element e = (Element) root;
-		DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode(e.getAttribute("name"));
+		DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode(e.getAttribute("path"));
 		this.createTree(root, treeRoot);
 		return treeRoot;
 	}
@@ -57,9 +57,11 @@ public class XMLReader {
 		for (int i = 0; i < list.getLength(); i++) {
 			Node n = list.item(i);
 			Element ele = (Element) n;
-			if (((Element) ele.getParentNode()).getAttribute("name").equals(
+			System.out.println(((Element) ele.getParentNode()).getAttribute("path"));
+			System.out.println(parent.toString());
+			if (((Element) ele.getParentNode()).getAttribute("path").equals(
 					parent.toString())) {
-				childNode = new DefaultMutableTreeNode(ele.getAttribute("name"));
+				childNode = new DefaultMutableTreeNode(ele.getAttribute("path"));
 				parent.add(childNode);
 				createTree(n, childNode);
 			}
@@ -69,7 +71,7 @@ public class XMLReader {
 		for (int i = 0; i < fileList.getLength(); i++) {
 			Node n = fileList.item(i);
 			Element ele = (Element) n;
-			if (((Element) ele.getParentNode()).getAttribute("name").equals(parent.toString())){
+			if (((Element) ele.getParentNode()).getAttribute("path").equals(parent.toString())){
 				NodeList tags = ele.getElementsByTagName("tags");
 				MP3File mp3 = null;
 				if (tags != null) {

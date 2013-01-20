@@ -15,14 +15,16 @@ import javax.xml.stream.XMLStreamWriter;
 public class XMLWriter {
 	private XMLOutputFactory factory;
 	private XMLStreamWriter writer;
+	private File xmlFile;
 
 	public XMLWriter(DefaultMutableTreeNode root) {
 
 		factory = XMLOutputFactory.newInstance();
 		try {
-			System.out.println(new File(root.getUserObject().toString()).getPath()+ File.separator + "cache.xml");
+			xmlFile = new File(root.getUserObject().toString());
+			System.out.println(xmlFile.getPath()+ File.separator + "cache.xml");
 			writer = factory.createXMLStreamWriter(new FileOutputStream(
-					new File(root.getUserObject().toString()).getPath()+ File.separator + "cache.xml"));
+					xmlFile.getPath()+ File.separator + "cache.xml"));
 
 			writer.writeStartDocument();
 			writer.writeCharacters("\n");
@@ -30,9 +32,11 @@ public class XMLWriter {
 			Calendar cal = Calendar.getInstance();
 		    SimpleDateFormat formater = new SimpleDateFormat();  
 			writer.writeAttribute("timestamp", formater.format(cal.getTime()));
+		//	writer.writeAttribute("path",xmlFile.getAbsolutePath());
 			writer.writeCharacters("\n");
 			writer.writeStartElement("folder");
 			writer.writeAttribute("name", root.toString());
+			writer.writeAttribute("path", root.getUserObject().toString());
 			writer.writeCharacters("\n");
 			writeXML(root, writer, 1);
 			writer.writeEndElement();
@@ -72,6 +76,7 @@ public class XMLWriter {
 				writeSpaces(depth, w);
 				w.writeStartElement("folder");
 				w.writeAttribute("name", node.toString());
+				w.writeAttribute("path", node.getUserObject().toString());
 				w.writeCharacters("\n");
 				writeXML(node, w, depth + 1);
 				writeSpaces(depth, w);

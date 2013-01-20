@@ -85,7 +85,7 @@ public class NavigationPanel extends JPanel {
 		} else {
 			System.out.println("xml");
 			XMLReader reader = new XMLReader(xml);
-			this.setTree(reader.readXML());
+			this.tree.setRoot(reader.readXML());
 		}
 	}
 
