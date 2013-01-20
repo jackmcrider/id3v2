@@ -67,10 +67,11 @@ public class XMLWriter {
 	public void writeXML(DefaultMutableTreeNode n, XMLStreamWriter w, int depth)
 			throws XMLStreamException {
 		MP3File m;
-		Enumeration en = n.children();
+		@SuppressWarnings("unchecked")
+		Enumeration<DefaultMutableTreeNode> en = n.children();
 		int ctr = 0;
 		while (en.hasMoreElements()) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) en
+			DefaultMutableTreeNode node = en
 					.nextElement();
 			if (!node.isLeaf()) {
 				writeSpaces(depth, w);
