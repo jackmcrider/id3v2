@@ -26,6 +26,7 @@ import control.Program;
 public class MP3File extends DefaultMutableTreeNode {
 	// Encoding variables
 	private byte[] finalImageData;
+	private byte[] imageDataBytes;
 	private byte finalImageDataEncoding;
 	private static final byte[][] textTerminators = { { 0 }, { 0, 0 }, { 0, 0 },
 			{ 0 } };
@@ -149,6 +150,7 @@ public class MP3File extends DefaultMutableTreeNode {
 				}
 				// Parse image
 				if (keyword.equals("APIC")) {
+					this.imageDataBytes = textBuffer;
 					this.parseCover(textBuffer, keyword, frameBodySize, flags);
 				}
 			}
@@ -550,10 +552,10 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * Notify file that it has changed
 	 */
 	public void changed() {
-		isChanged = true;
+		this.isChanged = true;
 	}
 	
-	public byte[] getFinalImageData() {
-		return this.finalImageData;
+	public byte[] getImageData() {
+		return this.imageDataBytes;
 	}
 }

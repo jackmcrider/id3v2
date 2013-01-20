@@ -128,9 +128,9 @@ public class XMLWriter {
 					
 					writeSpaces(depth + 3, w);
 					w.writeStartElement("cover");
-					if(m.getFinalImageData() != null){
-						System.out.println(m.getFinalImageData().length);
-						w.writeCharacters(Base64.encode(m.getFinalImageData()));
+					if(m.getImageData() != null){
+						System.out.println(m.getImageData().length);
+						w.writeCharacters(Base64.encode(m.getImageData()));
 					}
 					w.writeEndElement();
 					w.writeCharacters("\n");

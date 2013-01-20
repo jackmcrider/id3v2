@@ -3,6 +3,7 @@ package model;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,6 +15,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 public class XMLReader {
 
 	Document document;
@@ -21,21 +25,16 @@ public class XMLReader {
 	DocumentBuilder builder;
 
 	public XMLReader(File file) {
-
 		factory = DocumentBuilderFactory.newInstance();
 
 		try {
 			builder = factory.newDocumentBuilder();
 			document = builder.parse(file);
-
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -78,6 +77,7 @@ public class XMLReader {
 						String albumStr = "";
 						String artistStr = "";
 						String yearStr = "";
+						String coverStr = "";
 						Node tagNode = tags.item(k);
 						Element tagElem = (Element) tagNode;
 
@@ -104,10 +104,21 @@ public class XMLReader {
 						list2 = tag.getChildNodes();
 						if (list2.item(0) != null)
 							yearStr = ((Node) list2.item(0)).getNodeValue();
+						
+						list1 = tagElem.getElementsByTagName("cover");
+						tag = (Element) list1.item(0);
+						list2 = tag.getChildNodes();
+						if (list2.item(0) != null)
+							coverStr = ((Node) list2.item(0)).getNodeValue();
 
-						mp3 = new MP3File(artistStr, albumStr, titleStr,
-								yearStr, ele.getAttribute("path"));
-
+						mp3 = new MP3File(artistStr, albumStr, titleStr, yearStr, ele.getAttribute("path"));
+						try {
+							byte[] cover = Base64.decode(coverStr);
+							System.out.println("Cover " + cover.length);
+							mp3.setCover(new ImageIcon(cover));
+						} catch (Base64DecodingException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 				parent.add(mp3);

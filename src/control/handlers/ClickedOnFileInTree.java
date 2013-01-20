@@ -26,10 +26,6 @@ public class ClickedOnFileInTree implements TreeSelectionListener {
 			} else {
 				Program.getControl().getMainWindow()
 						.setStatus("This is not an MP3 file with ID3v2 tags.");
-
-				// TODO: does not work?!
-				current.removeFromParent();
-				Program.getControl().getMainWindow().getNavigationPanel().updateUI();
 			}
 		}
 	}

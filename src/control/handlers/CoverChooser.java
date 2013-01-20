@@ -33,7 +33,6 @@ public class CoverChooser extends MouseAdapter {
 		fc.setDialogTitle("Choose new cover");
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int returnVal = fc.showOpenDialog(Program.getControl().getMainWindow());
-System.out.println(returnVal);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 
