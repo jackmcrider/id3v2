@@ -86,20 +86,6 @@ public class XMLReader {
 			if (n.getParentNode() == node) {
 				Element ele = (Element) n;
 				
-				byte[] header = null;
-				try {
-					header = Base64.decode(((Element) ele.getElementsByTagName("header").item(0)).getTextContent());
-				} catch (Base64DecodingException | DOMException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-
-				/*NodeList tagframes = ele.getElementsByTagName("data").item(0).getChildNodes();				
-				for(int tagCounter = 0; tagCounter < tagframes.getLength(); tagCounter++){
-					Element tagElement = (Element) tagframes.item(tagCounter);
-					((Element) tagElement.getElementsByTagName("tagkeyword").item(0)).getChildNodes().item(0).getNodeValue());
-				}*/
-				
 				File file = new File(ele.getAttribute("path"));
 				if(file.lastModified() > timestamp){
 					mp3 = new MP3File(ele.getAttribute("path"));

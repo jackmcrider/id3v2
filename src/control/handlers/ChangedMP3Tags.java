@@ -13,6 +13,9 @@ public class ChangedMP3Tags implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		if(!Program.getControl().getCurrentlyOpenedMP3File().isParsed())
+			Program.getControl().getCurrentlyOpenedMP3File().parse();
+		
 		Program.getControl().updateCurrentlyOpenedMP3File();
 		Program.getControl().addChangedFile();
 	}
