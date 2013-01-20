@@ -66,12 +66,29 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.setUserObject(new File(path));
 	}
 	
+	public byte[] getHeader() {
+		return this.header;
+	}
+	
+	public Vector<ID3TextFrame> getTags() {
+		return this.tags;
+	}
+	
 	public boolean isCached(){
 		return this.cached;
 	}
+	
 	public int getSize(){
 		//muss noch genauer berechnet werden
 		return audioPart.length + finalImageData.length;
+	}
+	
+	public byte[] getAudioPart() {
+		return this.audioPart;
+	}
+	
+	public ID3PicFrame getPicFrame() {
+		return this.pframe;
 	}
 
 	/**
@@ -332,13 +349,11 @@ public class MP3File extends DefaultMutableTreeNode {
 			BufferedOutputStream bos = new BufferedOutputStream(dos);
 
 			for (int i = 0; i < header.length; i++) {
-				
 				bos.write(header[i]);
 			}
 			byte[] tag;
 			for (int i = 0; i < tags.size(); i++) {
 				tag = tags.get(i).getBytes();
-				
 				
 				for (int k = 0; k < tag.length; k++) {
 					// out.write(tag[k]);

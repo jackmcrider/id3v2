@@ -38,16 +38,6 @@ public class ID3PicFrame {
 	 * @param bodysize
 	 * @param flags
 	 */
-	/**
-	 * @param mimeType
-	 * @param type
-	 * @param dtype
-	 * @param descriptionBytes
-	 * @param data
-	 * @param keyword
-	 * @param bodysize
-	 * @param flags
-	 */
 	public ID3PicFrame(String mimeType, byte type, byte dtype,
 			byte[] descriptionBytes, byte[] data, String keyword, int bodysize,
 			short flags) {
@@ -60,16 +50,39 @@ public class ID3PicFrame {
 		this.bodysize = bodysize;
 		this.flags = flags;
 	}
-
-	/**
-	 * returns the keyword of the ID3PicFrame
-	 * 
-	 * @return keyword of the ID3PicFrame
-	 */
+	
+	public String getMimeType() {
+		return this.mimeType;
+	}
+	
+	public byte getType() {
+		return this.type;
+	}
+	
+	public byte getDtype() {
+		return this.dtype;
+	}
+	
+	public byte[] getDescription() {
+		return this.description;
+	}
+	
+	public byte[] getData() {
+		return this.data;
+	}
+	
+	public int getBodySize() {
+		return this.bodysize;
+	}
+	
+	public short getFlags() {
+		return this.flags;
+	}
+	
 	public String getKeyword() {
 		return this.keyword;
 	}
-
+	
 	/**
 	 * set a new keyword 
 	 * @param s new keyword

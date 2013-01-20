@@ -73,6 +73,14 @@ public class ID3TextFrame {
 	public int getFrameBodySize() {
 		return this.size;
 	}
+	
+	public byte getType() {
+		return this.type;
+	}
+	
+	public short getFlags() {
+		return this.flags;
+	}
 
 	/**
 	 * returns the comlete id3textFrame as a byte-array ready to write in a file.
