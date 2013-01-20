@@ -12,6 +12,8 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 public class XMLWriter {
 	private XMLOutputFactory factory;
 	private XMLStreamWriter writer;
@@ -121,6 +123,15 @@ public class XMLWriter {
 					writeSpaces(depth + 3, w);
 					w.writeStartElement("year");
 					w.writeCharacters(m.getYear());
+					w.writeEndElement();
+					w.writeCharacters("\n");
+					
+					writeSpaces(depth + 3, w);
+					w.writeStartElement("cover");
+					if(m.getFinalImageData() != null){
+						System.out.println(m.getFinalImageData().length);
+						w.writeCharacters(Base64.encode(m.getFinalImageData()));
+					}
 					w.writeEndElement();
 					w.writeCharacters("\n");
 

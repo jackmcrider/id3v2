@@ -44,7 +44,7 @@ public class XMLReader {
 		NodeList folders = document.getElementsByTagName("folder");
 		Node root = folders.item(0);
 		Element e = (Element) root;
-		DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode(e.getAttribute("path"));
+		DefaultMutableTreeNode treeRoot = new Folder(e.getAttribute("path"));
 		this.createTree(root, treeRoot);
 		return treeRoot;
 	}
@@ -61,7 +61,7 @@ public class XMLReader {
 			System.out.println(parent.toString());
 			if (((Element) ele.getParentNode()).getAttribute("path").equals(
 					parent.toString())) {
-				childNode = new DefaultMutableTreeNode(ele.getAttribute("path"));
+				childNode = new Folder(ele.getAttribute("path"));
 				parent.add(childNode);
 				createTree(n, childNode);
 			}

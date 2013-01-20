@@ -552,4 +552,8 @@ public class MP3File extends DefaultMutableTreeNode {
 	public void changed() {
 		isChanged = true;
 	}
+	
+	public byte[] getFinalImageData() {
+		return this.finalImageData;
+	}
 }
