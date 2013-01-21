@@ -47,13 +47,13 @@ public class XMLReader {
 	public DefaultMutableTreeNode readXML() {
 		Element cache = (Element) document.getElementsByTagName("cache").item(0);
 		timestampFormatted = cache.getAttribute("timestamp");
-		
-	    SimpleDateFormat formater = new SimpleDateFormat();
-	    try {
-			timestamp = formater.parse(timestampFormatted).getTime();
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
+		timestamp = Long.parseLong(timestampFormatted);
+//	    SimpleDateFormat formater = new SimpleDateFormat();
+//	    try {
+//			timestamp = formater.parse(timestampFormatted).getTime();
+//		} catch (ParseException e1) {
+//			e1.printStackTrace();
+//		}
 		
 		NodeList folders = document.getElementsByTagName("folder");
 		Node root = folders.item(0);
