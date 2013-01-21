@@ -28,9 +28,9 @@ public class MP3File extends DefaultMutableTreeNode {
 	private byte[] finalImageData;
 	private byte[] imageDataBytes;
 	private byte finalImageDataEncoding;
-	private static final byte[][] textTerminators = { { 0 }, { 0, 0 }, { 0, 0 },
-			{ 0 } };
-	
+	private static final byte[][] textTerminators = { { 0 }, { 0, 0 },
+			{ 0, 0 }, { 0 } };
+
 	// Holds the header
 	private byte[] header = new byte[10];
 	// Holds all the tags
@@ -52,68 +52,113 @@ public class MP3File extends DefaultMutableTreeNode {
 	private boolean isParsed = false;
 	private boolean isChanged = false;
 
-	// Create MP3 file and set represented file as its user object
+	/**
+	 * Create a new MP3 file in memory from path to represented file.
+	 * 
+	 * @param path
+	 */
 	public MP3File(String path) {
 		this.setUserObject(new File(path));
-		parse();	
+		parse();
 	}
-	public MP3File(String artist, String album, String title, String year, String path){
-		cached = true;
+
+	/**
+	 * Create a new MP3 file in memory with tags and path to represented file.
+	 * 
+	 * @param artist
+	 * @param album
+	 * @param title
+	 * @param year
+	 * @param path
+	 */
+	public MP3File(String artist, String album, String title, String year,
+			String path) {
+		this.cached = true;
+
 		this.setAlbum(album);
 		this.setArtist(artist);
 		this.setTitle(title);
 		this.setYear(year);
+
 		this.setUserObject(new File(path));
-	}
-	
-	public byte[] getHeader() {
-		return this.header;
-	}
-	
-	public Vector<ID3TextFrame> getTags() {
-		return this.tags;
-	}
-	
-	public boolean isCached(){
-		return this.cached;
-	}
-	
-	public int getSize(){
-		//muss noch genauer berechnet werden
-		return audioPart.length + finalImageData.length;
-	}
-	
-	public byte[] getAudioPart() {
-		return this.audioPart;
-	}
-	
-	public ID3PicFrame getPicFrame() {
-		return this.pframe;
-	}
-	
-	public void setTags(Vector<ID3TextFrame> tags){
-		this.tags = tags;
-	}
-	
-	public void setAudioPart(byte[] audioPart) {
-		this.audioPart = audioPart;
-	}
-	
-	public void setPicFrame(ID3PicFrame pframe) {
-		this.pframe = pframe;
-	}
-	
-	public void setHeader(byte[] header) {
-		this.header = header;
 	}
 
 	/**
-	 * Parse id3v2 tags of mp3 file
+	 * Create a new MP3 file without ID3v2 tags.
+	 * 
+	 * @param path
+	 * @param invalid
+	 */
+	public MP3File(String path, boolean invalid) {
+		this.cached = true;
+		this.setUserObject(new File(path));
+		this.isID3v2Tag = false;
+	}
+
+	/**
+	 * Getter for header
+	 * 
+	 * @return
+	 */
+	public byte[] getHeader() {
+		return this.header;
+	}
+
+	/**
+	 * Getter for tags
+	 * 
+	 * @return
+	 */
+	public Vector<ID3TextFrame> getTags() {
+		return this.tags;
+	}
+
+	/**
+	 * Checks if the MP3 file was generated from cache.
+	 * 
+	 * @return
+	 */
+	public boolean isCached() {
+		return this.cached;
+	}
+
+	/**
+	 * Get size of audioa part and image
+	 * 
+	 * @return
+	 */
+	public int getSize() {
+		return audioPart.length + finalImageData.length;
+	}
+
+	/**
+	 * Getter for audio part
+	 * 
+	 * @return
+	 */
+	public byte[] getAudioPart() {
+		return this.audioPart;
+	}
+
+	/**
+	 * Getter for pic frame
+	 * 
+	 * @return
+	 */
+	public ID3PicFrame getPicFrame() {
+		return this.pframe;
+	}
+
+	/**
+	 * Parse the tags of the MP3 file.
+	 * @return
 	 */
 	@SuppressWarnings("resource")
 	public boolean parse() {
 		boolean hasTagsLeft = true;
 		try {
+			System.out.println("Parsing " + this);
+			
 			DataInputStream data = new DataInputStream(new FileInputStream(
 					(File) this.getUserObject()));
 			data.read(header);
@@ -292,13 +337,18 @@ public class MP3File extends DefaultMutableTreeNode {
 		// Save data
 		length = bytes.length - pointer2;
 		System.arraycopy(bytes, pointer2, imageDataBytes, 0, length);
-		this.pframe = new ID3PicFrame(mimeType, pictureType, finalImageDataEncoding,
-				finalImageData, imageDataBytes, keyword, frameBodySize, flags);
+		this.pframe = new ID3PicFrame(mimeType, pictureType,
+				finalImageDataEncoding, finalImageData, imageDataBytes,
+				keyword, frameBodySize, flags);
 		this.cover = new ImageIcon(imageDataBytes);
 		this.setCover(this.cover);
 	}
-	
-	public void cachedCover(byte[] imageData) {
+
+	/**
+	 * Set cover to a cached value.
+	 * @param imageData
+	 */
+	public void setCachedCover(byte[] imageData) {
 		imageDataBytes = imageData;
 		this.cover = new ImageIcon(imageDataBytes);
 		this.setCover(this.cover);
@@ -370,11 +420,11 @@ public class MP3File extends DefaultMutableTreeNode {
 			byte[] tag;
 			for (int i = 0; i < tags.size(); i++) {
 				tag = tags.get(i).getBytes();
-				
+
 				for (int k = 0; k < tag.length; k++) {
 					// out.write(tag[k]);
 					System.out.print(new String(tag));
-					
+
 					bos.write(tag[k]);
 				}
 			}
@@ -397,15 +447,15 @@ public class MP3File extends DefaultMutableTreeNode {
 	}
 
 	public String toString() {
-		if(this.getUserObject() != null){
-		String name = ((File) this.getUserObject()).getName();
-		if (isChanged)
-			name = "*" + name;
+		if (this.getUserObject() != null) {
+			String name = ((File) this.getUserObject()).getName();
+			if (isChanged)
+				name = "*" + name;
 
-		return name;
+			return name;
 		}
 		return null;
-		
+
 	}
 
 	/**
@@ -553,7 +603,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * @param year
 	 */
 	public void setYear(String year) {
-		if(year.length() > 4){
+		if (year.length() > 4) {
 			year = year.substring(0, 4);
 		}
 		if (tags.size() > 0) {
@@ -561,7 +611,7 @@ public class MP3File extends DefaultMutableTreeNode {
 			if (tag != null)
 				tag.setData(year);
 		}
-		
+
 		this.year = year;
 	}
 
@@ -589,7 +639,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	public void changed() {
 		this.isChanged = true;
 	}
-	
+
 	public byte[] getImageData() {
 		return this.imageDataBytes;
 	}
