@@ -85,7 +85,7 @@ public class XMLReader {
 
 			@Override
 			public boolean accept(File arg0) {
-				if (arg0.isFile())
+				if (arg0.isFile() && arg0.getAbsolutePath().endsWith(".mp3"))
 					return true;
 
 				return false;
@@ -103,13 +103,15 @@ public class XMLReader {
 				File folder = new File(element.getAttribute("path"));
 				if (folder.exists()) {
 					// Add folder to tree
-					Folder subfolder = new Folder(
-							folder.getAbsolutePath(), false);
+					Folder subfolder = new Folder(folder.getAbsolutePath(),
+							false);
 					parent.add(subfolder);
 					createTree(n, subfolder);
-					
-					for(File f: subfolders){
-						if(f.getAbsolutePath().equals(((File) subfolder.getUserObject()).getAbsolutePath())){
+
+					for (File f : subfolders) {
+						if (f.getAbsolutePath().equals(
+								((File) subfolder.getUserObject())
+										.getAbsolutePath())) {
 							subfolders.remove(f);
 							System.out.println("Found cached folder " + f);
 							break;
@@ -126,15 +128,18 @@ public class XMLReader {
 			}
 		}
 
+		// Get all mp3s from xml
 		NodeList fileList = e.getElementsByTagName("file");
 		for (int i = 0; i < fileList.getLength(); i++) {
 			Node n = fileList.item(i);
 			MP3File mp3 = null;
+
 			if (n.getParentNode() == node) {
 				Element ele = (Element) n;
 
 				File file = new File(ele.getAttribute("path"));
 
+				// Check that file exists
 				if (file.exists()) {
 					if (file.lastModified() > timestamp) {
 						mp3 = new MP3File(ele.getAttribute("path"));
@@ -202,7 +207,24 @@ public class XMLReader {
 							}
 						}
 					}
+
+					for (File m : files) {
+						if (m.getAbsolutePath().equals(
+								((File) mp3.getUserObject()).getAbsolutePath())) {
+							files.remove(m);
+							System.out.println("Found cached file " + m);
+							break;
+						}
+					}
 				}
+			}
+		}
+
+		// Add folders that were not in the xml
+		if (!files.isEmpty()) {
+			for (File f : files) {
+				System.out.println("Adding new mp3 " + f);
+				parent.add(new MP3File(f.getAbsolutePath(), true));
 			}
 		}
 	}
