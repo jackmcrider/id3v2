@@ -22,7 +22,7 @@ public class XMLWriter {
 
 		factory = XMLOutputFactory.newInstance();
 		try {
-			xmlFile = new File(root.getUserObject().toString());
+			xmlFile = new File(((File) root.getUserObject()).getAbsolutePath());
 			System.out
 					.println(xmlFile.getPath() + File.separator + "cache.xml");
 			writer = factory.createXMLStreamWriter(new FileOutputStream(xmlFile

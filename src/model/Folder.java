@@ -9,11 +9,10 @@ public class Folder extends DefaultMutableTreeNode {
 	public Folder(String path, boolean recursive) {
 		if (path == null)
 			path = "resources" + File.separator + "mp3s";
-		
+
 		this.setUserObject(new File(path));
 
-		
-		if(recursive){
+		if (recursive) {
 			for (File f : ((File) this.getUserObject()).listFiles()) {
 				if (f.isDirectory()) {
 					this.add(new Folder(f.getPath(), recursive));
