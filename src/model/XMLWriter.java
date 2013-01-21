@@ -33,8 +33,7 @@ public class XMLWriter {
 			writer.writeCharacters("\n");
 			writer.writeStartElement("cache");
 			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat formater = new SimpleDateFormat();
-			writer.writeAttribute("timestamp", formater.format(cal.getTime()));
+			writer.writeAttribute("timestamp", (new Long(cal.getTimeInMillis())).toString());
 			// writer.writeAttribute("path",xmlFile.getAbsolutePath());
 			writer.writeCharacters("\n");
 			writer.writeStartElement("folder");
@@ -102,6 +101,102 @@ public class XMLWriter {
 						w.writeAttribute("name", f.getName());
 						w.writeAttribute("size", "1337");
 						w.writeCharacters("\n");
+						
+						w.writeStartElement("header");
+						w.writeCharacters(Base64.encode(m.getHeader()));
+						w.writeEndElement();
+						w.writeCharacters("\n");
+
+//						w.writeStartElement("data");
+//						w.writeCharacters("\n");
+//						for (ID3TextFrame frame : m.getTags()) {
+//							w.writeStartElement("tag");
+//
+//							w.writeStartElement("tagkeyword");
+//							w.writeCharacters(frame.getKeyword());
+//							w.writeEndElement();
+//							w.writeCharacters("\n");
+//
+//							w.writeStartElement("tagdata");
+//							w.writeCharacters(frame.getData());
+//							w.writeEndElement();
+//							w.writeCharacters("\n");
+//
+//							w.writeStartElement("tagtype");
+//							w.writeCharacters(new Integer(frame.getType())
+//									.toString());
+//							w.writeEndElement();
+//							w.writeCharacters("\n");
+//
+//							w.writeStartElement("tagsize");
+//							w.writeCharacters(new Integer(frame
+//									.getFrameBodySize()).toString());
+//							w.writeEndElement();
+//							w.writeCharacters("\n");
+//
+//							w.writeStartElement("tagflags");
+//							w.writeCharacters(new Integer(frame.getFlags())
+//									.toString());
+//							w.writeEndElement();
+//							w.writeCharacters("\n");
+//
+//							w.writeEndElement();
+//							w.writeCharacters("\n");
+//						}
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("pic");
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("picmimetype");
+//						w.writeCharacters(m.getPicFrame().getMimeType());
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("pictype");
+//						w.writeCharacters(new Integer(m.getPicFrame().getType())
+//								.toString());
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("picdtype");
+//						w.writeCharacters(new Integer(m.getPicFrame()
+//								.getDtype()).toString());
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("picdescription");
+//						w.writeCharacters(Base64.encode(m.getPicFrame()
+//								.getDescription()));
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("picdata");
+//						w.writeCharacters(Base64.encode(m.getPicFrame()
+//								.getData()));
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("pickeyword");
+//						w.writeCharacters(m.getPicFrame().getKeyword());
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("picmimetype");
+//						w.writeCharacters(new Integer(m.getPicFrame()
+//								.getBodySize()).toString());
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeStartElement("picmimetype");
+//						w.writeCharacters(new Integer(m.getPicFrame()
+//								.getFlags()).toString());
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
+//
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
 
 						writeSpaces(depth + 2, w);
 						w.writeStartElement("tags");
@@ -139,6 +234,11 @@ public class XMLWriter {
 						}
 						w.writeEndElement();
 						w.writeCharacters("\n");
+						
+//						w.writeStartElement("audio");
+//						w.writeCharacters(Base64.encode(m.getAudioPart()));
+//						w.writeEndElement();
+//						w.writeCharacters("\n");
 						
 						writeSpaces(depth + 2, w);
 						w.writeEndElement();
