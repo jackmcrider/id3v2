@@ -36,7 +36,7 @@ public class XMLWriter {
 			writer.writeCharacters("\n");
 			writer.writeStartElement("folder");
 			writer.writeAttribute("name", root.toString());
-			writer.writeAttribute("path", root.getUserObject().toString());
+			writer.writeAttribute("path", ((File) root.getUserObject()).getAbsolutePath());
 			writer.writeCharacters("\n");
 			writeXML(root, writer, 1);
 			writer.writeEndElement();
@@ -73,7 +73,7 @@ public class XMLWriter {
 				writeSpaces(depth, w);
 				w.writeStartElement("folder");
 				w.writeAttribute("name", node.toString());
-				w.writeAttribute("path", node.getUserObject().toString());
+				w.writeAttribute("path", ((File) node.getUserObject()).getAbsolutePath());
 				w.writeCharacters("\n");
 				writeXML(node, w, depth + 1);
 				writeSpaces(depth, w);
