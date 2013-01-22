@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import model.Folder;
 import model.XMLReader;
+import model.XMLWriter;
 import control.Program;
 import control.handlers.ClickedOnFileInTree;
 import control.handlers.DirectoryChooser;
@@ -34,10 +35,10 @@ public class NavigationPanel extends JPanel {
 
 		// Create tree of folders and files
 		xml = searchForCache(new File(standardPath));
-		if (xml == null){
+		if (xml == null) {
 			System.out.println("disk");
 			this.tree = new DefaultTreeModel(new Folder(standardPath, true));
-		}else{
+		} else {
 			System.out.println("xml");
 			reader = new XMLReader(xml);
 			this.tree = new DefaultTreeModel(reader.readXML());

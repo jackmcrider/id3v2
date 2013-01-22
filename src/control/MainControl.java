@@ -3,8 +3,10 @@ package control;
 import java.util.LinkedList;
 
 import javax.swing.UIManager;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.MP3File;
+import model.XMLWriter;
 import view.MainWindow;
 
 public class MainControl {
@@ -25,9 +27,11 @@ public class MainControl {
 
 		mainWindow = new MainWindow();
 		mainWindow.setTitle("ID3-Tag Editor");
+		XMLWriter xw = new XMLWriter((DefaultMutableTreeNode) mainWindow
+				.getNavigationPanel().getRoot());
 		setStatus("Everything is fine!");
 	}
-	
+
 	public MP3File getCurrentlyOpenedMP3File() {
 		return this.currentlyOpenedMP3File;
 	}
@@ -103,7 +107,7 @@ public class MainControl {
 	 */
 	public void updateCurrentlyOpenedMP3File() {
 		// Update tags when edited
-		
+
 		if (currentlyOpenedMP3FileIsParsed()) {
 			if (mainWindow.getEditorPanel().getTitle().length() == 0)
 				currentlyOpenedMP3File.setTitle(" ");
