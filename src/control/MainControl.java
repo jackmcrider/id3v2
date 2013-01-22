@@ -86,6 +86,13 @@ public class MainControl {
 	public MP3File[] getChangedFiles() {
 		return (MP3File[]) changedFiles.toArray();
 	}
+	
+	public boolean changedFiles() {
+		if(this.changedFiles.size() > 0)
+			return true;
+		
+		return false;
+	}
 
 	/**
 	 * Add a file to the list of changed files
@@ -132,6 +139,7 @@ public class MainControl {
 			if (mainWindow.getEditorPanel().getCover() != null) {
 				currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
 						.getCover());
+
 			}
 			setStatus(currentlyOpenedMP3File + " was changed.");
 		}
@@ -170,6 +178,13 @@ public class MainControl {
 		} else {
 			setStatus("Nothing to do!");
 		}
+	}
+
+	public void saveAll() {
+		Program.getControl().saveChangedFiles();
+
+		@SuppressWarnings("unused")
+		XMLWriter xw = new XMLWriter((DefaultMutableTreeNode) mainWindow.getNavigationPanel().getRoot());
 	}
 
 }

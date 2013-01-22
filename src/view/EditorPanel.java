@@ -146,6 +146,7 @@ public class EditorPanel extends JPanel {
 				Image.SCALE_SMOOTH));
 		cover = new JLabel(icon);
 		cover.setPreferredSize(new Dimension(100, 100));
+		cover.addMouseListener(new CoverChooser());
 		coverPanel.add(cover);
 	}
 

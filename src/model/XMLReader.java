@@ -113,7 +113,6 @@ public class XMLReader {
 								((File) subfolder.getUserObject())
 										.getAbsolutePath())) {
 							subfolders.remove(f);
-							System.out.println("Found cached folder " + f);
 							break;
 						}
 					}
@@ -123,7 +122,6 @@ public class XMLReader {
 		// Add folders that were not in the xml
 		if (!subfolders.isEmpty()) {
 			for (File f : subfolders) {
-				System.out.println("Adding new folder " + f);
 				parent.add(new Folder(f.getAbsolutePath(), true));
 			}
 		}
@@ -212,7 +210,6 @@ public class XMLReader {
 						if (m.getAbsolutePath().equals(
 								((File) mp3.getUserObject()).getAbsolutePath())) {
 							files.remove(m);
-							System.out.println("Found cached file " + m);
 							break;
 						}
 					}
@@ -223,7 +220,6 @@ public class XMLReader {
 		// Add folders that were not in the xml
 		if (!files.isEmpty()) {
 			for (File f : files) {
-				System.out.println("Adding new mp3 " + f);
 				parent.add(new MP3File(f.getAbsolutePath(), true));
 			}
 		}

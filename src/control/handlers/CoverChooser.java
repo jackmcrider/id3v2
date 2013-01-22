@@ -18,7 +18,7 @@ import control.Program;
 public class CoverChooser extends MouseAdapter {
 	public void mouseClicked(MouseEvent e) {
 		if (!Program.getControl().currentlyOpenedMP3FileIsParsed())
-			return;
+			Program.getControl().getCurrentlyOpenedMP3File().parse();
 		
 		System.out.println("Called");
 

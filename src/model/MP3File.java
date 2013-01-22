@@ -409,37 +409,21 @@ public class MP3File extends DefaultMutableTreeNode {
 	public void write() {
 		try {
 			File f = (File) this.getUserObject();
-
 			FileOutputStream fos = new FileOutputStream(f, false);
 			DataOutputStream dos = new DataOutputStream(fos);
 			BufferedOutputStream bos = new BufferedOutputStream(dos);
 
-			for (int i = 0; i < header.length; i++) {
-				bos.write(header[i]);
-			}
+			bos.write(header);
 			byte[] tag;
 			for (int i = 0; i < tags.size(); i++) {
 				tag = tags.get(i).getBytes();
-
-				for (int k = 0; k < tag.length; k++) {
-					// out.write(tag[k]);
-					System.out.print(new String(tag));
-
-					bos.write(tag[k]);
-				}
+				bos.write(tag);
 			}
-
 			tag = pframe.getBytes();
-			for (int k = 0; k < tag.length; k++) {
-				bos.write(tag[k]);
-			}
-			for (int i = 0; i < audioPart.length; i++) {
-				// out.write(rest[i]);
-				bos.write(audioPart[i]);
-			}
+			bos.write(tag);
+			bos.write(audioPart);
 			bos.flush();
 			fos.close();
-
 			isChanged = false;
 		} catch (Exception e) {
 			Program.getControl().setStatus(e.getMessage());
@@ -547,6 +531,7 @@ public class MP3File extends DefaultMutableTreeNode {
 				ImageIO.write(buImg, "png", outStream);
 				outStream.flush();
 				pframe.setData(outStream.toByteArray());
+				this.imageDataBytes = outStream.toByteArray();
 				outStream.close();
 			} catch (IOException e) {
 				Program.getControl().setStatus(e.getMessage());

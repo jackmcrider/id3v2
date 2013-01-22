@@ -36,10 +36,8 @@ public class NavigationPanel extends JPanel {
 		// Create tree of folders and files
 		xml = searchForCache(new File(standardPath));
 		if (xml == null) {
-			System.out.println("disk");
 			this.tree = new DefaultTreeModel(new Folder(standardPath, true));
 		} else {
-			System.out.println("xml");
 			reader = new XMLReader(xml);
 			this.tree = new DefaultTreeModel(reader.readXML());
 		}
@@ -74,7 +72,6 @@ public class NavigationPanel extends JPanel {
 	public void replaceTree(String path) {
 		xml = searchForCache(new File(path));
 		if (xml == null) {
-			System.out.println("disk");
 			folder = new Folder(path, true);
 			File newRoot = new File(path);
 			if (newRoot.exists() && newRoot.isDirectory()) {
@@ -84,7 +81,6 @@ public class NavigationPanel extends JPanel {
 						"The thing that you selected was not a directory.");
 			}
 		} else {
-			System.out.println("xml");
 			XMLReader reader = new XMLReader(xml);
 			this.tree.setRoot(reader.readXML());
 		}
