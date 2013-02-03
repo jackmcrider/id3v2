@@ -13,7 +13,6 @@ import javax.swing.tree.DefaultTreeModel;
 
 import model.Folder;
 import model.XMLReader;
-import model.XMLWriter;
 import control.Program;
 import control.handlers.ClickedOnFileInTree;
 import control.handlers.DirectoryChooser;

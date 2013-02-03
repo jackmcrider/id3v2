@@ -17,14 +17,10 @@ import control.Program;
 
 public class CoverChooser extends MouseAdapter {
 	public void mouseClicked(MouseEvent e) {
-		if (!Program.getControl().currentlyOpenedMP3FileIsParsed())
+		if (!Program.getControl().currentlyOpenedMP3FileIsParsed()|| Program.getControl().getCurrentlyOpenedMP3File().isCached())
 			Program.getControl().getCurrentlyOpenedMP3File().parse();
-		
-		System.out.println("Called");
 
-		FileFilter filter = new FileNameExtensionFilter("Image", "jpg", "jpeg",
-				"png");
-
+		FileFilter filter = new FileNameExtensionFilter("Image", "jpg", "jpeg","png");
 		JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);
@@ -35,10 +31,8 @@ public class CoverChooser extends MouseAdapter {
 		int returnVal = fc.showOpenDialog(Program.getControl().getMainWindow());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
-
 			BufferedImage image;
 			ImageIcon icon;
-
 			try {
 				image = ImageIO.read(file);
 				icon = new ImageIcon(image.getScaledInstance(100, 100,

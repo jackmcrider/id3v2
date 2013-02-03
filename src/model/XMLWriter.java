@@ -32,11 +32,13 @@ public class XMLWriter {
 			writer.writeCharacters("\n");
 			writer.writeStartElement("cache");
 			Calendar cal = Calendar.getInstance();
-			writer.writeAttribute("timestamp", (new Long(cal.getTimeInMillis())).toString());
+			writer.writeAttribute("timestamp",
+					(new Long(cal.getTimeInMillis())).toString());
 			writer.writeCharacters("\n");
 			writer.writeStartElement("folder");
 			writer.writeAttribute("name", root.toString());
-			writer.writeAttribute("path", ((File) root.getUserObject()).getAbsolutePath());
+			writer.writeAttribute("path",
+					((File) root.getUserObject()).getAbsolutePath());
 			writer.writeCharacters("\n");
 			writeXML(root, writer, 1);
 			writer.writeEndElement();
@@ -64,22 +66,24 @@ public class XMLWriter {
 	public void writeXML(DefaultMutableTreeNode n, XMLStreamWriter w, int depth)
 			throws XMLStreamException {
 		MP3File m;
+		@SuppressWarnings("unchecked")
 		Enumeration<DefaultMutableTreeNode> en = n.children();
 		int ctr = 0;
 		while (en.hasMoreElements()) {
 			DefaultMutableTreeNode node = en.nextElement();
-			
+
 			if (!node.isLeaf()) {
 				writeSpaces(depth, w);
 				w.writeStartElement("folder");
 				w.writeAttribute("name", node.toString());
-				w.writeAttribute("path", ((File) node.getUserObject()).getAbsolutePath());
+				w.writeAttribute("path",
+						((File) node.getUserObject()).getAbsolutePath());
 				w.writeCharacters("\n");
 				writeXML(node, w, depth + 1);
 				writeSpaces(depth, w);
 				w.writeEndElement();
 				w.writeCharacters("\n");
-			
+
 			} else {
 				if (n.getChildAt(ctr).toString().endsWith(".mp3")) {
 
@@ -123,14 +127,17 @@ public class XMLWriter {
 						w.writeEndElement();
 						w.writeCharacters("\n");
 
-						writeSpaces(depth + 3, w);
-						w.writeStartElement("cover");
-						if (m.getImageData() != null) {
-							w.writeCharacters(Base64.encode(m.getImageData()));
+						if (m.hasCover()) {
+							writeSpaces(depth + 3, w);
+							w.writeStartElement("cover");
+							if (m.getImageData() != null) {
+								w.writeCharacters(Base64.encode(m
+										.getImageData()));
+							}
+							w.writeEndElement();
+							w.writeCharacters("\n");
 						}
-						w.writeEndElement();
-						w.writeCharacters("\n");
-						
+
 						writeSpaces(depth + 2, w);
 						w.writeEndElement();
 						w.writeCharacters("\n");

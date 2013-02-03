@@ -25,6 +25,7 @@ import control.Program;
 @SuppressWarnings("serial")
 public class MP3File extends DefaultMutableTreeNode {
 	// Encoding variables
+
 	private byte[] finalImageData;
 	private byte[] imageDataBytes;
 	private byte finalImageDataEncoding;
@@ -47,6 +48,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	// Holds the audioPart of the MP3 file (music)
 	private byte[] audioPart;
 
+	private boolean hasCover = false;
 	private boolean cached = false;
 	private boolean isID3v2Tag = true;
 	private boolean isParsed = false;
@@ -140,6 +142,14 @@ public class MP3File extends DefaultMutableTreeNode {
 		return this.audioPart;
 	}
 
+	public void setHasCover(boolean b) {
+		this.hasCover = b;
+	}
+
+	public boolean hasCover() {
+		return this.hasCover;
+	}
+
 	/**
 	 * Getter for pic frame
 	 * 
@@ -151,14 +161,13 @@ public class MP3File extends DefaultMutableTreeNode {
 
 	/**
 	 * Parse the tags of the MP3 file.
+	 * 
 	 * @return
 	 */
-	@SuppressWarnings("resource")
 	public boolean parse() {
 		boolean hasTagsLeft = true;
 		try {
 			System.out.println("Parsing " + this);
-			
 			DataInputStream data = new DataInputStream(new FileInputStream(
 					(File) this.getUserObject()));
 			data.read(header);
@@ -342,13 +351,16 @@ public class MP3File extends DefaultMutableTreeNode {
 				keyword, frameBodySize, flags);
 		this.cover = new ImageIcon(imageDataBytes);
 		this.setCover(this.cover);
+		this.hasCover = true;
 	}
 
 	/**
 	 * Set cover to a cached value.
+	 * 
 	 * @param imageData
 	 */
 	public void setCachedCover(byte[] imageData) {
+		this.hasCover = true;
 		imageDataBytes = imageData;
 		this.cover = new ImageIcon(imageDataBytes);
 		this.setCover(this.cover);
@@ -419,8 +431,12 @@ public class MP3File extends DefaultMutableTreeNode {
 				tag = tags.get(i).getBytes();
 				bos.write(tag);
 			}
-			tag = pframe.getBytes();
-			bos.write(tag);
+			if (hasCover) {
+				System.out.println("write cover");
+				tag = pframe.getBytes();
+				bos.write(tag);
+			}
+
 			bos.write(audioPart);
 			bos.flush();
 			fos.close();
@@ -518,6 +534,10 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * @param i
 	 */
 	public void setCover(ImageIcon i) {
+		if (!this.hasCover) {
+			pframe = new ID3PicFrame("image/jpeg", (byte) 3, (byte) 0,
+					new byte[0], null, "APIC", 0, (short) 0);
+		}
 		if (pframe != null && i.getIconWidth() > 0 && i.getIconHeight() > 0
 				&& i != null) {
 			try {
@@ -538,6 +558,7 @@ public class MP3File extends DefaultMutableTreeNode {
 			}
 		}
 		this.cover = i;
+		this.hasCover = true;
 	}
 
 	/**

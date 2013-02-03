@@ -3,9 +3,6 @@ package control.handlers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
-import model.XMLWriter;
 import control.Program;
 
 public class SaveChangedMP3Files implements ActionListener {

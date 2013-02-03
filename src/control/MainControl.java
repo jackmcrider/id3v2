@@ -27,6 +27,7 @@ public class MainControl {
 
 		mainWindow = new MainWindow();
 		mainWindow.setTitle("ID3-Tag Editor");
+		@SuppressWarnings("unused")
 		XMLWriter xw = new XMLWriter((DefaultMutableTreeNode) mainWindow
 				.getNavigationPanel().getRoot());
 		setStatus("Everything is fine!");
@@ -75,7 +76,7 @@ public class MainControl {
 		if (currentlyOpenedMP3File == null)
 			return false;
 
-		return currentlyOpenedMP3File.isParsed();
+		return currentlyOpenedMP3File.isParsed() || currentlyOpenedMP3File.isCached();
 	}
 
 	/**
@@ -86,11 +87,11 @@ public class MainControl {
 	public MP3File[] getChangedFiles() {
 		return (MP3File[]) changedFiles.toArray();
 	}
-	
+
 	public boolean changedFiles() {
-		if(this.changedFiles.size() > 0)
+		if (this.changedFiles.size() > 0)
 			return true;
-		
+
 		return false;
 	}
 
@@ -115,7 +116,7 @@ public class MainControl {
 	public void updateCurrentlyOpenedMP3File() {
 		// Update tags when edited
 
-		if (currentlyOpenedMP3FileIsParsed()) {
+		if (currentlyOpenedMP3FileIsParsed() ) {
 			if (mainWindow.getEditorPanel().getTitle().length() == 0)
 				currentlyOpenedMP3File.setTitle(" ");
 			else
@@ -137,11 +138,11 @@ public class MainControl {
 				currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 						.getYear());
 			if (mainWindow.getEditorPanel().getCover() != null) {
-				currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
-						.getCover());
-
+				currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel().getCover());
+			} else {
+				currentlyOpenedMP3File.setHasCover(false);
 			}
-			setStatus(currentlyOpenedMP3File + " was changed.");
+			
 		}
 	}
 
@@ -154,13 +155,18 @@ public class MainControl {
 		updateCurrentlyOpenedMP3File();
 
 		currentlyOpenedMP3File = loadFile;
-
+		setStatus(currentlyOpenedMP3File + " is loaded");
 		mainWindow.getEditorPanel().setTitle(currentlyOpenedMP3File.getTitle());
 		mainWindow.getEditorPanel().setAlbum(currentlyOpenedMP3File.getAlbum());
 		mainWindow.getEditorPanel().setArtist(
 				currentlyOpenedMP3File.getArtist());
 		mainWindow.getEditorPanel().setYear(currentlyOpenedMP3File.getYear());
-		mainWindow.getEditorPanel().setCover(currentlyOpenedMP3File.getCover());
+		if (currentlyOpenedMP3File.hasCover())
+			mainWindow.getEditorPanel().setCover(
+					currentlyOpenedMP3File.getCover());
+		else
+			mainWindow.getEditorPanel().setCover(null);
+
 	}
 
 	/**
@@ -184,7 +190,8 @@ public class MainControl {
 		Program.getControl().saveChangedFiles();
 
 		@SuppressWarnings("unused")
-		XMLWriter xw = new XMLWriter((DefaultMutableTreeNode) mainWindow.getNavigationPanel().getRoot());
+		XMLWriter xw = new XMLWriter((DefaultMutableTreeNode) mainWindow
+				.getNavigationPanel().getRoot());
 	}
 
 }

@@ -11,6 +11,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
@@ -20,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import control.Program;
 import control.handlers.ApplicationCloser;
 import control.handlers.ChangedMP3Tags;
 import control.handlers.CoverChooser;
@@ -35,7 +38,7 @@ public class EditorPanel extends JPanel {
 	private JPanel titlePanel, albumPanel, artistPanel, yearPanel, coverPanel,
 			buttonsPanel;
 
-	private JButton saveButton, closeButton;
+	private JButton saveButton, closeButton, deleteButton;
 
 	private BufferedImage image;
 	private ImageIcon icon;
@@ -79,7 +82,17 @@ public class EditorPanel extends JPanel {
 		this.closeButton.addActionListener(new ApplicationCloser());
 		this.saveButton = new JButton("Save");
 		this.saveButton.addActionListener(new SaveChangedMP3Files());
-
+		this.deleteButton = new JButton("x");
+		this.deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!Program.getControl().currentlyOpenedMP3FileIsParsed()|| Program.getControl().getCurrentlyOpenedMP3File().isCached())
+					Program.getControl().getCurrentlyOpenedMP3File().parse();
+				Program.getControl().getMainWindow().getEditorPanel().setCover(null);
+				Program.getControl().updateCurrentlyOpenedMP3File();
+				Program.getControl().addChangedFile();
+			}
+		});
 		this.buttonsPanel = new JPanel();
 		this.buttonsPanel.setLayout(new FlowLayout());
 		this.saveButton.setSize(new Dimension(100, 40));
@@ -95,6 +108,7 @@ public class EditorPanel extends JPanel {
 
 		this.cover.setPreferredSize(new Dimension(100, 100));
 		this.coverPanel.add(cover);
+		this.coverPanel.add(this.deleteButton);
 
 		this.editorStructure = new GridBagLayout();
 
@@ -113,7 +127,7 @@ public class EditorPanel extends JPanel {
 		addComponent(this, this.editorStructure, this.coverPanel, 0, 2, 1, 3,
 				0, 0);
 	}
-	
+
 	public void setImage(BufferedImage newImage) {
 		image = newImage;
 		repaintCover();
@@ -142,12 +156,16 @@ public class EditorPanel extends JPanel {
 				.getSize().width : buttonsPanel.getSize().height;
 
 		coverPanel.removeAll();
-		icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace,
-				Image.SCALE_SMOOTH));
-		cover = new JLabel(icon);
-		cover.setPreferredSize(new Dimension(100, 100));
-		cover.addMouseListener(new CoverChooser());
+		if (image != null) {
+			icon = new ImageIcon(image.getScaledInstance(minSpace, minSpace,
+					Image.SCALE_SMOOTH));
+			cover = new JLabel(icon);
+			cover.setPreferredSize(new Dimension(100, 100));
+			cover.addMouseListener(new CoverChooser());
+			cover.setBorder(BorderFactory.createLineBorder(Color.black));
+		}
 		coverPanel.add(cover);
+		coverPanel.add(this.deleteButton);
 	}
 
 	public void setTitle(String s) {
@@ -167,10 +185,14 @@ public class EditorPanel extends JPanel {
 	}
 
 	public void setCover(ImageIcon i) {
-		if (i != null){
+		if (i != null) {
 			cover.setIcon(new ImageIcon(i.getImage().getScaledInstance(100,
 					100, Image.SCALE_SMOOTH)));
 			icon = i;
+		} else {
+			icon = null;
+			cover.setIcon(icon);
+			this.repaint();
 		}
 	}
 

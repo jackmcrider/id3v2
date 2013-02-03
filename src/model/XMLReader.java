@@ -32,8 +32,11 @@ public class XMLReader {
 		factory = DocumentBuilderFactory.newInstance();
 
 		try {
+			// factory.setValidating(true);
 			builder = factory.newDocumentBuilder();
+
 			document = builder.parse(file);
+
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -183,23 +186,29 @@ public class XMLReader {
 								if (list2.item(0) != null)
 									yearStr = ((Node) list2.item(0))
 											.getNodeValue();
-
-								list1 = tagElem.getElementsByTagName("cover");
-								tag = (Element) list1.item(0);
-								list2 = tag.getChildNodes();
-								if (list2.item(0) != null)
-									coverStr = ((Node) list2.item(0))
-											.getNodeValue();
-
+								
 								mp3 = new MP3File(artistStr, albumStr,
 										titleStr, yearStr,
 										ele.getAttribute("path"));
-								try {
-									byte[] cover = Base64.decode(coverStr);
-									mp3.setCachedCover(cover);
-								} catch (Base64DecodingException e1) {
-									e1.printStackTrace();
+								
+								list1 = tagElem.getElementsByTagName("cover");
+								if (list1.getLength() > 0) {
+									System.out.println("[xml] had a cover");
+									tag = (Element) list1.item(0);
+									list2 = tag.getChildNodes();
+									if (list2.item(0) != null)
+										coverStr = ((Node) list2.item(0))
+												.getNodeValue();
+									
+									try {
+										byte[] cover = Base64.decode(coverStr);
+										mp3.setCachedCover(cover);
+									} catch (Base64DecodingException e1) {
+										e1.printStackTrace();
+									}
 								}
+								
+								
 								parent.add(mp3);
 								System.out.println("[CACHED] " + mp3);
 							}
