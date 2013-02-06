@@ -76,7 +76,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	public MP3File(String artist, String album, String title, String year,
 			String path) {
 		this.cached = true;
-
+		this.isParsed = false;
 		this.setAlbum(album);
 		this.setArtist(artist);
 		this.setTitle(title);
@@ -231,6 +231,7 @@ public class MP3File extends DefaultMutableTreeNode {
 				byte[] textBuffer = new byte[frameBodySize];
 				data.read(textBuffer);
 
+				System.out.println(keyword);
 				// Parse text tags
 				if (keyword.startsWith("T")) {
 					this.parseText(textBuffer, keyword, frameBodySize, flags);
@@ -273,19 +274,26 @@ public class MP3File extends DefaultMutableTreeNode {
 					Charset.forName("ISO-8859-1"));
 		}
 
-		// Save content of tag to appropriate tag
-		if (keyword.equals("TPE1"))
-			this.setArtist(s);
-		if (keyword.equals("TALB"))
-			this.setAlbum(s);
-		if (keyword.equals("TIT2"))
-			this.setTitle(s);
-		if (keyword.equals("TYER"))
-			this.setYear(s);
-
 		// Save
 		id3frame = new ID3TextFrame(keyword, s, type, size, flags);
-		tags.add(id3frame);
+		boolean contains = false;
+		for (ID3TextFrame f : tags) {
+			if (f.getKeyword().equals(id3frame.getKeyword())) {
+				contains = true;
+			}
+		}
+		if (!contains) {
+			// Save content of tag to appropriate tag
+			if (keyword.equals("TPE1"))
+				this.setArtist(s);
+			if (keyword.equals("TALB"))
+				this.setAlbum(s);
+			if (keyword.equals("TIT2"))
+				this.setTitle(s);
+			if (keyword.equals("TYER"))
+				this.setYear(s);
+			tags.add(id3frame);
+		}
 	}
 
 	/**

@@ -33,7 +33,7 @@ public class MP3FileTest {
 	@Test
 	public void testParse1() {
 		MP3File testFile = new MP3File(testFilesPath + "correct.mp3");
-		assertTrue(testFile.parse());
+		assertTrue(!testFile.parse());
 	}
 
 	@Test

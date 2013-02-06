@@ -5,7 +5,14 @@ import java.io.File;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 @SuppressWarnings("serial")
+/*
+ * recursive representation of the folder
+ */
 public class Folder extends DefaultMutableTreeNode {
+	
+	/*
+	 * Creates a new DefaultMutableTreeNode for the NavigaionPanel
+	 */
 	public Folder(String path, boolean recursive) {
 		if (path == null)
 			path = "resources" + File.separator + "mp3s";
