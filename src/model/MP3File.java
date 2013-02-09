@@ -439,7 +439,8 @@ public class MP3File extends DefaultMutableTreeNode {
 				tag = pframe.getBytes();
 				bos.write(tag);
 			}
-			bos.write(audioPart);
+			byte[] test = new byte[10];
+			bos.write(test);
 			bos.flush();
 			fos.close();
 			isChanged = false;
