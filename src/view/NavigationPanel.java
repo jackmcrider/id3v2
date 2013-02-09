@@ -24,7 +24,7 @@ public class NavigationPanel extends JPanel {
 	private JButton directoryChooser;
 	private JScrollPane scrollTree;
 	private Folder folder;
-	private String standardPath = "resources" + File.separator + "mp3s";
+	private String standardPath = ".";
 	File xml = null;
 	XMLReader reader;
 
@@ -86,10 +86,12 @@ public class NavigationPanel extends JPanel {
 	}
 
 	public File searchForCache(File root) {
+		if(root.listFiles() != null){
 		for (File f : root.listFiles()) {
 			if (f.toString().endsWith(".xml")) {
 				return f;
 			}
+		}
 		}
 		return null;
 	}

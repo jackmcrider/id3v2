@@ -15,11 +15,12 @@ public class Folder extends DefaultMutableTreeNode {
 	 */
 	public Folder(String path, boolean recursive) {
 		if (path == null)
-			path = "resources" + File.separator + "mp3s";
+			path = ".";
 
 		this.setUserObject(new File(path));
 
 		if (recursive) {
+			if(((File)this.getUserObject()).listFiles() != null){
 			for (File f : ((File) this.getUserObject()).listFiles()) {
 				if (f.isDirectory()) {
 					this.add(new Folder(f.getPath(), recursive));
@@ -29,6 +30,7 @@ public class Folder extends DefaultMutableTreeNode {
 				} else {
 					// this.add(new OrdinaryFile(f.getPath()));
 				}
+			}
 			}
 		}
 	}

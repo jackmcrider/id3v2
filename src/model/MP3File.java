@@ -213,13 +213,9 @@ public class MP3File extends DefaultMutableTreeNode {
 
 				// Read audio part of the file and finish parsing
 				if (frameBodySize == 0) {
-					this.audioPart = new byte[data.available() + 6];
-					int i = 0;
-					for (i = 0; data.available() > 0; i++) {
+					this.audioPart = new byte[data.available()];
+					for (int i = 0; data.available() > 0; i++) {
 						data.read(this.audioPart);
-					}
-					for (i = this.audioPart.length - 1; i >= 6; i--) {
-						this.audioPart[i] = this.audioPart[i - 6];
 					}
 					data.close();
 					hasTagsLeft = false;
@@ -443,7 +439,6 @@ public class MP3File extends DefaultMutableTreeNode {
 				tag = pframe.getBytes();
 				bos.write(tag);
 			}
-
 			bos.write(audioPart);
 			bos.flush();
 			fos.close();
