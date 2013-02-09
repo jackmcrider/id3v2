@@ -23,7 +23,7 @@ public class Folder extends DefaultMutableTreeNode {
 			for (File f : ((File) this.getUserObject()).listFiles()) {
 				if (f.isDirectory()) {
 					this.add(new Folder(f.getPath(), recursive));
-				} else if (f.getPath().endsWith("mp3")) {
+				} else if (f.getPath().endsWith(".mp3")) {
 					MP3File mp3File = new MP3File(f.getPath());
 					this.add(mp3File);
 				} else {

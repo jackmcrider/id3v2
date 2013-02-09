@@ -12,7 +12,7 @@ import control.*;
 
 public class view
 {
-	private static MainControl tagger;
+	public static MainControl tagger;
 	private static MainWindow main;
 	private static NavigationPanel navigator;
 	private static EditorPanel editor;
