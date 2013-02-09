@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class control
 {
-	private
+	
 	
 	@BeforeClass
 	public static void init()
