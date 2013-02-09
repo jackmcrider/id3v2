@@ -230,8 +230,7 @@ public class MP3File extends DefaultMutableTreeNode {
 				// Read content of tag
 				byte[] textBuffer = new byte[frameBodySize];
 				data.read(textBuffer);
-
-				System.out.println(keyword);
+				
 				// Parse text tags
 				if (keyword.startsWith("T")) {
 					this.parseText(textBuffer, keyword, frameBodySize, flags);
