@@ -68,10 +68,9 @@ public class XMLWriter {
 		MP3File m;
 		@SuppressWarnings("unchecked")
 		Enumeration<DefaultMutableTreeNode> en = n.children();
-		int ctr = 0;
 		while (en.hasMoreElements()) {
 			DefaultMutableTreeNode node = en.nextElement();
-
+			System.out.println(((File) node.getUserObject()).getAbsolutePath()+" "+node.isLeaf());
 			if (!node.isLeaf()) {
 				writeSpaces(depth, w);
 				w.writeStartElement("folder");
@@ -85,12 +84,9 @@ public class XMLWriter {
 				w.writeCharacters("\n");
 
 			} else {
-				if (n.getChildAt(ctr).toString().endsWith(".mp3")) {
-
-					m = (MP3File) n.getChildAt(ctr);
-
+				if (((File) node.getUserObject()).getAbsolutePath().endsWith(".mp3")) {
+					m = (MP3File) node;
 					if (m.isID3v2Tag()) {
-						ctr++;
 						writeSpaces(depth + 1, w);
 						w.writeStartElement("file");
 						w.writeAttribute("path", m.getAbsolutePath());
