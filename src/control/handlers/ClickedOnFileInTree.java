@@ -5,9 +5,15 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.MP3File;
-
 import control.Program;
 
+/**
+ * This class handles events when something is clicked in the file tree in the
+ * navigation panel
+ * 
+ * @author Karl
+ * 
+ */
 public class ClickedOnFileInTree implements TreeSelectionListener {
 	public void valueChanged(TreeSelectionEvent e) {
 		// Get the selected node from the tree
@@ -26,11 +32,16 @@ public class ClickedOnFileInTree implements TreeSelectionListener {
 			} else {
 				Program.getControl().getMainWindow()
 						.setStatus("This is not an MP3 file with ID3v2 tags.");
-				Program.getControl().getMainWindow().getEditorPanel().setCover(null);
-				Program.getControl().getMainWindow().getEditorPanel().setTitle("broken file");
-				Program.getControl().getMainWindow().getEditorPanel().setArtist("broken file");
-				Program.getControl().getMainWindow().getEditorPanel().setAlbum("broken file");
-				Program.getControl().getMainWindow().getEditorPanel().setYear("broken file");
+				Program.getControl().getMainWindow().getEditorPanel()
+						.setCover(null);
+				Program.getControl().getMainWindow().getEditorPanel()
+						.setTitle("broken file");
+				Program.getControl().getMainWindow().getEditorPanel()
+						.setArtist("broken file");
+				Program.getControl().getMainWindow().getEditorPanel()
+						.setAlbum("broken file");
+				Program.getControl().getMainWindow().getEditorPanel()
+						.setYear("broken file");
 			}
 		}
 	}

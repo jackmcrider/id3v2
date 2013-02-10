@@ -7,11 +7,20 @@ import javax.swing.JOptionPane;
 
 import control.Program;
 
+/**
+ * Handles the pressing of the close button
+ * 
+ * @author Karl
+ * 
+ */
 public class ApplicationCloser implements ActionListener {
 	private static int clicked;
 
+	/**
+	 * Handles the event
+	 */
 	public void actionPerformed(ActionEvent e) {
-		if (Program.getControl().changedFiles()){  
+		if (Program.getControl().changedFiles()) {
 			clicked = JOptionPane.showConfirmDialog(null,
 					"Do you want to save before closing the application?",
 					"Closing application", JOptionPane.YES_NO_CANCEL_OPTION,

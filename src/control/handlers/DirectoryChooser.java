@@ -10,6 +10,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import model.XMLWriter;
 import control.Program;
 
+/**
+ * This class handles the event when the directory choosing button is pressed
+ * @author Karl
+ *
+ */
 public class DirectoryChooser implements ActionListener {
 
 	@Override
@@ -28,7 +33,7 @@ public class DirectoryChooser implements ActionListener {
 			XMLWriter xw = new XMLWriter((DefaultMutableTreeNode) Program
 					.getControl().getMainWindow().getNavigationPanel()
 					.getRoot());
-			
+
 			File file = fc.getSelectedFile();
 			Program.getControl().getMainWindow().getNavigationPanel()
 					.replaceTree(file.getAbsolutePath());
