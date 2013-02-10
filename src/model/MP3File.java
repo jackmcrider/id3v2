@@ -23,11 +23,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import control.Program;
 
 @SuppressWarnings("serial")
-/**
- * This represents an mp3 file
- * @author Karl
- *
- */
 public class MP3File extends DefaultMutableTreeNode {
 	// Encoding variables
 
@@ -175,7 +170,6 @@ public class MP3File extends DefaultMutableTreeNode {
 		boolean hasTagsLeft = true;
 		try {
 			System.out.println("Parsing " + this);
-			@SuppressWarnings("resource")
 			DataInputStream data = new DataInputStream(new FileInputStream(
 					(File) this.getUserObject()));
 			data.read(header);
@@ -427,14 +421,10 @@ public class MP3File extends DefaultMutableTreeNode {
 	/**
 	 * Write out changes
 	 */
-	public void write(boolean test) {
+	public void write() {
 		try {
-			if (!test) {
-				String f = this.getUserObject().toString();
-			} else {
-				String f = "resources/tests/junit/" + this.getUserObject().toString();
-			}
-
+			
+			File f = ((File)this.getUserObject());
 			FileOutputStream fos = new FileOutputStream(f, false);
 			DataOutputStream dos = new DataOutputStream(fos);
 			BufferedOutputStream bos = new BufferedOutputStream(dos);
