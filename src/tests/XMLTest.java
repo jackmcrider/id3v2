@@ -77,7 +77,33 @@ public class XMLTest {
 		}
 	}
 
-	public void corruptXMLTests() {
-
+	@Test
+	public void corruptXMLTest() {
+		try {
+			File cacheFile = new File(Program.getPath() + File.separator
+					+ "resources" + File.separator + "corruptXML.txt");
+			
+			XMLReader reader = new XMLReader(cacheFile);
+			reader.readXML();
+			fail("Should not be correct!");
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void invalidXMLTest() {
+		try {
+			File cacheFile = new File(Program.getPath() + File.separator
+					+ "resources" + File.separator + "invalidXML.txt");
+			
+			XMLReader reader = new XMLReader(cacheFile);
+			reader.readXML();
+			fail("Should not be correct!");
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			assertTrue(true);
+		}
 	}
 }

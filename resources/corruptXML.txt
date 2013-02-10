@@ -7,33 +7,7 @@
         <tags>
           <title>3</title>
           <album>3</album>
-          <artist>3</artist>
-          <year>3</year>
-        </tags>
-      </file>
-  </folder>
-    <file path="C:\Dokumente und Einstellungen\Karl\Eigene Dateien\GitHub\id3v2\resources\tests\1.mp3" name="1.mp3" size="1337">
-      <tags>
-        <title>1</title>
-        <album>1</album>
-        <artist>1</artist>
-        <year>1</year>
-      </tags>
-    </file>
-    <file path="C:\Dokumente und Einstellungen\Karl\Eigene Dateien\GitHub\id3v2\resources\tests\2.mp3" name="2.mp3" size="1337">
-      <tags>
-        <title>2</title>
-        <album>2</album>
-        <artist>2</artist>
-        <year>2</year>
-        <cover>iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAABEGElEQVR42rV9B5Qc5ZUuZ5+tOKPJ
-oXPu6clZmqAwkkZplOMo5yyUc84ZCZHBgDFg72LAAYxtoo3BhDUY29j7dvew63d2n7E3+Hl3jQMo
-8L373arqru7pHklr75xzT/d0V1f99X//zfe/dQuufYpPPwW+98YPEKqogy9cDn8wCq8vDI83pGS9
-d3uCJgXk/6CS1xeyURg+fwT+QDSJgvwsVImuWUvwrdfewYET53H52jW57lUA14Q+xTUZx9Ur1/DG
-99+Gz+dDfkEBhnV2YdfR85gwfQGCkSq43QE4vWFMmjobNfWD4fIGzDEEksZhjYv3MWvBcjzx1edR
-WdOGX/+/3+p1cE2ue+2yvL+Ky1c/xUefXEVDy1DkFZXCGwhj9oKlGD9pKsKRcixeshI79x5F54QZ
-cMl9u9OQx2PMk1vGU9PQiI1bd+DeBx+F2x/Ftp178cePr+DK1Wt67Wt8vXpVr33p0t3IL/Rg5brt
-WLFhOxqHdeIWAsIxvv7Wu4hU1sMfroAvEPkfAKQCJYFKPPqVb2P5+m34zW8/EkAMMPjHwV6Wibl4
+         oAvEPkfAKQCJYFKPPqVb2P5+m34zW8/EkAMMPjHwV6Wibl4
 4Q44Sh3IzslBY1sHlq7bBn9ZPUqdfrhcfjgEkCkzulHX2CKABM1x+FPGEdIx8tXhjeLuz30RgXAt
 vvPdN3FFQP/02hW53mW5/qf4RCboBz/6qRwXQnZeIcoqatDeMQaeYAROlw8OuWb78LG9AuJy+wUM
 Hzw+GaNQtLwWF+54SBZRDYaO6MT7P/1bXDXnmYv/qgDy4YcfYuSoMcgrdGP5mm1o6RiPAncQt3xq

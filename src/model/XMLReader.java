@@ -15,7 +15,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
@@ -34,11 +36,30 @@ public class XMLReader {
 
 	long timestamp;
 
-	public XMLReader(File file) throws ParserConfigurationException, SAXException, IOException {
+	public XMLReader(File file) throws ParserConfigurationException,
+			SAXException, IOException {
 		factory = DocumentBuilderFactory.newInstance();
-		
+
 		factory.setValidating(true);
 		builder = factory.newDocumentBuilder();
+		builder.setErrorHandler(new ErrorHandler() {
+
+			@Override
+			public void error(SAXParseException arg0) throws SAXException {
+				System.out.println(arg0.getMessage());				
+			}
+
+			@Override
+			public void fatalError(SAXParseException arg0) throws SAXException {
+				System.out.println(arg0.getMessage());				
+			}
+
+			@Override
+			public void warning(SAXParseException arg0) throws SAXException {
+				System.out.println(arg0.getMessage());
+			}
+			
+		});
 
 		document = builder.parse(file);
 	}
