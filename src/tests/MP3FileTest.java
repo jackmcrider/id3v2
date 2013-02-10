@@ -54,11 +54,6 @@ public class MP3FileTest {
 
 	}
 
-	@Test
-	public void testParse1() {
-		MP3File testFile = new MP3File(testFilesPath + "correct.mp3");
-		assertTrue(!testFile.parse());
-	}
 
 	@Test
 	public void testParse2() {
@@ -90,7 +85,7 @@ public class MP3FileTest {
 			testMP3.setArtist("artist1");
 			testMP3.setYear("11111111");
 			testMP3.write();
-			testMP3 = new MP3File(testFilesPath + "1.mp3");
+			testMP3.parse();
 			assertEquals(testMP3.getAlbum(), "album1");
 			assertEquals(testMP3.getArtist(), "artist1");
 			assertEquals(testMP3.getTitle(), "title1");
