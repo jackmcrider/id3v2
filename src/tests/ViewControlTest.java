@@ -41,15 +41,30 @@ public class ViewControlTest {
 	public void titel_korrekt() {
 		assertEquals(main.getTitle(), "ID3-Tag Editor");
 	}
-
+	
 	@Test
+	public void fenster_geht_auf() {
+		assertEquals(main.isVisible(), true);
+	}
+	
+	@Test
+	public void editor_panel_geht_auf() {
+		assertEquals(main.getEditorPanel().isVisible(), true);
+	}
+	
+	@Test
+	public void navigation_panel_geht_auf() {
+		assertEquals(main.getNavigationPanel().isVisible(), true);
+	}
+
+	/*@Test
 	public void standardwerte() {
 		assertEquals(editor.getAlbum(), "Album");
 		assertEquals(editor.getArtist(), "Artist");
 		assertEquals(editor.getTitle(), "Title");
 		assertEquals(editor.getYear(), "Year");
 		assertEquals(editor.getCover(), null);
-	}
+	}*/
 
 	public void simulateClick(MP3File m) {
 		if (m.isID3v2Tag()) {
