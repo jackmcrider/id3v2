@@ -23,6 +23,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import control.Program;
 
 @SuppressWarnings("serial")
+/**
+ * This represents an mp3 file
+ * @author Karl
+ *
+ */
 public class MP3File extends DefaultMutableTreeNode {
 	// Encoding variables
 
@@ -168,6 +173,7 @@ public class MP3File extends DefaultMutableTreeNode {
 		boolean hasTagsLeft = true;
 		try {
 			System.out.println("Parsing " + this);
+			@SuppressWarnings("resource")
 			DataInputStream data = new DataInputStream(new FileInputStream(
 					(File) this.getUserObject()));
 			data.read(header);
@@ -213,8 +219,8 @@ public class MP3File extends DefaultMutableTreeNode {
 
 				// Read audio part of the file and finish parsing
 				if (frameBodySize == 0) {
-					this.audioPart = new byte[data.available()+10];
-					data.read(this.audioPart, 9 , data.available());
+					this.audioPart = new byte[data.available() + 10];
+					data.read(this.audioPart, 9, data.available());
 					data.close();
 					hasTagsLeft = false;
 					this.isParsed = true;
@@ -224,7 +230,7 @@ public class MP3File extends DefaultMutableTreeNode {
 				// Read content of tag
 				byte[] textBuffer = new byte[frameBodySize];
 				data.read(textBuffer);
-				
+
 				// Parse text tags
 				if (keyword.startsWith("T")) {
 					this.parseText(textBuffer, keyword, frameBodySize, flags);

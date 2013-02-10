@@ -3,20 +3,26 @@ package model;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
+/**
+ * Holds all relevant information about a pic in an mp3
+ * 
+ * @author Karl
+ * 
+ */
 public class ID3PicFrame {
 	String keyword, mimeType;
 	int bodysize;
 	byte type, dtype;
 	byte[] data, description;
 	short flags;
-	
-	//different charsets
+
+	// different charsets
 	public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
 	public static final String CHARSET_UTF_16 = "UTF-16LE";
 	public static final String CHARSET_UTF_16BE = "UTF-16BE";
 	public static final String CHARSET_UTF_8 = "UTF-8";
 
-	//array of different charsets
+	// array of different charsets
 	private static final String[] characterSets = { CHARSET_ISO_8859_1,
 			CHARSET_UTF_16, CHARSET_UTF_16BE, CHARSET_UTF_8 };
 
@@ -50,42 +56,44 @@ public class ID3PicFrame {
 		this.bodysize = bodysize;
 		this.flags = flags;
 	}
-	
+
 	public String getMimeType() {
 		return this.mimeType;
 	}
-	
+
 	public byte getType() {
 		return this.type;
 	}
-	
+
 	public byte getDtype() {
 		return this.dtype;
 	}
-	
+
 	public byte[] getDescription() {
 		return this.description;
 	}
-	
+
 	public byte[] getData() {
 		return this.data;
 	}
-	
+
 	public int getBodySize() {
 		return this.bodysize;
 	}
-	
+
 	public short getFlags() {
 		return this.flags;
 	}
-	
+
 	public String getKeyword() {
 		return this.keyword;
 	}
-	
+
 	/**
-	 * set a new keyword 
-	 * @param s new keyword
+	 * set a new keyword
+	 * 
+	 * @param s
+	 *            new keyword
 	 */
 	public void setKeyword(String s) {
 		this.keyword = s;
@@ -93,7 +101,9 @@ public class ID3PicFrame {
 
 	/**
 	 * set new PictureData of the ID3PicFrame
-	 * @param bytes PictureData in byte[]
+	 * 
+	 * @param bytes
+	 *            PictureData in byte[]
 	 */
 	public void setData(byte[] bytes) {
 
@@ -107,7 +117,9 @@ public class ID3PicFrame {
 	}
 
 	/**
-	 * returns the complete ID3PicFrame in a byte-array ready to write in a file.
+	 * returns the complete ID3PicFrame in a byte-array ready to write in a
+	 * file.
+	 * 
 	 * @return
 	 */
 	public byte[] getBytes() {
@@ -132,6 +144,7 @@ public class ID3PicFrame {
 
 	/**
 	 * returns the size of the complete ID3PicFrame
+	 * 
 	 * @return
 	 */
 	protected int getLength() {
@@ -148,7 +161,9 @@ public class ID3PicFrame {
 	}
 
 	/**
-	 * returns a byte-array of the picture, including mimeType, encodingType, description and the picutredata. 
+	 * returns a byte-array of the picture, including mimeType, encodingType,
+	 * description and the picutredata.
+	 * 
 	 * @return
 	 */
 	public byte[] getPicBytes() {
@@ -193,6 +208,7 @@ public class ID3PicFrame {
 
 	/**
 	 * returns the characterSet for the description.
+	 * 
 	 * @param textEncoding
 	 * @return
 	 */
@@ -206,7 +222,9 @@ public class ID3PicFrame {
 	}
 
 	/**
-	 * returns a byte-array of the description. and you can choose with the params weather you want include the terminator and bom or not.
+	 * returns a byte-array of the description. and you can choose with the
+	 * params weather you want include the terminator and bom or not.
+	 * 
 	 * @param includeBom
 	 * @param includeTerminator
 	 * @return

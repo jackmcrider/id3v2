@@ -20,6 +20,12 @@ import org.xml.sax.SAXException;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
+/**
+ * This class reads an xml cache file and builds a tree off it
+ * 
+ * @author Karl
+ * 
+ */
 public class XMLReader {
 
 	Document document;
@@ -186,11 +192,11 @@ public class XMLReader {
 								if (list2.item(0) != null)
 									yearStr = ((Node) list2.item(0))
 											.getNodeValue();
-								
+
 								mp3 = new MP3File(artistStr, albumStr,
 										titleStr, yearStr,
 										ele.getAttribute("path"));
-								
+
 								list1 = tagElem.getElementsByTagName("cover");
 								if (list1.getLength() > 0) {
 									System.out.println("[xml] had a cover");
@@ -199,7 +205,7 @@ public class XMLReader {
 									if (list2.item(0) != null)
 										coverStr = ((Node) list2.item(0))
 												.getNodeValue();
-									
+
 									try {
 										byte[] cover = Base64.decode(coverStr);
 										mp3.setCachedCover(cover);
@@ -207,8 +213,7 @@ public class XMLReader {
 										e1.printStackTrace();
 									}
 								}
-								
-								
+
 								parent.add(mp3);
 								System.out.println("[CACHED] " + mp3);
 							}

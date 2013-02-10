@@ -15,6 +15,12 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import control.Program;
 
+/**
+ * This class writes an xml cache from a tree
+ * 
+ * @author Karl
+ * 
+ */
 public class XMLWriter {
 	private XMLOutputFactory factory;
 	private XMLStreamWriter writer;
@@ -33,7 +39,8 @@ public class XMLWriter {
 			writer.writeStartDocument();
 			writer.writeCharacters("\n");
 			writer.writeDTD("<!DOCTYPE cache SYSTEM \"" + Program.getPath()
-					+ File.separator + "resources" + File.separator + "cache.dtd" + "\">");
+					+ File.separator + "resources" + File.separator
+					+ "cache.dtd" + "\">");
 			writer.writeCharacters("\n");
 			writer.writeStartElement("cache");
 			Calendar cal = Calendar.getInstance();

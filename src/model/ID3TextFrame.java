@@ -4,6 +4,12 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
+/**
+ * Holds all relevant information about a text frame in an mp3
+ * 
+ * @author Karl
+ * 
+ */
 public class ID3TextFrame {
 
 	private String keyword, data;
@@ -13,6 +19,7 @@ public class ID3TextFrame {
 
 	/**
 	 * creates a new instance of a id3textFrame.
+	 * 
 	 * @param keyword
 	 * @param data
 	 * @param type
@@ -30,6 +37,7 @@ public class ID3TextFrame {
 
 	/**
 	 * set a new keyword
+	 * 
 	 * @param s
 	 */
 	public void setKeyword(String s) {
@@ -38,6 +46,7 @@ public class ID3TextFrame {
 
 	/**
 	 * change the string of the id3textframe
+	 * 
 	 * @param s
 	 */
 	public void setData(String s) {
@@ -52,7 +61,8 @@ public class ID3TextFrame {
 
 	/**
 	 * returns the keyword
-	 * @return 
+	 * 
+	 * @return
 	 */
 	public String getKeyword() {
 		return this.keyword;
@@ -60,6 +70,7 @@ public class ID3TextFrame {
 
 	/**
 	 * returns the string
+	 * 
 	 * @return
 	 */
 	public String getData() {
@@ -68,22 +79,25 @@ public class ID3TextFrame {
 
 	/**
 	 * returns the size of the id3textFrame
+	 * 
 	 * @return
 	 */
 	public int getFrameBodySize() {
 		return this.size;
 	}
-	
+
 	public byte getType() {
 		return this.type;
 	}
-	
+
 	public short getFlags() {
 		return this.flags;
 	}
 
 	/**
-	 * returns the comlete id3textFrame as a byte-array ready to write in a file.
+	 * returns the comlete id3textFrame as a byte-array ready to write in a
+	 * file.
+	 * 
 	 * @return
 	 */
 	public byte[] getBytes() {
