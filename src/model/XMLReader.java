@@ -32,7 +32,7 @@ public class XMLReader {
 		factory = DocumentBuilderFactory.newInstance();
 
 		try {
-			// factory.setValidating(true);
+			factory.setValidating(true);
 			builder = factory.newDocumentBuilder();
 
 			document = builder.parse(file);

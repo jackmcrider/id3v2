@@ -13,6 +13,8 @@ import javax.xml.stream.XMLStreamWriter;
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
+import control.Program;
+
 public class XMLWriter {
 	private XMLOutputFactory factory;
 	private XMLStreamWriter writer;
@@ -29,6 +31,9 @@ public class XMLWriter {
 					.getPath() + File.separator + "cache.xml"));
 
 			writer.writeStartDocument();
+			writer.writeCharacters("\n");
+			writer.writeDTD("<!DOCTYPE cache SYSTEM \"" + Program.getPath()
+					+ File.separator + "resources" + File.separator + "cache.dtd" + "\">");
 			writer.writeCharacters("\n");
 			writer.writeStartElement("cache");
 			Calendar cal = Calendar.getInstance();
@@ -70,7 +75,8 @@ public class XMLWriter {
 		Enumeration<DefaultMutableTreeNode> en = n.children();
 		while (en.hasMoreElements()) {
 			DefaultMutableTreeNode node = en.nextElement();
-			System.out.println(((File) node.getUserObject()).getAbsolutePath()+" "+node.isLeaf());
+			System.out.println(((File) node.getUserObject()).getAbsolutePath()
+					+ " " + node.isLeaf());
 			if (!node.isLeaf()) {
 				writeSpaces(depth, w);
 				w.writeStartElement("folder");
@@ -84,7 +90,8 @@ public class XMLWriter {
 				w.writeCharacters("\n");
 
 			} else {
-				if (((File) node.getUserObject()).getAbsolutePath().endsWith(".mp3")) {
+				if (((File) node.getUserObject()).getAbsolutePath().endsWith(
+						".mp3")) {
 					m = (MP3File) node;
 					if (m.isID3v2Tag()) {
 						writeSpaces(depth + 1, w);
