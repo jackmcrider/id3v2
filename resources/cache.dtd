@@ -1,0 +1,29 @@
+<?xml encoding="utf-8"?>
+<!ELEMENT cache (folder)>
+
+<!ELEMENT folder (file|folder)*>
+
+<!ELEMENT file (tags)>
+
+<!ELEMENT tags (title|artist|album|year|cover)*>
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT artist (#PCDATA)>
+<!ELEMENT album (#PCDATA)>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT cover (#PCDATA)>
+
+<!ATTLIST cache
+	timestamp	CDATA #REQUIRED
+>
+
+<!ATTLIST folder 
+	name	CDATA #REQUIRED
+	path	CDATA #REQUIRED
+>
+
+<!ATTLIST file
+	name	CDATA #REQUIRED
+	path	CDATA #REQUIRED
+	size	CDATA #REQUIRED
+>

@@ -18,6 +18,11 @@ import control.handlers.ClickedOnFileInTree;
 import control.handlers.DirectoryChooser;
 
 @SuppressWarnings("serial")
+/**
+ * The left side of the main window, the navigation panel
+ * @author Karl
+ *
+ */
 public class NavigationPanel extends JPanel {
 	private DefaultTreeModel tree;
 	private JTree visualTree;
@@ -86,12 +91,12 @@ public class NavigationPanel extends JPanel {
 	}
 
 	public File searchForCache(File root) {
-		if(root.listFiles() != null){
-		for (File f : root.listFiles()) {
-			if (f.toString().endsWith(".xml")) {
-				return f;
+		if (root.listFiles() != null) {
+			for (File f : root.listFiles()) {
+				if (f.toString().endsWith(".xml")) {
+					return f;
+				}
 			}
-		}
 		}
 		return null;
 	}

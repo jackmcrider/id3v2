@@ -11,6 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 
 @SuppressWarnings("serial")
+/**
+ * The main window
+ * @author Karl
+ *
+ */
 public class MainWindow extends JFrame {
 	// Components
 	private JSplitPane mainSplitter;

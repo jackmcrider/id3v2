@@ -11,8 +11,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
@@ -22,13 +20,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import control.Program;
 import control.handlers.ApplicationCloser;
 import control.handlers.ChangedMP3Tags;
 import control.handlers.CoverChooser;
+import control.handlers.CoverDeleter;
 import control.handlers.SaveChangedMP3Files;
 
 @SuppressWarnings("serial")
+/**
+ * The right side of the window, the editor panel
+ * @author Karl
+ *
+ */
 public class EditorPanel extends JPanel {
 
 	private GridBagLayout editorStructure;
@@ -83,16 +86,7 @@ public class EditorPanel extends JPanel {
 		this.saveButton = new JButton("Save");
 		this.saveButton.addActionListener(new SaveChangedMP3Files());
 		this.deleteButton = new JButton("x");
-		this.deleteButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!Program.getControl().currentlyOpenedMP3FileIsParsed()|| Program.getControl().getCurrentlyOpenedMP3File().isCached())
-					Program.getControl().getCurrentlyOpenedMP3File().parse();
-				Program.getControl().getMainWindow().getEditorPanel().setCover(null);
-				Program.getControl().updateCurrentlyOpenedMP3File();
-				Program.getControl().addChangedFile();
-			}
-		});
+		this.deleteButton.addActionListener(new CoverDeleter());
 		this.buttonsPanel = new JPanel();
 		this.buttonsPanel.setLayout(new FlowLayout());
 		this.saveButton.setSize(new Dimension(100, 40));

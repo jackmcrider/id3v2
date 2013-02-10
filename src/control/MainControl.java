@@ -9,7 +9,14 @@ import model.MP3File;
 import model.XMLWriter;
 import view.MainWindow;
 
+/**
+ * Holds all relevant references to needed classes
+ * 
+ * @author Karl
+ * 
+ */
 public class MainControl {
+	// Reference to the main window
 	private MainWindow mainWindow;
 
 	// Reference to the currently opened mp3 file
@@ -18,6 +25,9 @@ public class MainControl {
 	// Holds all mp3 files that have been changed
 	private LinkedList<MP3File> changedFiles = new LinkedList<MP3File>();
 
+	/**
+	 * Create a new main control
+	 */
 	public MainControl() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -33,6 +43,11 @@ public class MainControl {
 		setStatus("Everything is fine!");
 	}
 
+	/**
+	 * Get the currently opened mp3 file
+	 * 
+	 * @return
+	 */
 	public MP3File getCurrentlyOpenedMP3File() {
 		return this.currentlyOpenedMP3File;
 	}
@@ -76,7 +91,8 @@ public class MainControl {
 		if (currentlyOpenedMP3File == null)
 			return false;
 
-		return currentlyOpenedMP3File.isParsed() || currentlyOpenedMP3File.isCached();
+		return currentlyOpenedMP3File.isParsed()
+				|| currentlyOpenedMP3File.isCached();
 	}
 
 	/**
@@ -88,6 +104,11 @@ public class MainControl {
 		return (MP3File[]) changedFiles.toArray();
 	}
 
+	/**
+	 * Check if there are changed files
+	 * 
+	 * @return
+	 */
 	public boolean changedFiles() {
 		if (this.changedFiles.size() > 0)
 			return true;
@@ -114,9 +135,7 @@ public class MainControl {
 	 * @param triggeringField
 	 */
 	public void updateCurrentlyOpenedMP3File() {
-		// Update tags when edited
-
-		if (currentlyOpenedMP3FileIsParsed() ) {
+		if (currentlyOpenedMP3FileIsParsed()) {
 			if (mainWindow.getEditorPanel().getTitle().length() == 0)
 				currentlyOpenedMP3File.setTitle(" ");
 			else
@@ -138,11 +157,12 @@ public class MainControl {
 				currentlyOpenedMP3File.setYear(mainWindow.getEditorPanel()
 						.getYear());
 			if (mainWindow.getEditorPanel().getCover() != null) {
-				currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel().getCover());
+				currentlyOpenedMP3File.setCover(mainWindow.getEditorPanel()
+						.getCover());
 			} else {
 				currentlyOpenedMP3File.setHasCover(false);
 			}
-			
+
 		}
 	}
 
@@ -186,6 +206,9 @@ public class MainControl {
 		}
 	}
 
+	/**
+	 * Save changed files and write xml
+	 */
 	public void saveAll() {
 		Program.getControl().saveChangedFiles();
 

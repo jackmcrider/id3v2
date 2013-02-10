@@ -1,7 +1,11 @@
-package model;
+package tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.nio.file.Files;
+
+import model.MP3File;
 
 import org.junit.Before;
 import org.junit.Test;

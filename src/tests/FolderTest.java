@@ -1,6 +1,8 @@
-package model;
+package tests;
 
 import static org.junit.Assert.*;
+
+import model.Folder;
 
 import org.junit.Before;
 import org.junit.Test;

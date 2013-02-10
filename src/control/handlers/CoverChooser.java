@@ -15,12 +15,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import control.Program;
 
+/**
+ * This class handles clicks on the cover
+ * @author Karl
+ *
+ */
 public class CoverChooser extends MouseAdapter {
 	public void mouseClicked(MouseEvent e) {
-		if (!Program.getControl().currentlyOpenedMP3FileIsParsed()|| Program.getControl().getCurrentlyOpenedMP3File().isCached())
+		if (!Program.getControl().currentlyOpenedMP3FileIsParsed()
+				|| Program.getControl().getCurrentlyOpenedMP3File().isCached())
 			Program.getControl().getCurrentlyOpenedMP3File().parse();
 
-		FileFilter filter = new FileNameExtensionFilter("Image", "jpg", "jpeg","png");
+		FileFilter filter = new FileNameExtensionFilter("Image", "jpg", "jpeg",
+				"png");
 		JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);
@@ -38,12 +45,14 @@ public class CoverChooser extends MouseAdapter {
 				icon = new ImageIcon(image.getScaledInstance(100, 100,
 						Image.SCALE_SMOOTH));
 
-				Program.getControl().getMainWindow().getEditorPanel().setImage(image);
-				Program.getControl().getMainWindow().getEditorPanel().setCover(icon);
+				Program.getControl().getMainWindow().getEditorPanel()
+						.setImage(image);
+				Program.getControl().getMainWindow().getEditorPanel()
+						.setCover(icon);
 
 				Program.getControl().updateCurrentlyOpenedMP3File();
 				Program.getControl().addChangedFile();
-				
+
 				fc.cancelSelection();
 			} catch (IOException ex) {
 				Program.getControl().setStatus(ex.getMessage());
