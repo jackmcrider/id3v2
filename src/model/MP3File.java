@@ -166,6 +166,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("resource")
 	public boolean parse() {
 		boolean hasTagsLeft = true;
 		try {
@@ -422,8 +423,8 @@ public class MP3File extends DefaultMutableTreeNode {
 	 */
 	public void write() {
 		try {
-			
-			File f = ((File)this.getUserObject());
+
+			File f = ((File) this.getUserObject());
 			FileOutputStream fos = new FileOutputStream(f, false);
 			DataOutputStream dos = new DataOutputStream(fos);
 			BufferedOutputStream bos = new BufferedOutputStream(dos);
