@@ -14,14 +14,17 @@ public class Program {
 	// Reference to the working path
 	private static String workingPath;
 
+	public Program(){
+		workingPath = System.getProperty("user.dir");
+		mainControl = new MainControl();
+	}
 	/**
 	 * Main method
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		workingPath = System.getProperty("user.dir");
-		mainControl = new MainControl();
+		new Program();
 	}
 
 	/**

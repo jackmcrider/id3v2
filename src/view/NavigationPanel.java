@@ -28,8 +28,8 @@ public class NavigationPanel extends JPanel {
 	private JTree visualTree;
 	private JButton directoryChooser;
 	private JScrollPane scrollTree;
-	private Folder folder;
-	private String standardPath = ".";
+	private DefaultMutableTreeNode folder;
+	private String standardPath = "resources/tests/";
 	File xml = null;
 	XMLReader reader;
 
@@ -40,10 +40,12 @@ public class NavigationPanel extends JPanel {
 		// Create tree of folders and files
 		xml = searchForCache(new File(standardPath));
 		if (xml == null) {
-			this.tree = new DefaultTreeModel(new Folder(standardPath, true));
+			this.folder = new Folder(standardPath, true);
+			this.tree = new DefaultTreeModel(folder);
 		} else {
 			reader = new XMLReader(xml);
-			this.tree = new DefaultTreeModel(reader.readXML());
+			this.folder = reader.readXML();
+			this.tree = new DefaultTreeModel(folder);
 		}
 
 		// Initialize the visual tree
@@ -76,6 +78,7 @@ public class NavigationPanel extends JPanel {
 	public void replaceTree(String path) {
 		xml = searchForCache(new File(path));
 		if (xml == null) {
+			System.out.println("[x]"+path);
 			folder = new Folder(path, true);
 			File newRoot = new File(path);
 			if (newRoot.exists() && newRoot.isDirectory()) {
@@ -103,5 +106,9 @@ public class NavigationPanel extends JPanel {
 
 	public void setTree(DefaultMutableTreeNode n) {
 		this.tree.setRoot(n);
+	}
+
+	public DefaultMutableTreeNode getFolder() {
+		return this.folder;
 	}
 }

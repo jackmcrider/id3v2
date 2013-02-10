@@ -169,7 +169,6 @@ public class MP3File extends DefaultMutableTreeNode {
 	public boolean parse() {
 		boolean hasTagsLeft = true;
 		try {
-			System.out.println("Parsing " + this);
 			DataInputStream data = new DataInputStream(new FileInputStream(
 					(File) this.getUserObject()));
 			data.read(header);
