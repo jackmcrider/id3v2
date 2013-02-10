@@ -27,7 +27,7 @@ public class ViewControlTest {
 	public static void gui_aufbauen() {
 		System.out.println("GUI erstellen");
 		tagger = new Program();
-		main = tagger.getControl().getMainWindow();
+		main = Program.getControl().getMainWindow();
 		navigator = main.getNavigationPanel();
 		editor = main.getEditorPanel();
 	}
@@ -49,12 +49,12 @@ public class ViewControlTest {
 	
 	@Test
 	public void editor_panel_geht_auf() {
-		assertEquals(main.getEditorPanel().isVisible(), true);
+		assertEquals(navigator.isVisible(), true);
 	}
 	
 	@Test
 	public void navigation_panel_geht_auf() {
-		assertEquals(main.getNavigationPanel().isVisible(), true);
+		assertEquals(editor.isVisible(), true);
 	}
 
 	/*@Test

@@ -83,6 +83,20 @@ public class MP3FileTest {
 		assertEquals(testMP3.getTitle(), "title1");
 		assertEquals(testMP3.getYear(), "1111");
 	}
+	
+	@Test
+	public void removeCover() {
+		MP3File m1;
+		MP3File m2;
+		
+		m1 = new MP3File(testFilesPath + "2.mp3");
+		assertEquals(m1.hasCover(), true);
+		m1.setHasCover(false);
+		m1.write();
+		
+		m2 = new MP3File(testFilesPath + "2.mp3");
+		assertEquals(m2.hasCover(), false);
+	}
 
 	public static void copyFolder(File src, File dest) throws IOException {
 		if (src.isDirectory()) {
