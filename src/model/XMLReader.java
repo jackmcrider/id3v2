@@ -34,22 +34,13 @@ public class XMLReader {
 
 	long timestamp;
 
-	public XMLReader(File file) {
+	public XMLReader(File file) throws ParserConfigurationException, SAXException, IOException {
 		factory = DocumentBuilderFactory.newInstance();
+		
+		factory.setValidating(true);
+		builder = factory.newDocumentBuilder();
 
-		try {
-			factory.setValidating(true);
-			builder = factory.newDocumentBuilder();
-
-			document = builder.parse(file);
-
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
+		document = builder.parse(file);
 	}
 
 	public DefaultMutableTreeNode readXML() {

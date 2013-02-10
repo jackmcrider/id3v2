@@ -24,7 +24,7 @@ import control.handlers.DirectoryChooser;
  *
  */
 public class NavigationPanel extends JPanel {
-	private DefaultTreeModel tree;
+	private DefaultTreeModel tree = null;
 	private JTree visualTree;
 	private JButton directoryChooser;
 	private JScrollPane scrollTree;
@@ -37,16 +37,7 @@ public class NavigationPanel extends JPanel {
 		// Set layout of NavigationPanel
 		this.setLayout(new BorderLayout());
 
-		// Create tree of folders and files
-		xml = searchForCache(new File(standardPath));
-		if (xml == null) {
-			this.folder = new Folder(standardPath, true);
-			this.tree = new DefaultTreeModel(folder);
-		} else {
-			reader = new XMLReader(xml);
-			this.folder = reader.readXML();
-			this.tree = new DefaultTreeModel(folder);
-		}
+		this.replaceTree(standardPath);
 
 		// Initialize the visual tree
 		this.visualTree = new JTree(this.tree);
@@ -76,21 +67,38 @@ public class NavigationPanel extends JPanel {
 	 * @param path
 	 */
 	public void replaceTree(String path) {
-		xml = searchForCache(new File(path));
-		if (xml == null) {
-			System.out.println("[x]"+path);
-			folder = new Folder(path, true);
-			File newRoot = new File(path);
-			if (newRoot.exists() && newRoot.isDirectory()) {
-				this.tree.setRoot(folder);
-			} else {
-				Program.getControl().setStatus(
-						"The thing that you selected was not a directory.");
+		File dir = new File(path);
+
+		if (!dir.exists() || !dir.isDirectory()) {
+			Program.getControl().setStatus(
+					"The thing that you selected was not a directory.");
+			return;
+		}
+
+		xml = searchForCache(dir);
+
+		boolean builtFromXML = false;
+		try {
+			if(xml != null){
+				reader = new XMLReader(xml);
+				this.folder = reader.readXML();
+				if(this.tree == null)
+					this.tree = new DefaultTreeModel(folder);
+				else
+					this.tree.setRoot(this.folder);
+				
+				builtFromXML = true;
 			}
-		} else {
-			XMLReader reader = new XMLReader(xml);
-			this.folder = reader.readXML();
-			this.tree.setRoot(this.folder);
+		} catch (Exception e) {
+			System.out.println("XML korrumpiert!");
+		}
+
+		if (!builtFromXML) {
+			this.folder = new Folder(path, true);
+			if(this.tree == null)
+				this.tree = new DefaultTreeModel(folder);
+			else
+				this.tree.setRoot(folder);
 		}
 	}
 
