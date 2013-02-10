@@ -89,7 +89,8 @@ public class NavigationPanel extends JPanel {
 			}
 		} else {
 			XMLReader reader = new XMLReader(xml);
-			this.tree.setRoot(reader.readXML());
+			this.folder = reader.readXML();
+			this.tree.setRoot(this.folder);
 		}
 	}
 
