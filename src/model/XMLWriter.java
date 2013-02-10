@@ -70,7 +70,6 @@ public class XMLWriter {
 		Enumeration<DefaultMutableTreeNode> en = n.children();
 		while (en.hasMoreElements()) {
 			DefaultMutableTreeNode node = en.nextElement();
-			System.out.println(((File) node.getUserObject()).getAbsolutePath()+" "+node.isLeaf());
 			if (!node.isLeaf()) {
 				writeSpaces(depth, w);
 				w.writeStartElement("folder");

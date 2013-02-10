@@ -44,6 +44,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	private String year;
 	private ID3PicFrame pframe;
 	private ImageIcon cover;
+	private String path;
 
 	// Holds the audioPart of the MP3 file (music)
 	private byte[] audioPart;
@@ -81,8 +82,9 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.setArtist(artist);
 		this.setTitle(title);
 		this.setYear(year);
+		this.path = path;
 
-		this.setUserObject(new File(path));
+		this.setUserObject(new File(this.path));
 	}
 
 	/**
@@ -213,8 +215,8 @@ public class MP3File extends DefaultMutableTreeNode {
 
 				// Read audio part of the file and finish parsing
 				if (frameBodySize == 0) {
-					this.audioPart = new byte[data.available()+10];
-					data.read(this.audioPart, 9 , data.available());
+					this.audioPart = new byte[data.available() + 10];
+					data.read(this.audioPart, 9, data.available());
 					data.close();
 					hasTagsLeft = false;
 					this.isParsed = true;
@@ -224,7 +226,7 @@ public class MP3File extends DefaultMutableTreeNode {
 				// Read content of tag
 				byte[] textBuffer = new byte[frameBodySize];
 				data.read(textBuffer);
-				
+
 				// Parse text tags
 				if (keyword.startsWith("T")) {
 					this.parseText(textBuffer, keyword, frameBodySize, flags);
@@ -419,9 +421,14 @@ public class MP3File extends DefaultMutableTreeNode {
 	/**
 	 * Write out changes
 	 */
-	public void write() {
+	public void write(boolean test) {
 		try {
-			File f = (File) this.getUserObject();
+			if (!test) {
+				String f = this.getUserObject().toString();
+			} else {
+				String f = "resources/tests/junit/" + this.getUserObject().toString();
+			}
+
 			FileOutputStream fos = new FileOutputStream(f, false);
 			DataOutputStream dos = new DataOutputStream(fos);
 			BufferedOutputStream bos = new BufferedOutputStream(dos);
