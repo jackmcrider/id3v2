@@ -23,6 +23,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import control.Program;
 
 @SuppressWarnings("serial")
+/**
+ * Represents a mp3 file
+ * @author Karl
+ *
+ */
 public class MP3File extends DefaultMutableTreeNode {
 	// Encoding variables
 
@@ -144,10 +149,18 @@ public class MP3File extends DefaultMutableTreeNode {
 		return this.audioPart;
 	}
 
+	/**
+	 * Set that the file has a cover
+	 * @param b
+	 */
 	public void setHasCover(boolean b) {
 		this.hasCover = b;
 	}
 
+	/**
+	 * Check if the file has a cover
+	 * @return
+	 */
 	public boolean hasCover() {
 		return this.hasCover;
 	}
@@ -649,6 +662,10 @@ public class MP3File extends DefaultMutableTreeNode {
 		this.isChanged = true;
 	}
 
+	/**
+	 * Get image data
+	 * @return
+	 */
 	public byte[] getImageData() {
 		return this.imageDataBytes;
 	}
