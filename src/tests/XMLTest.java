@@ -19,6 +19,11 @@ import org.junit.Test;
 import control.MainControl;
 import control.Program;
 
+/**
+ * Test xml cache functionality
+ * @author Karl
+ *
+ */
 public class XMLTest {
 
 	@SuppressWarnings("unused")
@@ -37,6 +42,9 @@ public class XMLTest {
 	}
 
 	@Test
+	/**
+	 * Test behaviour with correct xmls
+	 */
 	public void correctXMLTests() {
 		MainControl control = Program.getControl();
 
@@ -78,6 +86,9 @@ public class XMLTest {
 	}
 
 	@Test
+	/**
+	 * Test behaviour with corrupt xml
+	 */
 	public void corruptXMLTest() {
 		try {
 			File cacheFile = new File(Program.getPath() + File.separator
@@ -93,6 +104,9 @@ public class XMLTest {
 	}
 	
 	@Test
+	/**
+	 * Test behaviour with invalid xml
+	 */
 	public void invalidXMLTest() {
 		try {
 			File cacheFile = new File(Program.getPath() + File.separator

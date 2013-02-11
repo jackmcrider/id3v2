@@ -26,6 +26,10 @@ public class XMLWriter {
 	private XMLStreamWriter writer;
 	private File xmlFile;
 
+	/**
+	 * Instantiate a new xml writer and write the xml
+	 * @param root
+	 */
 	public XMLWriter(DefaultMutableTreeNode root) {
 
 		factory = XMLOutputFactory.newInstance();
@@ -66,6 +70,11 @@ public class XMLWriter {
 		}
 	}
 
+	/**
+	 * for indentation
+	 * @param x
+	 * @param w
+	 */
 	public void writeSpaces(int x, XMLStreamWriter w) {
 		try {
 			for (int i = 0; i < x; i++)
@@ -75,6 +84,13 @@ public class XMLWriter {
 		}
 	}
 
+	/**
+	 * recursively write the xml
+	 * @param n
+	 * @param w
+	 * @param depth
+	 * @throws XMLStreamException
+	 */
 	public void writeXML(DefaultMutableTreeNode n, XMLStreamWriter w, int depth)
 			throws XMLStreamException {
 		MP3File m;

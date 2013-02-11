@@ -14,6 +14,9 @@ public class Program {
 	// Reference to the working path
 	private static String workingPath;
 
+	/**
+	 * Instantiate a new program
+	 */
 	public Program(){
 		workingPath = System.getProperty("user.dir");
 		mainControl = new MainControl();

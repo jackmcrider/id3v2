@@ -12,9 +12,10 @@ import view.MainWindow;
 import view.NavigationPanel;
 import control.Program;
 
-/*
- * Hier wird die GUI gestartet und gecheckt. Da parallel irgendwie nur ein Zugriff auf eine xml-Datei funktioniert,
- * sollte hier auch die Control-Tests gemacht werden mit der bereits vorhandenen GUI.
+/**
+ * Test view/control and rudimentary click handling
+ * @author Karl
+ *
  */
 public class ViewControlTest {
 	public static Program tagger;
@@ -86,6 +87,9 @@ public class ViewControlTest {
 	}
 
 	@Test
+	/**
+	 * Test what happens if something is clicked
+	 */
 	public void clickedOnFileInTreeTest() {
 		// soll ein Klick auf 1.mp3 simulieren
 		testFile = new MP3File("resources/tests/1.mp3");

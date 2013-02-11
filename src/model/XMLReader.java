@@ -36,6 +36,13 @@ public class XMLReader {
 
 	long timestamp;
 
+	/**
+	 * Instantiate a new xml reader
+	 * @param file
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
 	public XMLReader(File file) throws ParserConfigurationException,
 			SAXException, IOException {
 		factory = DocumentBuilderFactory.newInstance();
@@ -67,6 +74,10 @@ public class XMLReader {
 		document = builder.parse(file);
 	}
 
+	/**
+	 * Read the xml and build a tree off of it
+	 * @return
+	 */
 	public DefaultMutableTreeNode readXML() {
 		// Get cache element
 		Element cache = (Element) document.getElementsByTagName("cache")
@@ -87,6 +98,11 @@ public class XMLReader {
 		return treeRoot;
 	}
 
+	/**
+	 * Really build the tree here
+	 * @param node
+	 * @param parent
+	 */
 	public void createTree(Node node, DefaultMutableTreeNode parent) {
 		Element e = (Element) node;
 		File currentFolder = (File) parent.getUserObject();
