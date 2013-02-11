@@ -21,6 +21,11 @@ import model.MP3File;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests the MP3File model
+ * @author Karl
+ *
+ */
 public class MP3FileTest {
 
 	private String testFilesPath;
@@ -55,18 +60,27 @@ public class MP3FileTest {
 	}
 
 	@Test
+	/**
+	 * Test parsing
+	 */
 	public void testParse2() {
 		MP3File testFile = new MP3File(testFilesPath + "wrong.mp3");
 		assertTrue(!testFile.parse());
 	}
 
 	@Test
+	/**
+	 * Test parsing
+	 */
 	public void testParse3() {
 		MP3File testFile = new MP3File(testFilesPath + "empty.mp3");
 		assertTrue(!testFile.parse());
 	}
 
 	@Test
+	/**
+	 * Test parsing
+	 */
 	public void testeMP3ModelParser1() {
 		MP3File testMP3 = new MP3File(testFilesPath + "1.mp3");
 		assertEquals(testMP3.getAlbum(), "1");
@@ -76,6 +90,9 @@ public class MP3FileTest {
 	}
 
 	@Test
+	/**
+	 * Test writing/parsing
+	 */
 	public void testeMP3ModelWriter1() {
 		MP3File testMP3 = new MP3File(testFilesPath + "1.mp3");
 		testMP3.setAlbum("album1");
@@ -91,6 +108,9 @@ public class MP3FileTest {
 	}
 
 	@Test
+	/**
+	 * Test removing of cover
+	 */
 	public void removeCover() {
 		MP3File m1;
 		MP3File m2;
@@ -105,6 +125,9 @@ public class MP3FileTest {
 	}
 
 	@Test
+	/**
+	 * Test adding a cover
+	 */
 	public void addCover() {
 		MP3File m1 = new MP3File(testFilesPath + "1.mp3");
 		File file = new File(testFilesPath + "bild.jpg");
@@ -125,6 +148,12 @@ public class MP3FileTest {
 		assertEquals(m2.hasCover(), true);
 	}
 
+	/**
+	 * Copy a complete folder
+	 * @param src
+	 * @param dest
+	 * @throws IOException
+	 */
 	public static void copyFolder(File src, File dest) throws IOException {
 		if (src.isDirectory()) {
 

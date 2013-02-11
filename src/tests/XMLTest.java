@@ -19,6 +19,11 @@ import org.junit.Test;
 import control.MainControl;
 import control.Program;
 
+/**
+ * Test xml cache functionality
+ * @author Karl
+ *
+ */
 public class XMLTest {
 
 	@SuppressWarnings("unused")
@@ -37,6 +42,9 @@ public class XMLTest {
 	}
 
 	@Test
+	/**
+	 * Test behaviour with correct xmls
+	 */
 	public void correctXMLTests() {
 		MainControl control = Program.getControl();
 

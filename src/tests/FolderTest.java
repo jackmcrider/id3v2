@@ -16,6 +16,11 @@ import model.MP3File;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * Tests the folder model
+ * @author Karl
+ *
+ */
 public class FolderTest {
 
 	static String path = "resources/tests/";
@@ -48,6 +53,9 @@ public class FolderTest {
 	}
 
 	@Test
+	/**
+	 * Tests the folder model
+	 */
 	public void testeFolderModel() {
 		@SuppressWarnings("unchecked")
 		Enumeration<Object> children = folder.children();
@@ -72,6 +80,12 @@ public class FolderTest {
 
 	}
 
+	/**
+	 * Copy a complete folder
+	 * @param src
+	 * @param dest
+	 * @throws IOException
+	 */
 	public static void copyFolder(File src, File dest) throws IOException {
 
 		if (src.isDirectory()) {
