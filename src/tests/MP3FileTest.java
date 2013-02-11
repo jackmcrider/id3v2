@@ -2,13 +2,19 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import model.MP3File;
 
@@ -83,19 +89,40 @@ public class MP3FileTest {
 		assertEquals(testMP3.getTitle(), "title1");
 		assertEquals(testMP3.getYear(), "1111");
 	}
-	
+
 	@Test
 	public void removeCover() {
 		MP3File m1;
 		MP3File m2;
-		
+
 		m1 = new MP3File(testFilesPath + "2.mp3");
 		assertEquals(m1.hasCover(), true);
 		m1.setHasCover(false);
 		m1.write();
-		
+
 		m2 = new MP3File(testFilesPath + "2.mp3");
 		assertEquals(m2.hasCover(), false);
+	}
+
+	@Test
+	public void addCover() {
+		MP3File m1 = new MP3File(testFilesPath + "1.mp3");
+		File file = new File(testFilesPath + "bild.jpg");
+		BufferedImage image;
+		ImageIcon icon;
+		try {
+			image = ImageIO.read(file);
+			icon = new ImageIcon(image.getScaledInstance(100, 100,
+					Image.SCALE_SMOOTH));
+
+			m1.setCover(icon);
+			m1.write();
+		} catch (IOException ex) {
+			fail("Could not write cover!");
+		}
+		
+		MP3File m2 = new MP3File(testFilesPath + "1.mp3");
+		assertEquals(m2.hasCover(), true);
 	}
 
 	public static void copyFolder(File src, File dest) throws IOException {

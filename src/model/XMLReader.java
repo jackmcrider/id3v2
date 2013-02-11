@@ -46,17 +46,20 @@ public class XMLReader {
 
 			@Override
 			public void error(SAXParseException arg0) throws SAXException {
-				System.out.println(arg0.getMessage());				
+				System.out.println(arg0.getMessage());			
+				throw arg0;
 			}
 
 			@Override
 			public void fatalError(SAXParseException arg0) throws SAXException {
-				System.out.println(arg0.getMessage());				
+				System.out.println(arg0.getMessage());		
+				throw arg0;
 			}
 
 			@Override
 			public void warning(SAXParseException arg0) throws SAXException {
 				System.out.println(arg0.getMessage());
+				throw arg0;
 			}
 			
 		});

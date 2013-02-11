@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Enumeration;
 
 import model.Folder;
 import model.MP3File;
@@ -48,15 +49,26 @@ public class FolderTest {
 
 	@Test
 	public void testeFolderModel() {
-		// teste ob Folder den Ordnernamen richtig ausgelesen hat
-		assertEquals(folder.getChildAt(1).toString(), "unterordner");
+		@SuppressWarnings("unchecked")
+		Enumeration<Object> children = folder.children();
+		while (children.hasMoreElements()) {
+			Object node = children.nextElement();
 
-		// teste ob Folder den Dateinamen richtig ausgelesen hat
-		assertEquals(folder.getChildAt(0).toString(), "correct.mp3");
-		assertEquals(folder.getChildAt(2).toString(), "empty.mp3");
-		assertEquals(folder.getChildAt(3).toString(), "1.mp3");
-		assertEquals(folder.getChildAt(4).toString(), "wrong.mp3");
-		assertEquals(folder.getChildAt(1).getChildAt(0).toString(), "3.mp3");
+			// Check that this subdirectory has 1 file in it
+			if (node.toString() == "unterordner") {
+				Folder f = (Folder) node;
+				assertEquals(f.getChildCount(), 1);
+			}
+
+			// Check that the file has a cover as wanted
+			if (node.toString() == "2.mp3") {
+				MP3File m = (MP3File) node;
+				assertEquals(m.hasCover(), true);
+			}
+		}
+
+		// Check that there are 5 files/folders present
+		assertEquals(folder.getChildCount(), 5);
 
 	}
 
