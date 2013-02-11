@@ -5,6 +5,11 @@ import java.awt.event.ActionListener;
 
 import control.Program;
 
+/**
+ * Adds functionality to remove a cover from a file
+ * @author Karl
+ *
+ */
 public class CoverDeleter implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
