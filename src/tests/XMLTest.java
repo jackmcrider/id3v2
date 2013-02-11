@@ -86,6 +86,9 @@ public class XMLTest {
 	}
 
 	@Test
+	/**
+	 * Test behaviour with corrupt xml
+	 */
 	public void corruptXMLTest() {
 		try {
 			File cacheFile = new File(Program.getPath() + File.separator
@@ -101,6 +104,9 @@ public class XMLTest {
 	}
 	
 	@Test
+	/**
+	 * Test behaviour with invalid xml
+	 */
 	public void invalidXMLTest() {
 		try {
 			File cacheFile = new File(Program.getPath() + File.separator
