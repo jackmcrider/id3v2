@@ -94,7 +94,7 @@ public class MP3File extends DefaultMutableTreeNode {
 	 * @param invalid
 	 */
 	public MP3File(String path, boolean invalid) {
-		this.cached = true;
+		this.cached = false;
 		this.setUserObject(new File(path));
 		this.isID3v2Tag = false;
 	}

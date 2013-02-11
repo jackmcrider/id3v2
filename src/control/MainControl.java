@@ -60,6 +60,10 @@ public class MainControl {
 	public MainWindow getMainWindow() {
 		return mainWindow;
 	}
+	
+	public void setCurrentyMP3(MP3File m){
+		this.currentlyOpenedMP3File = m;
+	}
 
 	/**
 	 * Set the status
@@ -91,8 +95,18 @@ public class MainControl {
 		if (currentlyOpenedMP3File == null)
 			return false;
 
-		return currentlyOpenedMP3File.isParsed()
-				|| currentlyOpenedMP3File.isCached();
+		return currentlyOpenedMP3File.isParsed();
+	}
+	/**
+	 * Check if the currently opened mp3 file is cached
+	 * 
+	 * @return
+	 */
+	public boolean currentlyOpenedMP3FileIsCached() {
+		if (currentlyOpenedMP3File == null)
+			return false;
+
+		return currentlyOpenedMP3File.isCached();
 	}
 
 	/**
@@ -135,7 +149,7 @@ public class MainControl {
 	 * @param triggeringField
 	 */
 	public void updateCurrentlyOpenedMP3File() {
-		if (currentlyOpenedMP3FileIsParsed()) {
+		if (currentlyOpenedMP3FileIsParsed()||currentlyOpenedMP3FileIsCached()) {
 			if (mainWindow.getEditorPanel().getTitle().length() == 0)
 				currentlyOpenedMP3File.setTitle(" ");
 			else

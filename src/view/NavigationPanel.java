@@ -56,7 +56,10 @@ public class NavigationPanel extends JPanel {
 		this.add(scrollTree, BorderLayout.CENTER);
 		this.add(this.directoryChooser, BorderLayout.SOUTH);
 	}
-
+	/**
+	 * returns the the root of the JTree
+	 * 
+	 */
 	public Object getRoot() {
 		return this.tree.getRoot();
 	}
@@ -79,6 +82,7 @@ public class NavigationPanel extends JPanel {
 
 		boolean builtFromXML = false;
 		try {
+			//if a cache.xml in root exists
 			if(xml != null){
 				reader = new XMLReader(xml);
 				this.folder = reader.readXML();
@@ -92,7 +96,9 @@ public class NavigationPanel extends JPanel {
 		} catch (Exception e) {
 			System.out.println("XML korrumpiert!");
 		}
-
+		
+		//if theres no cache.xml or the cache.xml is corrupt
+		//build the tree by scanning the disk
 		if (!builtFromXML) {
 			this.folder = new Folder(path, true);
 			if(this.tree == null)
@@ -101,7 +107,11 @@ public class NavigationPanel extends JPanel {
 				this.tree.setRoot(folder);
 		}
 	}
-
+	/**
+	 * searches for a cache.xml in the given root-directory and return the file if it exists. otherwise null.
+	 * 
+	 * @param root
+	 */
 	public File searchForCache(File root) {
 		if (root.listFiles() != null) {
 			for (File f : root.listFiles()) {

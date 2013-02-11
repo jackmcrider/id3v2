@@ -47,8 +47,10 @@ public class EditorPanel extends JPanel {
 	private ImageIcon icon;
 
 	public EditorPanel() {
+		//contains  the changed tags
 		ChangedMP3Tags addFileToChangedFiles = new ChangedMP3Tags();
 
+		//the panel where the JTextField and JLabel for the title is placed
 		this.titlePanel = new JPanel();
 		this.titlePanel.setLayout(new GridLayout(2, 0));
 		this.titleLabel = new JLabel("Title");
@@ -57,6 +59,7 @@ public class EditorPanel extends JPanel {
 		this.titlePanel.add(titleField);
 		this.titleField.addKeyListener(addFileToChangedFiles);
 
+		//the panel where the JTextField and JLabel for the album is placed
 		this.albumPanel = new JPanel();
 		this.albumPanel.setLayout(new GridLayout(2, 0));
 		this.albumLabel = new JLabel("Album");
@@ -65,6 +68,7 @@ public class EditorPanel extends JPanel {
 		this.albumPanel.add(albumField);
 		this.albumField.addKeyListener(addFileToChangedFiles);
 
+		//the panel where the JTextField and JLabel for the artist is placed
 		this.artistPanel = new JPanel();
 		this.artistPanel.setLayout(new GridLayout(2, 0));
 		this.artistLabel = new JLabel("Artist");
@@ -73,6 +77,7 @@ public class EditorPanel extends JPanel {
 		this.artistPanel.add(artistField);
 		this.artistField.addKeyListener(addFileToChangedFiles);
 
+		//the panel where the JTextField and JLabel for the year is placed
 		this.yearPanel = new JPanel();
 		this.yearPanel.setLayout(new GridLayout(2, 0));
 		this.yearLabel = new JLabel("Year");
@@ -81,12 +86,13 @@ public class EditorPanel extends JPanel {
 		this.yearPanel.add(yearField);
 		this.yearField.addKeyListener(addFileToChangedFiles);
 
+		//the panel which contains the two buttons
 		this.closeButton = new JButton("Close");
+		//logic for clicking on close-Button
 		this.closeButton.addActionListener(new ApplicationCloser());
 		this.saveButton = new JButton("Save");
+		//logic for clicking on the save-Button
 		this.saveButton.addActionListener(new SaveChangedMP3Files());
-		this.deleteButton = new JButton("x");
-		this.deleteButton.addActionListener(new CoverDeleter());
 		this.buttonsPanel = new JPanel();
 		this.buttonsPanel.setLayout(new FlowLayout());
 		this.saveButton.setSize(new Dimension(100, 40));
@@ -94,12 +100,14 @@ public class EditorPanel extends JPanel {
 		this.buttonsPanel.add(this.saveButton);
 		this.buttonsPanel.add(this.closeButton);
 
+		//the coverpanel with the cover an the button to delete the cover
 		this.coverPanel = new JPanel();
 		this.coverPanel.setLayout(new FlowLayout());
 		this.cover = new JLabel();
 		this.cover.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.cover.addMouseListener(new CoverChooser());
-
+		this.deleteButton = new JButton("x");
+		this.deleteButton.addActionListener(new CoverDeleter());
 		this.cover.setPreferredSize(new Dimension(100, 100));
 		this.coverPanel.add(cover);
 		this.coverPanel.add(this.deleteButton);
@@ -122,6 +130,7 @@ public class EditorPanel extends JPanel {
 				0, 0);
 	}
 
+	//sets Cover by a given BufferedImage
 	public void setImage(BufferedImage newImage) {
 		image = newImage;
 		repaintCover();
@@ -145,6 +154,7 @@ public class EditorPanel extends JPanel {
 		cont.add(c);
 	}
 
+	//is called every time when the mp3 or the cover is changed
 	public void repaintCover() {
 		int minSpace = (artistPanel.getSize().width < buttonsPanel.getSize().height) ? artistPanel
 				.getSize().width : buttonsPanel.getSize().height;
@@ -162,22 +172,28 @@ public class EditorPanel extends JPanel {
 		coverPanel.add(this.deleteButton);
 	}
 
+
+	//sets the value of the title-JTextField
 	public void setTitle(String s) {
 		titleField.setText(s);
 	}
 
+	//sets the value of the album-JTextField
 	public void setAlbum(String s) {
 		albumField.setText(s);
 	}
 
+	//sets the value of the artist-JTextField
 	public void setArtist(String s) {
 		artistField.setText(s);
 	}
 
+	//sets the value of the year-JTextField
 	public void setYear(String s) {
 		yearField.setText(s);
 	}
 
+	//changes the shown cover on the panel
 	public void setCover(ImageIcon i) {
 		if (i != null) {
 			cover.setIcon(new ImageIcon(i.getImage().getScaledInstance(100,
@@ -190,22 +206,26 @@ public class EditorPanel extends JPanel {
 		}
 	}
 
+	//returns the cover shown on the panel
 	public ImageIcon getCover() {
 		return this.icon;
 	}
 
+	//return a String with title
 	public String getTitle() {
 		return titleField.getText();
 	}
-
+	//return a String with album
 	public String getAlbum() {
 		return albumField.getText();
 	}
 
+	//return a String with artist
 	public String getArtist() {
 		return artistField.getText();
 	}
 
+	//return a String with year
 	public String getYear() {
 		return yearField.getText();
 	}

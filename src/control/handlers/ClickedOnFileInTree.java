@@ -16,6 +16,7 @@ import control.Program;
  */
 public class ClickedOnFileInTree implements TreeSelectionListener {
 	public void valueChanged(TreeSelectionEvent e) {
+		
 		// Get the selected node from the tree
 		DefaultMutableTreeNode selected = (DefaultMutableTreeNode) e.getPath()
 				.getLastPathComponent();
@@ -23,13 +24,14 @@ public class ClickedOnFileInTree implements TreeSelectionListener {
 		// Check if it is an mp3 file
 		if (selected instanceof MP3File) {
 			MP3File current = (MP3File) selected;
-
-			if (!current.isParsed() && !current.isCached())
+			if (!current.isParsed() || !current.isCached()){
 				current.parse();
-
+			}
 			if (current.isID3v2Tag()) {
 				Program.getControl().loadMP3File(current);
 			} else {
+				Program.getControl().updateCurrentlyOpenedMP3File();
+				Program.getControl().setCurrentyMP3(null);
 				Program.getControl().getMainWindow()
 						.setStatus("This is not an MP3 file with ID3v2 tags.");
 				Program.getControl().getMainWindow().getEditorPanel()
